@@ -4,19 +4,23 @@ using UnityEngine;
 
 public class PunctureWeapon : Weapon {
 
-    //TODO Separate this into PunctureWeapon
     FixedJoint2D stickPoint;
     Vector2 stabPoint;
 
+    float maxStab = 0.2f;
     float stabTime;
     bool stabFlag;
 
+    float maxStuck = 2;
     float stuckTime;
     bool stuckFlag;
 
     public float sharpness;
     public float range;
     public float midPoint;
+
+    int aimAssist = 300; //The force with which the weapon yoinks into the body upon stabbing
+    int breakForce = 400; //The force required for the fixedjoint in the body to be broken
 
     // Use this for initialization
     protected override void Start () {
@@ -40,8 +44,8 @@ public class PunctureWeapon : Weapon {
 
             //Calculate power of attack
             float force = collision.relativeVelocity.magnitude;
-            float punctureForce = CheckPuncture(); //Maybe just calculate force in CheckPuncture
-            float power = punctureForce * force;
+            float punctureForce = CheckPuncture();
+            float power = force + punctureForce;
 
             //Determine the point of contact
             ContactPoint2D[] contactPoints = new ContactPoint2D[1];
@@ -51,7 +55,7 @@ public class PunctureWeapon : Weapon {
 
             //Get the body's script and deal the damage
             Body targetBodyScript = target.GetComponent<Body>();
-            Hit(targetBodyScript, power, contactPoint, player);
+            Hit(targetBodyScript, power, contactPoint, (punctureForce > 1), player);
 
             //Do we puncture, yo?
             if (target && punctureForce > 1) {
@@ -70,8 +74,7 @@ public class PunctureWeapon : Weapon {
         //While the timer is going, yoink into the enemy's bod. when the timer is done, stickem!
         stabTime = TimerFunc(stabTime,
             delegate () {
-                Vector2 weaponForce = (target.transform.position - transform.TransformPoint(stabPoint)).normalized * 300;
-                //TODO Maybe make that 300 a variable?
+                Vector2 weaponForce = (target.transform.position - transform.TransformPoint(stabPoint)).normalized * aimAssist;
                 rb.AddForceAtPosition((weaponForce), transform.TransformPoint(stabPoint));
             },
             delegate () {
@@ -92,7 +95,7 @@ public class PunctureWeapon : Weapon {
                 if (stuckFlag) {
                     stuckFlag = false;
                     if (stickPoint)
-                        stickPoint.breakForce = 400; //TODO make this a variable?
+                        stickPoint.breakForce = breakForce;
                 }
             });
     }
@@ -102,7 +105,7 @@ public class PunctureWeapon : Weapon {
     }
 
     void StartStab() {
-        stabTime = 0.2f; //TODO Might vary / Make this a variable
+        stabTime = maxStab;
         stabFlag = true;
         rb.velocity *= 0;
         rb.angularVelocity *= 0;
@@ -112,7 +115,7 @@ public class PunctureWeapon : Weapon {
         Destroy(stickPoint);
         stickPoint = gameObject.AddComponent<FixedJoint2D>();
         stickPoint.connectedBody = targetColl.attachedRigidbody;
-        stuckTime = 2; //TODO Might vary / Make this a variable
+        stuckTime = maxStuck;
         stuckFlag = true;
     }
 

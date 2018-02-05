@@ -5,10 +5,12 @@ using UnityEngine;
 public class FollowPointer : MonoBehaviour {
     
     Rigidbody2D body;
-    Vector2 anchorOffset;
+
+    public Vector2 anchorOffset = new Vector2(0f, 2);
     Vector2 targetPos;
     Vector2 forcePoint;
     //Vector2 stabPoint;
+
     public int maxSpeed = 10; //This will depend on the weapon
     public int clamp = 20;
     public int multiplier = 5;
@@ -28,8 +30,6 @@ public class FollowPointer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         body = gameObject.GetComponent<Rigidbody2D>();
-
-        anchorOffset = new Vector2(0f, 2);
 
         targetPos = body.centerOfMass + anchorOffset;
         forcePoint = body.centerOfMass + anchorOffset;

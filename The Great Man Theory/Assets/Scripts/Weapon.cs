@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO Make superclass of Weapon and subclass of PunctureWeapon
 public class Weapon : MonoBehaviour {
 
     protected GameObject target;
@@ -68,7 +67,7 @@ public class Weapon : MonoBehaviour {
 
             //Get the body's script and deal the damage
             Body targetBodyScript = target.GetComponent<Body>();
-            Hit(targetBodyScript, power, contactPoint, player);
+            Hit(targetBodyScript, power, contactPoint, false, player);
         }
     }
 
@@ -105,11 +104,12 @@ public class Weapon : MonoBehaviour {
         return timer;
     }
 
-    protected void Hit(Body bodyHit, float power, Vector2 hitPoint, bool playerHit = false) {
+    protected void Hit(Body bodyHit, float power, Vector2 hitPoint, bool puncturing = false, bool playerHit = false) {
         //TODO Play a sound at the volume (power) or something?
         limpTime = (power > limpThreshold) ? power / 100 : 0;
+        limpTime = Mathf.Clamp(limpTime, 0, 0.5f);
         limpFlag = (limpTime > 0);
-        bodyHit.Hit(power, hitPoint, playerHit);
+        bodyHit.Hit(power, hitPoint, puncturing, playerHit);
     }
 
     void EnableMovement(bool canMove) {
