@@ -4,25 +4,43 @@ using UnityEngine;
 
 public class MouseControl : MonoBehaviour {
 
+    private delegate void MoveDel();
+    private enum MoveState { end = -1, off = 0, on = 1, start = 2 }
+
     public FollowPointer pointer;
     Camera cam;
 
-    bool brace = false;
+    Vector2 target;
+
 
     float originalDrag;
     float dashDrag;
+    int dashMax = 1;
+    float dashTimer;
+    float dashThreshold;
+    MoveState dash = MoveState.off;
+
+    int holdButton = 0;
+    int braceButton = 1;
+    MoveState brace = MoveState.off;
+
+    MoveState hold = MoveState.off;
+    /*
+    //bool brace = false;
+    bool braceStart = false; //this is a flag to show that brace has just been initiated
+    bool braceEnd = false;
+
+    //bool hold = false;
+    bool holdStart = false;
+    bool holdEnd = false;
+    //bool dash = false;
+    bool dashStart = false; //this is a flag to show that dash has just been initiated
+    bool dashEnd = false;
+    */
 
     Rigidbody2D body;
     HingeJoint2D[] armJoints;
     JointAngleLimits2D[] originalLimits;
-
-    int dashMax = 2;
-    float dashTimer;
-    float dashThreshold;
-    bool dashing = false;
-
-    int holdButton = 0;
-    int braceButton = 1;
 
     void Start() {
         body = gameObject.GetComponent<Rigidbody2D>();
@@ -53,58 +71,72 @@ public class MouseControl : MonoBehaviour {
         dashThreshold = dashMax * 0.75f;
     }
 
+
     // Update is called once per frame
     void Update() {
+        GetInput();
+        Move();
         SetForces();
-        if (!brace)
-            Dash();
-        Brace();
-        Hold();
     }
 
-    void SetForces() {
-        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+    void GetInput() {
+        target = cam.ScreenToWorldPoint(Input.mousePosition);
 
-        // pointer.SetTarget(mousePos);
-        pointer.TargetPos = (mousePos - pointer.ForcePoint); // * dashMultiplier;
-        pointer.Forces();
-    }
-
-    void Dash() {
-        if (Input.GetKey(KeyCode.LeftShift) && dashTimer > dashThreshold) {
-            if (!dashing) {
-                originalDrag = body.drag;
-                dashDrag = body.drag * 0.01f;
-                body.drag = dashDrag;
-            }
-            dashing = true;
+        //DASHING
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashTimer > dashThreshold && (int)brace < 1) {
+            dash = MoveState.start;
         }
-        else {
-            dashing = false;
-            body.drag = originalDrag;
+        else if (Input.GetKeyUp(KeyCode.LeftShift)) {
+            dash = MoveState.end;
+        }
+        else if (dashTimer <= 0) {
+            dash = MoveState.end;
         }
 
-        if (dashing && dashTimer > 0) {
-            dashTimer -= Time.deltaTime;
-        }
-        else if (dashTimer < dashMax) {
-            dashTimer += Time.deltaTime * 2;
-        }
-    }
-
-    void Brace() {
+        //BRACING
         if (Input.GetMouseButtonDown(braceButton)) {
-            brace = true;
-            body.drag = 50000;
+            brace = MoveState.start;
         }
-        if (Input.GetMouseButtonUp(braceButton)) {
-            brace = false;
-            body.drag = originalDrag;
+        else if (Input.GetMouseButtonUp(braceButton)) {
+            brace = MoveState.end;
+        }
+
+        //HOLDING
+        if (Input.GetMouseButtonDown(holdButton)) {
+            hold = MoveState.start;
+        }
+        else if (Input.GetMouseButtonUp(holdButton)) {
+            hold = MoveState.end;
         }
     }
 
-    void Hold() {
-        if (Input.GetMouseButtonDown(holdButton)) {
+    void Move() {
+        //DASHING
+        SetMoveState(ref dash,
+        delegate {
+            originalDrag = body.drag;
+            dashDrag = body.drag * 0.01f;
+            body.drag = dashDrag;
+        },
+        delegate { body.drag = originalDrag; },
+        delegate {
+            if ((int)dash > 0 && dashTimer > 0) {
+                dashTimer -= Time.deltaTime;
+            }
+            else if (dashTimer < dashMax) {
+                dashTimer += Time.deltaTime * 2;
+            }
+        });
+
+        //BRACING
+        SetMoveState(ref brace,
+        delegate { body.drag = 50000; },
+        delegate { body.drag = originalDrag; }
+        );
+
+        //HOLDING
+        SetMoveState(ref hold,
+        delegate {
             for (int i = 0; i < 4; i++) {
                 HingeJoint2D joint = armJoints[i];
                 float angle = joint.jointAngle;
@@ -113,14 +145,44 @@ public class MouseControl : MonoBehaviour {
                 newLimits.min = angle - 5f;
                 joint.limits = newLimits;
             }
-        }
-        if (Input.GetMouseButtonUp(holdButton)) {
+        },
+        delegate {
             for (int i = 0; i < 4; i++) {
                 HingeJoint2D joint = armJoints[i];
                 float angle = joint.jointAngle;
                 joint.limits = originalLimits[i];
             }
         }
+        );
+    }
+
+    void SetMoveState(ref MoveState moveState, MoveDel StartDel, MoveDel EndDel, MoveDel WhileDel = null) {
+        int state = (int)moveState;
+        if (state > 0) {
+            if (state > 1) {
+                StartDel();
+                moveState = MoveState.on;
+            }
+        }
+        else if (state < 1) {
+            if (state < 0) {
+                EndDel();
+                moveState = MoveState.off;
+            }
+        }
+
+        if (WhileDel != null) {
+            WhileDel();
+        }
+    }
+
+    void SetForces() {
+        // pointer.SetTarget(mousePos);
+        if (target != null) {
+            pointer.TargetPos = (target - pointer.ForcePoint); // * dashMultiplier;
+            pointer.Forces();
+        }
     }
 }
+
 
