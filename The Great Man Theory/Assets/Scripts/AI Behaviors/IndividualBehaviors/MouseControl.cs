@@ -12,7 +12,6 @@ public class MouseControl : MonoBehaviour {
 
     Vector2 target;
 
-
     float originalDrag;
     float dashDrag;
     int dashMax = 1;
@@ -25,18 +24,6 @@ public class MouseControl : MonoBehaviour {
     MoveState brace = MoveState.off;
 
     MoveState hold = MoveState.off;
-    /*
-    //bool brace = false;
-    bool braceStart = false; //this is a flag to show that brace has just been initiated
-    bool braceEnd = false;
-
-    //bool hold = false;
-    bool holdStart = false;
-    bool holdEnd = false;
-    //bool dash = false;
-    bool dashStart = false; //this is a flag to show that dash has just been initiated
-    bool dashEnd = false;
-    */
 
     Rigidbody2D body;
     HingeJoint2D[] armJoints;
@@ -178,10 +165,8 @@ public class MouseControl : MonoBehaviour {
 
     void SetForces() {
         // pointer.SetTarget(mousePos);
-        if (target != null) {
-            pointer.TargetPos = (target - pointer.ForcePoint); // * dashMultiplier;
-            pointer.Forces();
-        }
+        pointer.TargetPos = (target - pointer.ForcePoint); // * dashMultiplier;
+        pointer.Forces();
     }
 }
 
