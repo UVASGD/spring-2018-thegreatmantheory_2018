@@ -2,16 +2,105 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum  NodeState {
+	Failure,
+	Success,
+	Running
+}
+
 public class BehaviorTree {
 
 	
 }
 
-public class Node {
-    protected string name = "node";
+public abstract class Node {
+	protected string name = "node";
+
+	public Node(string _name = "Default Node") {
+		name = _name;
+	}
+
+	public abstract NodeState getState();
 }
 
-public class Leaf : Node {
+/*
+public abstract class Leaf : Node {
+	//Not really enough shared behaviors for a class??
+	public abstract void Dewit ();
+}
+*/
 
-    public void Dewit() { }
+public class Selector : Node {
+	protected List<Node> children;
+	protected int currentNodeIndex = 0;
+
+	public Selector(string _name = "Selector", List<Node> _children  = new List<Node>()) : base(_name) {
+		children = _children;
+		currentNodeIndex = 0;
+	}
+
+	public NodeState getState() {
+		for (int i = currentNodeIndex; i < children.Count; i++) {
+			NodeState childState = children [i].getState ();
+			if (childState == NodeState.Running) {
+				currentNodeIndex = i;
+				return NodeState.Running;
+			} else if (childState == NodeState.Success) {
+				currentNodeIndex = 0;
+				return NodeState.Success;
+			}
+		}
+		currentNodeIndex = 0;
+		return NodeState.Failure;
+	}
+}
+
+public class RandomSelector : Node {
+	protected List<Node> children;
+	protected int currentNodeIndex = 0;
+
+	public RandomSelector(string _name = "Random Selector", List<Node> _children  = new List<Node>()) : base(_name) {
+		children = _children;
+		currentNodeIndex = Random.Range(0, children.Count);
+	}
+
+	public NodeState getState() {
+		for (int i = currentNodeIndex; i < children.Count; i++) {
+			NodeState childState = children [i].getState ();
+			if (childState == NodeState.Running) {
+				currentNodeIndex = i;
+				return NodeState.Running;
+			} else if (childState == NodeState.Success) {
+				currentNodeIndex = Random.Range(0, children.Count);
+				return NodeState.Success;
+			}
+		}
+		currentNodeIndex = Random.Range (0, children.Count);
+		return NodeState.Failure;
+	}
+}
+
+public class Sequencer : Node {
+	protected List<Node> children;
+	protected int currentNodeIndex = 0;
+
+	public Sequencer(string _name = "Selector", List<Node> _children  = new List<Node>()) : base(_name) {
+		children = _children;
+		currentNodeIndex = 0;
+	}
+
+	public NodeState getState() {
+		for (int i = currentNodeIndex; i < children.Count; i++) {
+			NodeState childState = children [i].getState ();
+			if (childState == NodeState.Running) {
+				currentNodeIndex = i;
+				return NodeState.Running;
+			} else if (childState == NodeState.Failure) {
+				currentNodeIndex = 0;
+				return NodeState.Failure;
+			}
+		}
+		currentNodeIndex = 0;
+		return NodeState.Success;
+	}
 }
