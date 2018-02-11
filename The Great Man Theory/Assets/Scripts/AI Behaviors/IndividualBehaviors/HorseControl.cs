@@ -29,7 +29,7 @@ public class HorseControl : MonoBehaviour {
     void GetInput() {
         target = cam.ScreenToWorldPoint(Input.mousePosition);
         if (Input.GetMouseButtonDown(0)) {
-            veloc += 10f;
+            veloc += 3f;
         }
     }
 
