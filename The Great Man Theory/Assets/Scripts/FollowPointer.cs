@@ -35,11 +35,6 @@ public class FollowPointer : MonoBehaviour {
         forcePoint = body.centerOfMass + anchorOffset;
         //stabPoint = body.centerOfMass - (anchorOffset / 2);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        // Forces();
-	}
 
     public void SetTarget(Vector2 newTarget) {
         targetPos = newTarget;
