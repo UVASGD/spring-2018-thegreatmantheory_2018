@@ -13,6 +13,8 @@ public class MouseControl : MonoBehaviour {
 
     Vector2 target;
 
+    public bool hasArms = true;
+
     float originalDrag;
     float dashDrag;
     int dashMax = 1;
@@ -36,24 +38,26 @@ public class MouseControl : MonoBehaviour {
         dashDrag = originalDrag * 0.1f;
         cam = Camera.main;
 
-        HingeJoint2D[] RightArm = transform.Find("RightArm").GetComponentsInChildren<HingeJoint2D>();
-        HingeJoint2D[] LeftArm = transform.Find("LeftArm").GetComponentsInChildren<HingeJoint2D>();
+        if (hasArms) {
+            HingeJoint2D[] RightArm = transform.Find("RightArm").GetComponentsInChildren<HingeJoint2D>();
+            HingeJoint2D[] LeftArm = transform.Find("LeftArm").GetComponentsInChildren<HingeJoint2D>();
 
-        armJoints = new HingeJoint2D[]
-            {
+            armJoints = new HingeJoint2D[]
+                {
             RightArm[0],
             RightArm[1],
             LeftArm[0],
             LeftArm[1]
-            };
+                };
 
-        originalLimits = new JointAngleLimits2D[]
-            {
+            originalLimits = new JointAngleLimits2D[]
+                {
             armJoints[0].limits,
             armJoints[1].limits,
             armJoints[2].limits,
             armJoints[3].limits,
-            };
+                };
+        }
 
         dashTimer = dashMax;
         dashThreshold = dashMax * 0.75f;
@@ -90,10 +94,10 @@ public class MouseControl : MonoBehaviour {
         }
 
         //HOLDING
-        if (Input.GetMouseButtonDown(holdButton)) {
+        if (Input.GetMouseButtonDown(holdButton) && hasArms) {
             hold = MoveState.start;
         }
-        else if (Input.GetMouseButtonUp(holdButton)) {
+        else if (Input.GetMouseButtonUp(holdButton) && hasArms) {
             hold = MoveState.end;
         }
     }
