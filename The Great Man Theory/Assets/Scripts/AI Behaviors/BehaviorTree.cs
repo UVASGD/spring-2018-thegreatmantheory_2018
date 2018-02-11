@@ -20,7 +20,7 @@ public abstract class Node {
 		name = _name;
 	}
 
-	public abstract NodeState getState();
+	public abstract NodeState GetState();
 }
 
 /*
@@ -34,14 +34,14 @@ public class Selector : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public Selector(string _name = "Selector", List<Node> _children  = new List<Node>()) : base(_name) {
+	public Selector(List<Node> _children, string _name = "Selector") : base(_name) {
 		children = _children;
 		currentNodeIndex = 0;
 	}
 
-	public NodeState getState() {
+	public override NodeState GetState() {
 		for (int i = currentNodeIndex; i < children.Count; i++) {
-			NodeState childState = children [i].getState ();
+			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeIndex = i;
 				return NodeState.Running;
@@ -59,14 +59,14 @@ public class RandomSelector : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public RandomSelector(string _name = "Random Selector", List<Node> _children  = new List<Node>()) : base(_name) {
+	public RandomSelector(List<Node> _children, string _name = "Random Selector") : base(_name) {
 		children = _children;
 		currentNodeIndex = Random.Range(0, children.Count);
 	}
 
-	public NodeState getState() {
+	public override NodeState GetState() {
 		for (int i = currentNodeIndex; i < children.Count; i++) {
-			NodeState childState = children [i].getState ();
+			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeIndex = i;
 				return NodeState.Running;
@@ -84,14 +84,14 @@ public class Sequencer : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public Sequencer(string _name = "Selector", List<Node> _children  = new List<Node>()) : base(_name) {
+	public Sequencer(List<Node> _children, string _name = "Selector") : base(_name) {
 		children = _children;
 		currentNodeIndex = 0;
 	}
 
-	public NodeState getState() {
+	public override NodeState GetState() {
 		for (int i = currentNodeIndex; i < children.Count; i++) {
-			NodeState childState = children [i].getState ();
+			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeIndex = i;
 				return NodeState.Running;
