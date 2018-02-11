@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,34 +9,36 @@ public enum  NodeState {
 	Running
 }
 
-public class BehaviorTree {
-
-	
-}
-
 public abstract class Node {
-	protected string name = "node";
+    protected string name = "node";
 
-	public Node(string _name = "Default Node") {
-		name = _name;
-	}
+    public Node(string _name = "Default Node") {
+        name = _name;
+    }
 
-	public abstract NodeState GetState();
+    public abstract NodeState GetState();
 }
 
-/*
-public abstract class Leaf : Node {
-	//Not really enough shared behaviors for a class??
-	public abstract void Dewit ();
+public delegate NodeState LeafDel();
+
+public class Leaf : Node {
+    LeafDel leafDel;
+
+    public Leaf(string _name = "Selector", LeafDel _leafDel = null) : base(_name) {
+        leafDel = _leafDel;
+    }
+
+    public override NodeState GetState() {
+        return leafDel();
+    }
 }
-*/
 
 public class Selector : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public Selector(List<Node> _children, string _name = "Selector") : base(_name) {
-		children = _children;
+	public Selector(string _name = "Selector", List<Node> _children = null) : base(_name) {
+		children =  (_children == null) ? new List<Node>() : _children;
 		currentNodeIndex = 0;
 	}
 
@@ -59,9 +62,9 @@ public class RandomSelector : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public RandomSelector(List<Node> _children, string _name = "Random Selector") : base(_name) {
-		children = _children;
-		currentNodeIndex = Random.Range(0, children.Count);
+	public RandomSelector(string _name = "Random Selector", List<Node> _children = null) : base(_name) {
+        children = (_children == null) ? new List<Node>() : _children;
+        currentNodeIndex = UnityEngine.Random.Range(0, children.Count);
 	}
 
 	public override NodeState GetState() {
@@ -71,11 +74,11 @@ public class RandomSelector : Node {
 				currentNodeIndex = i;
 				return NodeState.Running;
 			} else if (childState == NodeState.Success) {
-				currentNodeIndex = Random.Range(0, children.Count);
+				currentNodeIndex = UnityEngine.Random.Range(0, children.Count);
 				return NodeState.Success;
 			}
 		}
-		currentNodeIndex = Random.Range (0, children.Count);
+		currentNodeIndex = UnityEngine.Random.Range (0, children.Count);
 		return NodeState.Failure;
 	}
 }
@@ -84,9 +87,9 @@ public class Sequencer : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public Sequencer(List<Node> _children, string _name = "Selector") : base(_name) {
-		children = _children;
-		currentNodeIndex = 0;
+	public Sequencer(string _name = "Sequencer", List<Node> _children = null) : base(_name) {
+        children = (_children == null) ? new List<Node>() : _children;
+        currentNodeIndex = 0;
 	}
 
 	public override NodeState GetState() {
