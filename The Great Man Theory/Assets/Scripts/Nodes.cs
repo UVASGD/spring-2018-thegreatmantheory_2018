@@ -116,7 +116,7 @@ public class RandomSelector : Node {
 
 	public override NodeState GetState() {
 		for (int i = currentNodeOffset; i < children.Count; i++) {
-			NodeState childState = children [i + currentStartIndex].GetState ();
+			NodeState childState = children [(i + currentStartIndex) % children.Count].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeOffset = i;
 				return NodeState.Running;
