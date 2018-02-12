@@ -60,7 +60,8 @@ public class Selector : Node {
 
 public class RandomSelector : Node {
 	protected List<Node> children;
-	protected int currentNodeIndex = 0;
+	protected int currentStartIndex;
+	protected int currentNodeOffset = 0;
 
 	protected List<int> cumulativeFrequencies;
 	protected int frequencySum;
@@ -78,7 +79,8 @@ public class RandomSelector : Node {
 	public RandomSelector(string _name = "Random Selector", List<Node> _children = null, List<int> _frequencies = null) : base(_name) {
         children = (_children == null) ? new List<Node>() : _children;
 		generateCumulativeFrequencies (_frequencies);
-		currentNodeIndex = GetRandomIndex ();
+		currentStartIndex = GetRandomIndex ();
+		currentNodeOffset = 0;
 	}
 
 	private void generateCumulativeFrequencies(List<int> _frequencies) {
@@ -113,17 +115,19 @@ public class RandomSelector : Node {
 	}
 
 	public override NodeState GetState() {
-		for (int i = currentNodeIndex; i < children.Count; i++) {
-			NodeState childState = children [i].GetState ();
+		for (int i = currentNodeOffset; i < children.Count; i++) {
+			NodeState childState = children [i + currentStartIndex].GetState ();
 			if (childState == NodeState.Running) {
-				currentNodeIndex = i;
+				currentNodeOffset = i;
 				return NodeState.Running;
 			} else if (childState == NodeState.Success) {
-				currentNodeIndex = GetRandomIndex();
+				currentStartIndex = GetRandomIndex();
+				currentNodeOffset = 0;
 				return NodeState.Success;
 			}
 		}
-		currentNodeIndex = GetRandomIndex();
+		currentStartIndex = GetRandomIndex();
+		currentNodeOffset = 0;
 		return NodeState.Failure;
 	}
 }
