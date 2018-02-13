@@ -9,40 +9,202 @@ public enum  NodeState {
 	Running
 }
 
+public delegate NodeState NodeDel();
+
+
 public abstract class Node {
     protected string name = "node";
+    protected NodeDel nodeDel;
 
-    public Node(string _name = "Default Node") {
+    public Node(string _name = "Default Node", NodeDel _nodeDel = null) {
+        nodeDel = _nodeDel;
         name = _name;
     }
 
     public abstract NodeState GetState();
 }
 
-public delegate NodeState LeafDel();
+
 
 public class Leaf : Node {
-    LeafDel leafDel;
 
-    public Leaf(string _name = "Selector", LeafDel _leafDel = null) : base(_name) {
-        leafDel = _leafDel;
+    public Leaf(string _name = "Leaf") : base(_name) {
     }
 
     public override NodeState GetState() {
-        return leafDel();
+        return NodeState.Running;
     }
 }
+
+public class MaintainLeaf : Leaf {
+    bool started = false;
+    float timerMax;
+    float timer;
+    Mover mover;
+    Transform pos;
+    Vector2 target;
+    int prefDist;
+    int leeway;
+
+    public MaintainLeaf(Mover _mover, float _timerMax, int _prefDist, int _leeway, string _name = "Maintain") : base(_name) {
+        timerMax = _timerMax;
+        timer = timerMax;
+        mover = _mover;
+        pos = mover.transform;
+        target = mover.Target;
+        prefDist = _prefDist;
+        leeway = _leeway;
+    }
+
+    public override NodeState GetState() {
+        if (!started) {
+            mover.Hold();
+            started = true;
+        }
+        Debug.Log(name);
+        timer -= Time.deltaTime;
+        target = mover.Target;
+        target = ((Vector2)pos.position - target).normalized * prefDist;
+        mover.SetTarget(target);
+        if (timer <= 0) {
+            timer = timerMax;
+            started = false;
+            mover.Hold(false);
+            return (Mathf.Abs(prefDist - Vector2.Distance(pos.position, target)) < leeway) ? NodeState.Success : NodeState.Failure;
+        }
+        return NodeState.Running;
+    }
+}
+
+public class WiggleLeaf : Leaf {
+    bool started = false;
+    float timerMax;
+    float timer;
+    float maxWig;
+    float swingMax;
+    float swingTimer;
+    Mover mover;
+    Vector2 target;
+    float randoDist;
+
+
+    public WiggleLeaf(Mover _mover, float _timerMax, float _maxWig, float _randoDist, string _name = "Wiggle") : base(_name) {
+        timerMax = _timerMax;
+        timer = timerMax;
+        mover = _mover;
+        target = mover.Target;
+        randoDist = _randoDist;
+        maxWig = _maxWig;
+        swingMax = UnityEngine.Random.Range(0.2f, _maxWig);
+        swingTimer = swingMax;
+    }
+
+    public override NodeState GetState() {
+        Debug.Log(name);
+        if (!started) {
+            started = true;
+            target = mover.Target + (UnityEngine.Random.insideUnitCircle * randoDist);
+            mover.SetTarget(target);
+            swingMax = UnityEngine.Random.Range(0.2f, maxWig);
+            swingTimer = swingMax;
+        }
+        swingTimer -= Time.deltaTime;
+        if (swingTimer <= 0) {
+            swingTimer = swingMax;
+            target = mover.Target + (UnityEngine.Random.insideUnitCircle * randoDist);
+            mover.SetTarget(target);
+        }
+        timer -= Time.deltaTime;
+        if (timer <= 0) {
+            timer = timerMax;
+            started = false;
+            return NodeState.Success;
+        }
+        return NodeState.Running;
+    }
+}
+
+public class ChargeLeaf : Leaf {
+    bool started = false;
+    float timerMax;
+    float timer;
+    Mover mover;
+
+    public ChargeLeaf(Mover _mover, float _timerMax, string _name = "Charge") : base(_name) {
+        timerMax = _timerMax;
+        timer = timerMax;
+        mover = _mover;
+    }
+
+    public override NodeState GetState() {
+        Debug.Log(name);
+        if (!started) {
+            started = true;
+            mover.SetTarget(mover.Target);
+        }
+        timer -= Time.deltaTime;
+        mover.Dash();
+        if (timer <= 0) {
+            timer = timerMax;
+            started = false;
+            return NodeState.Success;
+        }
+        return NodeState.Running;
+    }
+}
+
+public class MedicLeaf : Leaf {
+    Mover mover;
+    Transform pos;
+    Body body;
+    Vector2 target;
+
+    public MedicLeaf(Mover _mover, Body _body, string _name = "Medic") : base(_name) {
+        mover = _mover;
+        pos = mover.transform;
+        body = _body;
+        target = mover.Target;
+    }
+
+    public override NodeState GetState() {
+        target = mover.Target;
+        mover.SetTarget(target);
+        return NodeState.Running;
+    }
+}
+
+public class FleeLeaf : Leaf {
+    bool started = false;
+    Mover mover;
+    int fleeDir;
+
+    public FleeLeaf(Mover _mover, int _fleeDir, string _name = "Flee") : base(_name) {
+        mover = _mover;
+        fleeDir = _fleeDir;
+    }
+
+    public override NodeState GetState() {
+        if (!started) {
+            started = true;
+            mover.SetTarget(new Vector2(mover.transform.position.x, fleeDir));
+        }
+        return NodeState.Running;
+    }
+}
+
 
 public class Selector : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public Selector(string _name = "Selector", List<Node> _children = null) : base(_name) {
+	public Selector(string _name = "Selector", NodeDel _nodeDel = null, List < Node> _children = null) : base(_name, _nodeDel) {
 		children =  (_children == null) ? new List<Node>() : _children;
 		currentNodeIndex = 0;
 	}
 
 	public override NodeState GetState() {
+        if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
+
 		for (int i = currentNodeIndex; i < children.Count; i++) {
 			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
@@ -76,7 +238,8 @@ public class RandomSelector : Node {
 	 * * Example, for a node with 4 children, the list [1, 3, 4, 2] would have a 1/10 chance for node 0, 3/10 for node 1, 4/10 for node 2, and 2/10 for node 3
 	 * 
 	 */
-	public RandomSelector(string _name = "Random Selector", List<Node> _children = null, List<int> _frequencies = null) : base(_name) {
+	public RandomSelector(string _name = "Random Selector", NodeDel _nodeDel = null, List < Node> _children = null, List<int> _frequencies = null) 
+        : base(_name, _nodeDel) {
         children = (_children == null) ? new List<Node>() : _children;
 		generateCumulativeFrequencies (_frequencies);
 		currentStartIndex = GetRandomIndex ();
@@ -115,7 +278,8 @@ public class RandomSelector : Node {
 	}
 
 	public override NodeState GetState() {
-		for (int i = currentNodeOffset; i < children.Count; i++) {
+        if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
+        for (int i = currentNodeOffset; i < children.Count; i++) {
 			NodeState childState = children [(i + currentStartIndex) % children.Count].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeOffset = i;
@@ -136,13 +300,14 @@ public class Sequencer : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public Sequencer(string _name = "Sequencer", List<Node> _children = null) : base(_name) {
+	public Sequencer(string _name = "Sequencer", NodeDel _nodeDel = null, List < Node> _children = null) : base(_name, _nodeDel) {
         children = (_children == null) ? new List<Node>() : _children;
         currentNodeIndex = 0;
 	}
 
 	public override NodeState GetState() {
-		for (int i = currentNodeIndex; i < children.Count; i++) {
+        if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
+        for (int i = currentNodeIndex; i < children.Count; i++) {
 			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeIndex = i;

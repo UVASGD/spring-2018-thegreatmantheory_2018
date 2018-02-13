@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Body : MonoBehaviour {
+public enum Team { GoodGuys, BadGuys }
 
-    public enum TeamColor { GoodGuys, BadGuys }
+public enum UnitType { Pike, Sword, Longsword, Arquebus, HorseSword, HorseArquebus }
+
+public class Body : MonoBehaviour {
 
     [HideInInspector]
     public SpriteRenderer headRender;
@@ -22,7 +24,8 @@ public class Body : MonoBehaviour {
     public Sprite[] bodySprites;
     public Sprite[] headSprites;
 
-    public TeamColor teamColor;
+    public Team team;
+    public UnitType unitType;
     public Color bodyColor = Color.black;
     public Color lowerArmColor;
     public Color upperArmColor;
@@ -31,7 +34,8 @@ public class Body : MonoBehaviour {
     public Transform effectGen;
 
     public Rigidbody2D rb;
-    public float health = 100f;
+    public float maxHealth = 100f;
+    float health;
     public float punctureResist = 8;
     public float threshold = 2;
     //public float thresholdMultiplier = 2;
@@ -44,6 +48,7 @@ public class Body : MonoBehaviour {
 
     void Start () {
         rb = GetComponent<Rigidbody2D>();
+        health = maxHealth;
         SetColors();
         ApplyColors();
         CheckHealth();
@@ -105,17 +110,20 @@ public class Body : MonoBehaviour {
         }
     }
 
+    public bool Wounded() {
+        return (health < (maxHealth * 0.1f));
+    }
 
     //COLORING AND SPRITING THE DUDE
 
     void SetColors() {
-        switch (teamColor) {
-            case (TeamColor.GoodGuys):
+        switch (team) {
+            case (Team.GoodGuys):
                 bodyColor = Color.blue;
                 upperArmColor = Color.red;
                 lowerArmColor = Color.blue;
                 break;
-            case (TeamColor.BadGuys):
+            case (Team.BadGuys):
                 bodyColor = Color.black;
                 upperArmColor = Color.red;
                 lowerArmColor = Color.black;
