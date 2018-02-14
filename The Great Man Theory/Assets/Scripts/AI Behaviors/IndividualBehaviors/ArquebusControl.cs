@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class ArquebusControl : MonoBehaviour {
 
+    public Transform cloud;
+    Transform lastCloud;
+
     public float reloadTime = 2f;
-    float recoilStrength = 5000f;
+    float recoilStrength = 8000f;
 
     Rigidbody2D body;
 
@@ -19,8 +22,7 @@ public class ArquebusControl : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         body = GetComponent<Rigidbody2D>();
-
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -46,11 +48,14 @@ public class ArquebusControl : MonoBehaviour {
             Body target = hit.rigidbody.GetComponent<Body>();
             if (target) {
                 float damage = 125 - hit.distance;
-                target.Damage(damage);
+                target.Hit(damage/2, hit.point);
                 Debug.Log(damage);
                 break;
             }
         }
+
+        if (lastCloud) { Destroy(lastCloud.gameObject); } 
+        lastCloud = Instantiate(cloud, barrelEnd, Quaternion.identity);
     }
 
     void Recoil() {

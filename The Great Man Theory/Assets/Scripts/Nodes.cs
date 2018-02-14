@@ -61,7 +61,6 @@ public class MaintainLeaf : Leaf {
             mover.Hold();
             started = true;
         }
-        Debug.Log(name);
         timer -= Time.deltaTime;
         target = mover.Target;
         target = ((Vector2)pos.position - target).normalized * prefDist;
@@ -100,7 +99,6 @@ public class WiggleLeaf : Leaf {
     }
 
     public override NodeState GetState() {
-        Debug.Log(name);
         if (!started) {
             started = true;
             target = mover.Target + (UnityEngine.Random.insideUnitCircle * randoDist);
@@ -137,7 +135,6 @@ public class ChargeLeaf : Leaf {
     }
 
     public override NodeState GetState() {
-        Debug.Log(name);
         if (!started) {
             started = true;
             mover.SetTarget(mover.Target);
