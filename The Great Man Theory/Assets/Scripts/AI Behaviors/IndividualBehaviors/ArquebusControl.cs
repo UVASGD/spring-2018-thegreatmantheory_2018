@@ -10,12 +10,16 @@ public class ArquebusControl : MonoBehaviour {
     Rigidbody2D body;
 
     float reload;
+    float damage = 100f;
 
     int shotNum = 0;
+
+    Vector2 barrelEnd;
 
 	// Use this for initialization
 	void Start () {
         body = GetComponent<Rigidbody2D>();
+
 	}
 	
 	// Update is called once per frame
@@ -29,7 +33,23 @@ public class ArquebusControl : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F) && reload > reloadTime) {
             shotNum++;
             reload = 0f;
+            Shoot();
             Recoil();
+        }
+    }
+
+    void Shoot() {
+        barrelEnd = transform.position + (transform.up * 1.25f);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(barrelEnd, transform.up);
+
+        foreach(RaycastHit2D hit in hits) {
+            Body target = hit.rigidbody.GetComponent<Body>();
+            if (target) {
+                float damage = 125 - hit.distance;
+                target.Damage(damage);
+                Debug.Log(damage);
+                break;
+            }
         }
     }
 
@@ -39,4 +59,5 @@ public class ArquebusControl : MonoBehaviour {
         body.AddForce(backwards * recoilStrength);
         Debug.Log(backwards);
     }
+
 }

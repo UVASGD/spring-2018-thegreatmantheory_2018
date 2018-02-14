@@ -43,7 +43,6 @@ public class Weapon : MonoBehaviour {
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision) {
-        Debug.Log("SHOULD NOT CALL");
         shouldCheck = true;
         
         if (collision.collider.CompareTag("Body") && collision.collider != thisBodyCollider) {
@@ -56,19 +55,18 @@ public class Weapon : MonoBehaviour {
             target = targetColl.gameObject;
             targetRB = target.GetComponent<Rigidbody2D>();
 
-            //Calculate power of attack
-            float power = collision.relativeVelocity.magnitude;
-
             //Determine the point of contact
             ContactPoint2D[] contactPoints = new ContactPoint2D[1];
             collision.GetContacts(contactPoints);
             ContactPoint2D contact = contactPoints[0];
             Vector2 contactPoint = contact.point;
 
-            //Get the body's script and deal the damage
-            Body targetBodyScript = target.GetComponent<Body>();
-            Hit(targetBodyScript, power, contactPoint, false, player);
+            HitCalc(contactPoint, collision);
         }
+    }
+
+    protected void CollisionCheck(Collision2D collision) {
+
     }
 
     //Anomymous methods are fun, yo
@@ -102,6 +100,15 @@ public class Weapon : MonoBehaviour {
             ifDone();
         }
         return timer;
+    }
+
+    protected virtual void HitCalc(Vector2 contactPoint, Collision2D collision) {
+        //Get the body's script and deal the damage
+        Body targetBodyScript = target.GetComponent<Body>();
+
+        //Calculate power of attack
+        float power = collision.relativeVelocity.magnitude;
+        Hit(targetBodyScript, power, contactPoint, false, player);
     }
 
     protected void Hit(Body bodyHit, float power, Vector2 hitPoint, bool puncturing = false, bool playerHit = false) {

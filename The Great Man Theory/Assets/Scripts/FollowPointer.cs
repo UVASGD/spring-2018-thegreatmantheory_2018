@@ -36,10 +36,6 @@ public class FollowPointer : MonoBehaviour {
         //stabPoint = body.centerOfMass - (anchorOffset / 2);
 	}
 
-    public void SetTarget(Vector2 newTarget) {
-        targetPos = newTarget;
-    }
-
     public void Forces() {
         Vector2 force = Vector2.ClampMagnitude(targetPos * multiplier, clamp) *  CanMove;
 
