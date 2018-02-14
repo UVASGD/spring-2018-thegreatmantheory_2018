@@ -180,7 +180,12 @@ public class Mover : MonoBehaviour {
     }
 
     public void Hold(bool start = true) {
-        if (start && (int)hold < 1) hold = MoveState.start;
-        else hold = MoveState.end;
+        if (start && (int)hold < 1) {
+            rb.freezeRotation = true;
+            hold = MoveState.start;
+        }
+        else {
+            rb.freezeRotation = false;
+            hold = MoveState.end; }
     }
 }

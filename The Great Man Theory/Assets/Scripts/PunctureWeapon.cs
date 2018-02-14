@@ -29,45 +29,6 @@ public class PunctureWeapon : Weapon {
             stabPoint = pointer.StabPoint;
     }
 
-    protected override void OnCollisionEnter2D(Collision2D collision) {
-        shouldCheck = true;
-
-        if (collision.collider.CompareTag("Body") && collision.collider != thisBodyCollider) {
-            //TODO make sure elevation is roughly the same & the target isn't the same team
-            //Maybe use ContactFilter2D with useDepth ???
-
-            if (targetColl && (collision.collider != targetColl || !stabFlag))
-                Physics2D.IgnoreCollision(targetColl, thisCollider, false);
-            targetColl = collision.collider;
-            target = targetColl.gameObject;
-            targetRB = target.GetComponent<Rigidbody2D>();
-
-            //Calculate power of attack
-            float force = collision.relativeVelocity.magnitude;
-            float punctureForce = CheckPuncture();
-            float power = force + punctureForce;
-
-            //Determine the point of contact
-            ContactPoint2D[] contactPoints = new ContactPoint2D[1];
-            collision.GetContacts(contactPoints);
-            ContactPoint2D contact = contactPoints[0];
-            Vector2 contactPoint = contact.point;
-
-            //Get the body's script and deal the damage
-            Body targetBodyScript = target.GetComponent<Body>();
-            Hit(targetBodyScript, power, contactPoint, (punctureForce > 1), player);
-
-            //Do we puncture, yo?
-            if (target && punctureForce > 1) {
-                float resistance = targetBodyScript.punctureResist;
-                if (power > resistance) {
-                    Physics2D.IgnoreCollision(targetColl, thisCollider);
-                    StartStab();
-                }
-            }
-        }
-    }
-
     protected override void AffectMovement() {
         base.AffectMovement();
 
@@ -98,6 +59,27 @@ public class PunctureWeapon : Weapon {
                         stickPoint.breakForce = breakForce;
                 }
             });
+    }
+
+    protected override void HitCalc(Vector2 contactPoint, Collision2D collision) {
+        //Get the body's script and deal the damage
+        Body targetBodyScript = target.GetComponent<Body>();
+
+        //Calculate power of attack
+        float force = collision.relativeVelocity.magnitude;
+        float punctureForce = CheckPuncture();
+        float power = force + punctureForce;
+
+        Hit(targetBodyScript, power, contactPoint, (punctureForce > 1), player);
+
+        //Do we puncture, yo?
+        if (target && punctureForce > 1) {
+            float resistance = targetBodyScript.punctureResist;
+            if (power > resistance) {
+                Physics2D.IgnoreCollision(targetColl, thisCollider);
+                StartStab();
+            }
+        }
     }
 
     void OnJointBreak2D(Joint2D joint) {
