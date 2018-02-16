@@ -9,6 +9,7 @@ public class Mover : MonoBehaviour {
     protected delegate void MoveDel();
 
     public BehaviorTree behavior;
+
     public Body body;
 
     public FollowPointer pointer;
