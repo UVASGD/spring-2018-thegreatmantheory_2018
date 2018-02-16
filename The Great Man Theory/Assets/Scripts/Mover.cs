@@ -109,7 +109,7 @@ public class Mover : MonoBehaviour {
                 dashTimer -= Time.deltaTime;
             }
             else if (dashTimer < dashMax) {
-                dashTimer += Time.deltaTime * 2;
+                dashTimer += Time.deltaTime * 2.5f;
             }
         });
 

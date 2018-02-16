@@ -61,9 +61,7 @@ public class PunctureWeapon : Weapon {
             });
     }
 
-    protected override void HitCalc(Vector2 contactPoint, Collision2D collision) {
-        //Get the body's script and deal the damage
-        Body targetBodyScript = target.GetComponent<Body>();
+    protected override void HitCalc(Vector2 contactPoint, Body targetBodyScript, Collision2D collision) {
 
         //Calculate power of attack
         float force = collision.relativeVelocity.magnitude;
