@@ -152,14 +152,10 @@ public class ChargeLeaf : Leaf {
 
 public class MedicLeaf : Leaf {
     Mover mover;
-    Transform pos;
-    Body body;
     Vector2 target;
 
-    public MedicLeaf(Mover _mover, Body _body, string _name = "Medic") : base(_name) {
+    public MedicLeaf(Mover _mover, string _name = "Medic") : base(_name) {
         mover = _mover;
-        pos = mover.transform;
-        body = _body;
         target = mover.Target;
     }
 

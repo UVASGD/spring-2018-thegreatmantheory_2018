@@ -11,8 +11,9 @@ public class Weapon : MonoBehaviour {
     public bool player = false;
     public float height; //TODO make this actually matter, should just match body's height
 
-    public GameObject thisObj; //The Body-holding object
-    public Body thisBody;
+    public GameObject bodyObj;
+    protected Body thisBody;
+    public Body ThisBody { get { return thisBody; } }
     protected Collider2D thisBodyCollider;
     protected Collider2D thisCollider;
     public Rigidbody2D rb;
@@ -28,7 +29,8 @@ public class Weapon : MonoBehaviour {
 
 
     protected virtual void Start() {
-        thisBodyCollider = thisObj.GetComponent<Collider2D>();
+        thisBodyCollider = bodyObj.GetComponent<Collider2D>();
+        thisBody = bodyObj.GetComponent<Body>();
         thisCollider = GetComponent<Collider2D>();
         if (!rb)
             rb = GetComponent<Rigidbody2D>();

@@ -25,7 +25,7 @@ public class MeleeBehavior : BehaviorTree {
         : base(_body, _mover) {
 
         List<Node> WoundedList = new List<Node>() {
-            new MedicLeaf(mover, body), //timer, medic target from squad -- medic target == null
+            new MedicLeaf(mover), //timer, medic target from squad -- medic target == null
             new FleeLeaf(mover, fleeDir) //end zone from squad -- n/a
         };
 

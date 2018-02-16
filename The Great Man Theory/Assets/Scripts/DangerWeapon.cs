@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DangerWeapon : MonoBehaviour {
 
-    public Collider2D trigger;
+    Collider2D trigger;
     Body thisBody;
     public GameObject holder;
 
@@ -12,6 +12,7 @@ public class DangerWeapon : MonoBehaviour {
         if (!thisBody) {
             thisBody = holder.GetComponentInChildren<Body>();
         }
+        trigger = GetComponent<Collider2D>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -22,7 +23,7 @@ public class DangerWeapon : MonoBehaviour {
             }
             else if (collision.CompareTag("Weapon")) {
                 Weapon weapon = collision.GetComponent<Weapon>();
-                if (weapon.thisBody.team == thisBody.team) {
+                if (weapon.ThisBody.team == thisBody.team) {
                     return;
                 }
             }
