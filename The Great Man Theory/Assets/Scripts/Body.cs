@@ -63,16 +63,19 @@ public class Body : MonoBehaviour {
             Vector2 spankForce = (hitPoint - (Vector2)transform.position).normalized; //Yes, we are calling it this.
             if (force > (threshold * 4) && playerHit && greatHittable) {
                 //Particle effect, push away from hitPoint big, play cheer sound, shake camera
+                if (!puncturing)
                     rb.AddRelativeForce(spankForce * 250, ForceMode2D.Impulse);
                 Debug.Log("GREAT HIT!");
             }
             else if (force > (threshold * 3)) {
                 //Particle effect, play sound large, push away from hitPoint medium
+                if (!puncturing)
                     rb.AddRelativeForce(spankForce * 100, ForceMode2D.Impulse);
                 Debug.Log("Large hit");
             }
             else if (force > (threshold * 2)) {
                 //Particle effect, play sound medium, push away from hitPoint small
+                if (!puncturing)
                     rb.AddRelativeForce(spankForce * 20, ForceMode2D.Impulse);
                 Debug.Log("Medium hit");
             }

@@ -15,11 +15,12 @@ public class PunctureWeapon : Weapon {
     float stuckTime;
     bool stuckFlag;
 
+    public Collider2D stabArea;
     public float sharpness;
     public float range;
     public float midPoint;
 
-    int aimAssist = 300; //The force with which the weapon yoinks into the body upon stabbing
+    int aimAssist = 400; //The force with which the weapon yoinks into the body upon stabbing
     int breakForce = 400; //The force required for the fixedjoint in the body to be broken
 
     // Use this for initialization
@@ -44,7 +45,9 @@ public class PunctureWeapon : Weapon {
                     if (targetColl.Distance(thisCollider).isOverlapped) {
                         Stab(targetRB);
                     }
-                    else Physics2D.IgnoreCollision(targetColl, thisCollider, false);
+                    else {
+                        Physics2D.IgnoreCollision(targetColl, thisCollider, false);
+                    }
                 }
             });
 
@@ -62,22 +65,22 @@ public class PunctureWeapon : Weapon {
     }
 
     protected override void HitCalc(Vector2 contactPoint, Body targetBodyScript, Collision2D collision) {
-
-        //Calculate power of attack
+            //Calculate power of attack
         float force = collision.relativeVelocity.magnitude;
-        float punctureForce = CheckPuncture();
-        float power = force + punctureForce;
-
-        Hit(targetBodyScript, power, contactPoint, (punctureForce > 1), player);
-
-        //Do we puncture, yo?
-        if (target && punctureForce > 1) {
-            float resistance = targetBodyScript.punctureResist;
-            if (power > resistance) {
-                Physics2D.IgnoreCollision(targetColl, thisCollider);
-                StartStab();
+        if (!stabArea || targetColl.Distance(stabArea).distance < 1) {
+            float punctureForce = CheckPuncture();
+            float power = force + punctureForce;
+            Hit(targetBodyScript, power, contactPoint, (punctureForce > 1), player);
+            //Do we puncture, yo?
+            if (target && punctureForce > 1) {
+                float resistance = targetBodyScript.punctureResist;
+                if (power > resistance) {
+                    Physics2D.IgnoreCollision(targetColl, thisCollider);
+                    StartStab();
+                }
             }
         }
+        else { Hit(targetBodyScript, force/4, contactPoint, false, player); }
     }
 
     void OnJointBreak2D(Joint2D joint) {

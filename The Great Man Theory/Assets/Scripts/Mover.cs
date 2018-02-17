@@ -83,7 +83,8 @@ public class Mover : MonoBehaviour {
         if (behavior != null)
             behavior.Traverse();
         Move();
-        SetForces();
+        if (pointer)
+            SetForces();
     }
 
     protected virtual void GetInput() {
