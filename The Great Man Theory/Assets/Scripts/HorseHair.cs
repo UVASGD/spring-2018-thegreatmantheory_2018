@@ -16,9 +16,7 @@ public class HorseHair : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Vector2 localNeck = neck.transform.InverseTransformPoint(transform.position);
-		if (true) {
+        // Vector2 localNeck = neck.transform.InverseTransformPoint(transform.position);
 
-        }
 	}
 }
