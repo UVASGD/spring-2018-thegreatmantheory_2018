@@ -15,6 +15,8 @@ public class HorseControl : MonoBehaviour {
 
     float veloc = 0f;
     float giddup = 30f;
+    float maxVeloc = 60f;
+    float velocReduce = 120f;
 
 	// Use this for initialization
 	void Start () {
@@ -27,8 +29,6 @@ public class HorseControl : MonoBehaviour {
 	void Update () {
         GetInput();
         SetForces();
-
-
     }
 
     void GetInput() {
@@ -39,12 +39,12 @@ public class HorseControl : MonoBehaviour {
     }
 
     void SetForces() {
+
         // head.TargetPos = new Vector2((target - head.ForcePoint).x, 0f);
         Vector2 localHeadForce = transform.InverseTransformVector(target - head.ForcePoint);
         localHeadForce = new Vector2(localHeadForce.x, 0f);
         head.TargetPos = transform.TransformVector(localHeadForce);
         head.Forces();
-
 
         /*
         head.TargetPos = (target - head.ForcePoint);
@@ -56,8 +56,12 @@ public class HorseControl : MonoBehaviour {
         if (veloc > 0f) {
             bodyPointer.TargetPos = transform.up * veloc;
             bodyPointer.Forces();
-            veloc -= 60f * Time.deltaTime;
+            veloc -= velocReduce * Time.deltaTime;
             Debug.Log("Veloc: " + veloc.ToString());
         }
+        else if (veloc > maxVeloc) {
+            veloc = maxVeloc;
+        }
+
     }
 }
