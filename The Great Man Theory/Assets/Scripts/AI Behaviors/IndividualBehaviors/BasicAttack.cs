@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/*
 //TRASH THIS SHIT
 public class BasicAttack : BotMovement {
 
@@ -91,3 +91,4 @@ public class BasicAttack : BotMovement {
     }
 
 }
+*/
