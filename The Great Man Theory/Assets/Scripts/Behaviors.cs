@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BehaviorTree : ICommandable {
+public class BehaviorTree : ICommandable {
 
     protected Body body;
     protected Mover mover;
