@@ -32,6 +32,8 @@ public class Body : MonoBehaviour {
 
     public Transform deadBody;
     public Transform effectGen;
+	public ParticleSystem fx;
+	public ParticleSystem.MainModule fxMain;
 
     public Rigidbody2D rb;
     public float maxHealth = 100f;
@@ -49,6 +51,9 @@ public class Body : MonoBehaviour {
     void Start () {
         rb = GetComponent<Rigidbody2D>();
         health = maxHealth;
+		fx = effectGen.GetComponent<ParticleSystem> ();
+		fxMain = fx.main;
+
         SetColors();
         ApplyColors();
         CheckHealth();
@@ -65,22 +70,35 @@ public class Body : MonoBehaviour {
                 //Particle effect, push away from hitPoint big, play cheer sound, shake camera
                 if (!puncturing)
                     rb.AddRelativeForce(spankForce * 250, ForceMode2D.Impulse);
+				if (!fx.isPlaying)
+					fxMain.duration = 1.5f;
+				fx.Play ();
                 Debug.Log("GREAT HIT!");
             }
             else if (force > (threshold * 3)) {
                 //Particle effect, play sound large, push away from hitPoint medium
                 if (!puncturing)
                     rb.AddRelativeForce(spankForce * 100, ForceMode2D.Impulse);
+				if (!fx.isPlaying)
+					fxMain.duration = 1f;
+				fx.Play ();
                 Debug.Log("Large hit");
             }
             else if (force > (threshold * 2)) {
                 //Particle effect, play sound medium, push away from hitPoint small
                 if (!puncturing)
                     rb.AddRelativeForce(spankForce * 20, ForceMode2D.Impulse);
+				
+				if (!fx.isPlaying)
+					fxMain.duration = 0.75f;
+				fx.Play ();
                 Debug.Log("Medium hit");
             }
             else {
                 //play sound quiet
+				if (!fx.isPlaying)
+					fxMain.duration = 0.2f;
+				fx.Play ();
                 Debug.Log("Small hit");
             }
 
