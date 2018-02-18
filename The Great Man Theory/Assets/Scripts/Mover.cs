@@ -9,6 +9,7 @@ public class Mover : MonoBehaviour {
     protected delegate void MoveDel();
 
     public BehaviorTree behavior;
+
     public Body body;
 
     public FollowPointer pointer;
@@ -82,7 +83,8 @@ public class Mover : MonoBehaviour {
         if (behavior != null)
             behavior.Traverse();
         Move();
-        SetForces();
+        if (pointer)
+            SetForces();
     }
 
     protected virtual void GetInput() {
@@ -109,7 +111,7 @@ public class Mover : MonoBehaviour {
                 dashTimer -= Time.deltaTime;
             }
             else if (dashTimer < dashMax) {
-                dashTimer += Time.deltaTime * 2;
+                dashTimer += Time.deltaTime * 2.5f;
             }
         });
 

@@ -9,17 +9,29 @@ public enum  NodeState {
 	Running
 }
 
+public enum LeafKey {
+    Maintain,
+    Wiggle,
+    Charge,
+    Medic,
+    Flee
+}
+
 public delegate NodeState NodeDel();
 
 
 public abstract class Node {
     protected string name = "node";
     protected NodeDel nodeDel;
+    protected int priority;
+    public int currPriority;
 
-    public Node(string _name = "Default Node", NodeDel _nodeDel = null) {
+    public Node(string _name = "Default Node", NodeDel _nodeDel = null, int _priority = 0) {
         nodeDel = _nodeDel;
         name = _name;
-    }
+        priority = _priority;
+        currPriority = priority;
+}
 
     public abstract NodeState GetState();
 }
@@ -28,7 +40,10 @@ public abstract class Node {
 
 public class Leaf : Node {
 
-    public Leaf(string _name = "Leaf") : base(_name) {
+    protected LeafKey key;
+    public LeafKey Key { get { return key; } }
+
+    public Leaf(string _name = "Leaf", int priority = 0) : base(_name, _priority: priority) {
     }
 
     public override NodeState GetState() {
@@ -46,7 +61,8 @@ public class MaintainLeaf : Leaf {
     int prefDist;
     int leeway;
 
-    public MaintainLeaf(Mover _mover, float _timerMax, int _prefDist, int _leeway, string _name = "Maintain") : base(_name) {
+    public MaintainLeaf(Mover _mover, float _timerMax, int _prefDist, int _leeway, string _name = "Maintain", int _priority = 1) : base(_name, priority: _priority) {
+        key = LeafKey.Maintain;
         timerMax = _timerMax;
         timer = timerMax;
         mover = _mover;
@@ -61,7 +77,6 @@ public class MaintainLeaf : Leaf {
             mover.Hold();
             started = true;
         }
-        Debug.Log(name);
         timer -= Time.deltaTime;
         target = mover.Target;
         target = ((Vector2)pos.position - target).normalized * prefDist;
@@ -88,7 +103,8 @@ public class WiggleLeaf : Leaf {
     float randoDist;
 
 
-    public WiggleLeaf(Mover _mover, float _timerMax, float _maxWig, float _randoDist, string _name = "Wiggle") : base(_name) {
+    public WiggleLeaf(Mover _mover, float _timerMax, float _maxWig, float _randoDist, string _name = "Wiggle", int _priority = 2) : base(_name, priority: _priority) {
+        key = LeafKey.Wiggle;
         timerMax = _timerMax;
         timer = timerMax;
         mover = _mover;
@@ -100,7 +116,6 @@ public class WiggleLeaf : Leaf {
     }
 
     public override NodeState GetState() {
-        Debug.Log(name);
         if (!started) {
             started = true;
             target = mover.Target + (UnityEngine.Random.insideUnitCircle * randoDist);
@@ -130,14 +145,14 @@ public class ChargeLeaf : Leaf {
     float timer;
     Mover mover;
 
-    public ChargeLeaf(Mover _mover, float _timerMax, string _name = "Charge") : base(_name) {
+    public ChargeLeaf(Mover _mover, float _timerMax, string _name = "Charge", int _priority = 3) : base(_name, priority: _priority) {
+        key = LeafKey.Charge;
         timerMax = _timerMax;
         timer = timerMax;
         mover = _mover;
     }
 
     public override NodeState GetState() {
-        Debug.Log(name);
         if (!started) {
             started = true;
             mover.SetTarget(mover.Target);
@@ -155,21 +170,19 @@ public class ChargeLeaf : Leaf {
 
 public class MedicLeaf : Leaf {
     Mover mover;
-    Transform pos;
-    Body body;
     Vector2 target;
 
-    public MedicLeaf(Mover _mover, Body _body, string _name = "Medic") : base(_name) {
+    public MedicLeaf(Mover _mover, string _name = "Medic", int _priority = 5) : base(_name, priority: _priority) {
+        key = LeafKey.Medic;
         mover = _mover;
-        pos = mover.transform;
-        body = _body;
         target = mover.Target;
     }
 
     public override NodeState GetState() {
-        target = mover.Target;
-        mover.SetTarget(target);
-        return NodeState.Running;
+        //Find medic, yo
+        //target = mover.Target;
+        //mover.SetTarget(target);
+        return NodeState.Failure;
     }
 }
 
@@ -178,7 +191,8 @@ public class FleeLeaf : Leaf {
     Mover mover;
     int fleeDir;
 
-    public FleeLeaf(Mover _mover, int _fleeDir, string _name = "Flee") : base(_name) {
+    public FleeLeaf(Mover _mover, int _fleeDir, string _name = "Flee", int _priority = 5) : base(_name, priority: _priority) {
+        key = LeafKey.Flee;
         mover = _mover;
         fleeDir = _fleeDir;
     }
@@ -188,6 +202,7 @@ public class FleeLeaf : Leaf {
             started = true;
             mover.SetTarget(new Vector2(mover.transform.position.x, fleeDir));
         }
+        mover.Dash();
         return NodeState.Running;
     }
 }
@@ -203,12 +218,16 @@ public class Selector : Node {
 	}
 
 	public override NodeState GetState() {
+        currPriority = priority;
+        int highestState = 0;
         if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
 
 		for (int i = currentNodeIndex; i < children.Count; i++) {
 			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeIndex = i;
+                highestState = (children[i].currPriority > highestState) ? children[i].currPriority : highestState;
+                currPriority = highestState;
 				return NodeState.Running;
 			} else if (childState == NodeState.Success) {
 				currentNodeIndex = 0;
@@ -278,11 +297,13 @@ public class RandomSelector : Node {
 	}
 
 	public override NodeState GetState() {
+        currPriority = priority;
         if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
         for (int i = currentNodeOffset; i < children.Count; i++) {
 			NodeState childState = children [(i + currentStartIndex) % children.Count].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeOffset = i;
+                currPriority = children[i].currPriority;
 				return NodeState.Running;
 			} else if (childState == NodeState.Success) {
 				currentStartIndex = GetRandomIndex();
@@ -306,11 +327,13 @@ public class Sequencer : Node {
 	}
 
 	public override NodeState GetState() {
+        currPriority = priority;
         if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
         for (int i = currentNodeIndex; i < children.Count; i++) {
 			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeIndex = i;
+                currPriority = children[i].currPriority;
 				return NodeState.Running;
 			} else if (childState == NodeState.Failure) {
 				currentNodeIndex = 0;

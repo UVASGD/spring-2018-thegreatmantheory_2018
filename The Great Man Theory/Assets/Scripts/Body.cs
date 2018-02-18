@@ -54,6 +54,8 @@ public class Body : MonoBehaviour {
         CheckHealth();
     }
 
+
+
     public void Hit(float force, Vector2 hitPoint, bool puncturing = false, bool playerHit = false) {
         //Debug.Log(force);
         if (force > threshold) {
@@ -62,7 +64,7 @@ public class Body : MonoBehaviour {
             if (force > (threshold * 4) && playerHit && greatHittable) {
                 //Particle effect, push away from hitPoint big, play cheer sound, shake camera
                 if (!puncturing)
-                    rb.AddRelativeForce(spankForce * 500, ForceMode2D.Impulse);
+                    rb.AddRelativeForce(spankForce * 250, ForceMode2D.Impulse);
                 Debug.Log("GREAT HIT!");
             }
             else if (force > (threshold * 3)) {
@@ -99,7 +101,7 @@ public class Body : MonoBehaviour {
                 dead.GetComponent<SpriteRenderer>().color = bodyColor;
             }
 
-            if (weapon) {
+            if (weapon) { //TODO just get Weapon script and call Drop();
                 weapon.transform.parent = null;
                 Rigidbody2D weaponRB = weapon.GetComponent<Rigidbody2D>();
                 weaponRB.velocity = new Vector2(0, 0);
