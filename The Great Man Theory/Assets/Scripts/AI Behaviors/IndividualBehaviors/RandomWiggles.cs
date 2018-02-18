@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
 //TRASH THIS SHIT
 public class RandomWiggles : BotMovement {
 
@@ -32,3 +33,4 @@ public class RandomWiggles : BotMovement {
         return direct * random;
     }
 }
+*/
