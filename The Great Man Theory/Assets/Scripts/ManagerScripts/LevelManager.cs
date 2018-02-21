@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/*
 //TRASH THIS SHIT
 public delegate void gameEvent();
 
@@ -64,3 +65,4 @@ public class LevelManager : MonoBehaviour {
         SceneManager.LoadScene(levelIndex);
     }
 }
+*/
