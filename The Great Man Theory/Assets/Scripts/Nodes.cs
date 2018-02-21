@@ -13,6 +13,9 @@ public enum LeafKey {
     Maintain,
     Wiggle,
     Charge,
+    Focus,
+    Shoot,
+    Repo,
     Medic,
     Flee
 }
@@ -167,6 +170,37 @@ public class ChargeLeaf : Leaf {
         return NodeState.Running;
     }
 }
+
+
+public class FocusLeaf : Leaf {
+    bool started = false;
+    Mover mover;
+    float timerMax;
+    float timer;
+
+    public FocusLeaf(Mover _mover, float _timerMax, string _name = "Focus", int _priority = 2) : base(_name, priority: _priority) {
+        key = LeafKey.Focus;
+        timerMax = _timerMax;
+        timer = timerMax;
+        mover = _mover;
+    }
+
+    public override NodeState GetState() {
+        if (!started) {
+            started = true;
+            //TODO Set target accordingly
+        }
+        timer -= Time.deltaTime;
+        mover.Brace();
+        if (timer <= 0) {
+            timer = timerMax;
+            started = false;
+            return NodeState.Success;
+        }
+        return NodeState.Running;
+    }
+}
+
 
 public class MedicLeaf : Leaf {
     Mover mover;

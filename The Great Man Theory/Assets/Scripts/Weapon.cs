@@ -12,12 +12,14 @@ public class Weapon : MonoBehaviour {
     public float height; //TODO make this actually matter, should just match body's height
 
     public GameObject bodyObj;
+    public GameObject dangerObj;
     protected Body thisBody;
     public Body ThisBody { get { return thisBody; } }
     protected Collider2D thisBodyCollider;
     public Collider2D thisCollider;
     public Rigidbody2D rb;
     public FollowPointer pointer;
+
 
 
     protected bool shouldCheck = false;

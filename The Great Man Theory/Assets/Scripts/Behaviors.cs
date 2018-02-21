@@ -84,3 +84,32 @@ public class MeleeBehavior : BehaviorTree {
         rootNode = new Selector("RootNode", _children:RootList);
     }
 }
+
+public class RangedBehavior : BehaviorTree {
+    public RangedBehavior(Body _body, Mover _mover, int fleeDir) : base(_body, _mover) {
+        MedicLeaf medic = new MedicLeaf(mover);
+        FleeLeaf flee = new FleeLeaf(mover, fleeDir);
+
+        commandList = new List<Leaf>() { medic, flee };
+
+        List<Node> WoundedList = new List<Node>() {
+            medic, //timer, medic target from squad -- medic target == null
+            flee //end zone from squad -- n/a
+        };
+
+        List<Node> FightList = new List<Node>() {
+        
+        };
+
+        List<Node> RootList = new List<Node>() {
+            new RandomSelector("Wounded",
+                delegate() { return (body.Wounded()) ? NodeState.Running : NodeState.Failure; },
+                WoundedList), // n/a -- health < (maxHealth * 0.1)
+            new RandomSelector("Fight",
+                delegate() { return (mover.targetObj) ? NodeState.Running : NodeState.Failure; },
+                FightList) // n/a -- (target) && squad.Fight
+        };
+
+        rootNode = new Selector("RootNode", _children: RootList);
+    }
+}
