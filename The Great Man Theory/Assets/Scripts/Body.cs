@@ -43,7 +43,7 @@ public class Body : MonoBehaviour {
     //public float thresholdMultiplier = 2;
     public bool greatHittable = true;
 
-    public GameObject weapon;
+    public Weapon weapon;
 
     public float height; //TODO make this a thing for elevation, and maybe use it in collisions? 
                          //make sure to set weapon's height equal to body height
@@ -119,13 +119,13 @@ public class Body : MonoBehaviour {
                 dead.GetComponent<SpriteRenderer>().color = bodyColor;
             }
 
-            if (weapon) { //TODO just get Weapon script and call Drop();
+            /*if (weapon) { //TODO just get Weapon script and call Drop();
                 weapon.transform.parent = null;
                 Rigidbody2D weaponRB = weapon.GetComponent<Rigidbody2D>();
                 weaponRB.velocity = new Vector2(0, 0);
                 weaponRB.angularVelocity = 0;
                 weapon.layer = LayerMask.NameToLayer("Ground");
-            }
+            }*/
             Destroy(transform.parent.gameObject);
         }
     }
