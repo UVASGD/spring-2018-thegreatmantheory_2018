@@ -69,7 +69,7 @@ public class Body : MonoBehaviour {
             if (force > (threshold * 4) && playerHit && greatHittable) {
                 //Particle effect, push away from hitPoint big, play cheer sound, shake camera
                 if (!puncturing)
-                    rb.AddRelativeForce(spankForce * 250, ForceMode2D.Impulse);
+                    rb.AddForce(spankForce * 50, ForceMode2D.Impulse);
 				if (!fx.isPlaying)
 					fxMain.duration = 1.5f;
 				fx.Play ();
@@ -78,7 +78,7 @@ public class Body : MonoBehaviour {
             else if (force > (threshold * 3)) {
                 //Particle effect, play sound large, push away from hitPoint medium
                 if (!puncturing)
-                    rb.AddRelativeForce(spankForce * 100, ForceMode2D.Impulse);
+                    rb.AddForce(spankForce * 20, ForceMode2D.Impulse);
 				if (!fx.isPlaying)
 					fxMain.duration = 1f;
 				fx.Play ();
@@ -87,7 +87,7 @@ public class Body : MonoBehaviour {
             else if (force > (threshold * 2)) {
                 //Particle effect, play sound medium, push away from hitPoint small
                 if (!puncturing)
-                    rb.AddRelativeForce(spankForce * 20, ForceMode2D.Impulse);
+                    rb.AddForce(spankForce * 10, ForceMode2D.Impulse);
 				
 				if (!fx.isPlaying)
 					fxMain.duration = 0.75f;
