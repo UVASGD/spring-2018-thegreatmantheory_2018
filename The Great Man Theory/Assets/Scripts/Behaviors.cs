@@ -90,15 +90,19 @@ public class RangedBehavior : BehaviorTree {
         MedicLeaf medic = new MedicLeaf(mover);
         FleeLeaf flee = new FleeLeaf(mover, fleeDir);
 
-        commandList = new List<Leaf>() { medic, flee };
+        FocusLeaf focus = new FocusLeaf(mover, body, 1.5f);
+        ShootLeaf shoot = new ShootLeaf(body, 1);
+
+        commandList = new List<Leaf>() { medic, flee, focus, shoot };
 
         List<Node> WoundedList = new List<Node>() {
             medic, //timer, medic target from squad -- medic target == null
             flee //end zone from squad -- n/a
         };
 
-        List<Node> FightList = new List<Node>() {
-        
+        List<Node> ShootList = new List<Node>() {
+            focus,
+            shoot
         };
 
         List<Node> RootList = new List<Node>() {
@@ -107,7 +111,7 @@ public class RangedBehavior : BehaviorTree {
                 WoundedList), // n/a -- health < (maxHealth * 0.1)
             new RandomSelector("Fight",
                 delegate() { return (mover.targetObj) ? NodeState.Running : NodeState.Failure; },
-                FightList) // n/a -- (target) && squad.Fight
+                ShootList) // n/a -- (target) && squad.Fight
         };
 
         rootNode = new Selector("RootNode", _children: RootList);

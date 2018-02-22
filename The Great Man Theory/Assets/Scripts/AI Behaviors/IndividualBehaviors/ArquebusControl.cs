@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArquebusControl : MonoBehaviour {
+public class RangedWeapon : Weapon {
 
     public Transform cloud;
     Transform lastCloud;
@@ -10,22 +10,16 @@ public class ArquebusControl : MonoBehaviour {
     public float reloadTime = 2f;
     float recoilStrength = 8000f;
 
-    Rigidbody2D body;
-
     float reload;
     float damage = 100f;
 
     int shotNum = 0;
 
     Vector2 barrelEnd;
-
-	// Use this for initialization
-	void Start () {
-        body = GetComponent<Rigidbody2D>();
-    }
 	
 	// Update is called once per frame
-	void Update () {
+	protected override void Update () {
+        base.Update();
         GetInput();
         if (reload < reloadTime)
             reload += Time.deltaTime;
@@ -38,6 +32,11 @@ public class ArquebusControl : MonoBehaviour {
             Shoot();
             Recoil();
         }
+    }
+
+    public void Trigger() {
+        Shoot();
+        Recoil();
     }
 
     void Shoot() {
@@ -61,7 +60,7 @@ public class ArquebusControl : MonoBehaviour {
     void Recoil() {
         Debug.Log("BANG" + shotNum.ToString());
         Vector2 backwards = -transform.up;
-        body.AddForce(backwards * recoilStrength);
+        rb.AddForce(backwards * recoilStrength);
         Debug.Log(backwards);
     }
 

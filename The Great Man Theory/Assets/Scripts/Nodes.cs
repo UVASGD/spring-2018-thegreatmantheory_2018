@@ -182,7 +182,7 @@ public class FocusLeaf : Leaf {
     public FocusLeaf(Mover _mover, Body _body, float _timerMax, string _name = "Focus", int _priority = 2) : base(_name, priority: _priority) {
         key = LeafKey.Focus;
         timerMax = _timerMax;
-        timer = timerMax;
+        timer = UnityEngine.Random.Range(0.4f, timerMax);
         mover = _mover;
         body = _body;
     }
@@ -198,7 +198,7 @@ public class FocusLeaf : Leaf {
         timer -= Time.deltaTime;
         mover.Brace();
         if (timer <= 0) {
-            timer = timerMax;
+            timer = UnityEngine.Random.Range(0.4f, timerMax);
             started = false;
             return NodeState.Success;
         }
@@ -207,21 +207,27 @@ public class FocusLeaf : Leaf {
 }
 
 public class ShootLeaf : Leaf {
+    bool fired = false;
     Body body;
     float timerMax;
     float timer;
 
-    public ShootLeaf(Body _body, float _timerMax, float _timer, string _name = "Shoot", int _priority = 5) : base(_name, priority: _priority) {
+    public ShootLeaf(Body _body, float _timerMax, string _name = "Shoot", int _priority = 5) : base(_name, priority: _priority) {
         key = LeafKey.Shoot;
         timerMax = _timerMax;
-        timer = _timer;
+        timer = UnityEngine.Random.Range(0.4f, timerMax);
         body = _body;
     }
 
     public override NodeState GetState() {
+        if (!fired) {
+            fired = true;
+            ((RangedWeapon)body.weapon).Trigger();
+        }
         timer -= Time.deltaTime;
         if (timer <= 0) {
-            timer = timerMax;
+            timer = UnityEngine.Random.Range(0.4f, timerMax);
+            fired = false;
             return NodeState.Success;
         }
         return NodeState.Running;
