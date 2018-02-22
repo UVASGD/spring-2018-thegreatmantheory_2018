@@ -18,6 +18,7 @@ public class HorseControl : MonoBehaviour {
     float maxVeloc = 60f;
     float velocReduce = 120f;
 
+    bool mouseDown = false;
 	// Use this for initialization
 	void Start () {
         body = GetComponent<Rigidbody2D>();
@@ -28,10 +29,20 @@ public class HorseControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         GetInput();
-        SetForces();
+        if (!mouseDown)
+            SetForces();
     }
 
     void GetInput() {
+        target = cam.ScreenToWorldPoint(Input.mousePosition);
+        if (Input.GetMouseButton(1)) {
+            mouseDown = true;
+        }
+        else
+            mouseDown = false;
+    }
+
+    void OldGetInput() {
         target = cam.ScreenToWorldPoint(Input.mousePosition);
         if (Input.GetKeyDown(KeyCode.Space)) {
             veloc += giddup;
