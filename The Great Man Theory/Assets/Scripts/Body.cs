@@ -117,6 +117,7 @@ public class Body : MonoBehaviour {
             if (deadBody) {
                 Transform dead = Instantiate(deadBody, transform.position, Quaternion.Euler(0, 0, (Vector2.SignedAngle(Vector2.up, rb.velocity))));
                 dead.GetComponent<SpriteRenderer>().color = bodyColor;
+                dead.GetComponent<Rigidbody2D>().AddForce(rb.velocity*5, ForceMode2D.Impulse);
             }
 
             /*if (weapon) { //TODO just get Weapon script and call Drop();
