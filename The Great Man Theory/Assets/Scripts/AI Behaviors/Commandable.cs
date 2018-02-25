@@ -1,4 +1,8 @@
-﻿interface ICommandable {
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public interface ICommandable {
 	/* * 
 	 * void SetCommand
 	 * 
@@ -8,4 +12,27 @@
 	 * 
 	 */
 	bool SetCommand (LeafKey comm, int priority);
+
+	/* *
+	 * GameObject GetGameObject
+	 * 
+	 * @return the gameobject this is associated with
+	 * 
+	 */
+	GameObject GetGameObject();
+
+	/* *
+	 * void SetCommander
+	 * 
+	 * @param 
+	 * 
+	 */
+	void SetCommander (ICommander commander);
+}
+
+public interface ICommander {
+	Transform FindOfficer ();
+	Transform FindMedic ();
+	Transform FindTarget ();
+	float SquadRadius ();
 }

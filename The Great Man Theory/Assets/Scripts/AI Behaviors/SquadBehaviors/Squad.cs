@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Squad : MonoBehaviour, ICommandable {
+public abstract class Squad : MonoBehaviour, ICommandable, ICommander {
 
-	List<ICommandable> minions;
+	public List<ICommandable> minions;
+
+	public ICommander commander;
 
 	// Use this for initialization
 	void Start () {
@@ -23,4 +25,18 @@ public class Squad : MonoBehaviour, ICommandable {
 		}
 		return worked;
 	}
+
+	public void SetCommander(ICommander comm) {
+		commander = comm;
+	}
+
+	public abstract float SquadRadius ();
+
+	public abstract GameObject GetGameObject();
+
+	public abstract Transform FindOfficer();
+
+	public abstract Transform FindMedic();
+
+	public abstract Transform FindTarget();
 }

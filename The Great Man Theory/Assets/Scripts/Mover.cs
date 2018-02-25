@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum MoveState { end = -1, off = 0, on = 1, start = 2 }
 
-public class Mover : MonoBehaviour {
+public class Mover : MonoBehaviour, ICommandable {
 
     protected delegate void MoveDel();
 
@@ -35,6 +35,8 @@ public class Mover : MonoBehaviour {
     HingeJoint2D[] armJoints;
     JointAngleLimits2D[] originalLimits;
     public bool hasArms = true;
+
+	protected ICommander commander;
 
     void Start() {
         SetMover();
@@ -190,4 +192,20 @@ public class Mover : MonoBehaviour {
             rb.freezeRotation = false;
             hold = MoveState.end; }
     }
+
+	public bool SetCommand(LeafKey key, int priority) {
+		return behavior.SetCommand (key, priority);
+	}
+
+	public GameObject GetGameObject() {
+		return gameObject;
+	}
+
+	public void SetCommander(ICommander comm) {
+		commander = comm;
+	}
+
+	public ICommander GetCommander() {
+		return commander;
+	}
 }
