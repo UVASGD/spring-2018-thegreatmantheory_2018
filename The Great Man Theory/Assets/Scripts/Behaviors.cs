@@ -8,6 +8,8 @@ public class BehaviorTree : ICommandable {
     protected Mover mover;
     protected Leaf command;
     protected int currentPriority = 0;
+
+	protected ICommander commander;
     //squad
 
     protected List<Leaf> commandList; //Maybe change this to node, but probably not
@@ -42,6 +44,14 @@ public class BehaviorTree : ICommandable {
                 }
         return false;
     }
+
+	public void SetCommander(ICommander comm) {
+		commander = comm;
+	}
+
+	public GameObject GetGameObject() {
+		return body.gameObject;
+	}
 }
 
 public class MeleeBehavior : BehaviorTree {
@@ -55,7 +65,7 @@ public class MeleeBehavior : BehaviorTree {
         ChargeLeaf charge = new ChargeLeaf(mover, charTimer);
         WiggleLeaf wiggle = new WiggleLeaf(mover, wigTimer, maxWig, wigDist);
 
-        commandList = new List<Leaf>() { medic, flee, maintain, charge, wiggle };
+		commandList = new List<Leaf>() { medic, flee, maintain, charge, wiggle, new MoveLeaf(_mover), new RegroupLeaf(_mover)};
 
         List<Node> WoundedList = new List<Node>() {
             medic, //timer, medic target from squad -- medic target == null
@@ -93,7 +103,7 @@ public class RangedBehavior : BehaviorTree {
         FocusLeaf focus = new FocusLeaf(mover, body, 1.5f);
         ShootLeaf shoot = new ShootLeaf(body, 1);
 
-        commandList = new List<Leaf>() { medic, flee, focus, shoot };
+		commandList = new List<Leaf>() { medic, flee, focus, shoot, new MoveLeaf(mover), new RegroupLeaf(mover)};
 
         List<Node> WoundedList = new List<Node>() {
             medic, //timer, medic target from squad -- medic target == null

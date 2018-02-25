@@ -17,7 +17,9 @@ public enum LeafKey {
     Shoot,
     Repo,
     Medic,
-    Flee
+    Flee,
+	Move,
+	Regroup
 }
 
 public delegate NodeState NodeDel();
@@ -237,20 +239,72 @@ public class ShootLeaf : Leaf {
 
 public class MedicLeaf : Leaf {
     Mover mover;
-    Vector2 target;
+	Transform target;
 
-    public MedicLeaf(Mover _mover, string _name = "Medic", int _priority = 5) : base(_name, priority: _priority) {
+
+	public MedicLeaf(Mover _mover, string _name = "Medic", int _priority = 5) : base(_name, priority: _priority) {
         key = LeafKey.Medic;
         mover = _mover;
-        target = mover.Target;
-    }
+		target = null;
+	}
 
     public override NodeState GetState() {
-        //Find medic, yo
-        //target = mover.Target;
-        //mover.SetTarget(target);
-        return NodeState.Failure;
+		target = mover.GetCommander().FindMedic();
+		if (target == null) {
+			return NodeState.Failure;
+		} else if (((Vector2)mover.gameObject.transform.position - (Vector2)target.position).magnitude > 1) {
+			mover.SetTarget (target.position);
+			return NodeState.Running;
+		} else {
+			return NodeState.Success;
+		}
     }
+}
+
+public class MoveLeaf : Leaf {
+	Mover mover;
+	Transform target;
+
+	public MoveLeaf(Mover _mover, string _name = "MoveTo", int _priority = 4) : base(_name, priority: _priority) {
+		key = LeafKey.Move;
+		mover = _mover;
+		target = null;
+	}
+
+	public override NodeState GetState() {
+		target = mover.GetCommander().FindTarget();
+		if (target == null) {
+			return NodeState.Failure;
+		} else if (((Vector2)mover.gameObject.transform.position - (Vector2)target.position).magnitude > 1) {
+			mover.SetTarget (target.position);
+			return NodeState.Running;
+		} else {
+			return NodeState.Success;
+		}
+	}
+}
+
+public class RegroupLeaf : Leaf {
+	Mover mover;
+	Transform target;
+
+	public RegroupLeaf(Mover _mover, string _name = "Regroup", int _priority = 4) : base(_name, priority: _priority) {
+		key = LeafKey.Regroup;
+		mover = _mover;
+		target = null;
+	}
+
+	public override NodeState GetState() {
+		target = mover.GetCommander().FindOfficer();
+		if (target == null) {
+			return NodeState.Failure;
+		} else if (((Vector2)mover.gameObject.transform.position - (Vector2)target.position).magnitude > mover.GetCommander().SquadRadius()) {
+			mover.SetTarget (target.position);
+			return NodeState.Running;
+		} else {
+			return NodeState.Success;
+		}
+	}
 }
 
 public class FleeLeaf : Leaf {
