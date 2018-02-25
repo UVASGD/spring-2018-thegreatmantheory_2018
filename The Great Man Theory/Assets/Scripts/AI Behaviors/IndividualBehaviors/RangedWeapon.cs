@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArquebusControl : Weapon {
+public class RangedWeapon : Weapon {
 
     public float reloadTime = 2f;
-    float recoilStrength = 5000f;
+    float recoilStrength = 8000f;
 
     float reload;
     float damage = 100f;
@@ -58,6 +58,14 @@ public class ArquebusControl : Weapon {
                 break;
             }
         }
+
+    }
+
+    void Recoil() {
+        Debug.Log("BANG" + shotNum.ToString());
+        Vector2 backwards = -transform.up;
+        rb.AddForce(backwards * recoilStrength);
+        Debug.Log(backwards);
     }
 
     void FX() {
@@ -67,11 +75,5 @@ public class ArquebusControl : Weapon {
         }
     }
 
-    void Recoil() {
-        Debug.Log("BANG" + shotNum.ToString());
-        Vector2 backwards = -transform.up;
-        rb.AddForce(backwards * recoilStrength);
-        Debug.Log(backwards);
-    }
 
 }
