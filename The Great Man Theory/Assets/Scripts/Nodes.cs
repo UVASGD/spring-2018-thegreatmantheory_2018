@@ -13,6 +13,9 @@ public enum LeafKey {
     Maintain,
     Wiggle,
     Charge,
+    Focus,
+    Shoot,
+    Repo,
     Medic,
     Flee
 }
@@ -167,6 +170,70 @@ public class ChargeLeaf : Leaf {
         return NodeState.Running;
     }
 }
+
+
+public class FocusLeaf : Leaf {
+    bool started = false;
+    Mover mover;
+    Body body;
+    float timerMax;
+    float timer;
+
+    public FocusLeaf(Mover _mover, Body _body, float _timerMax, string _name = "Focus", int _priority = 2) : base(_name, priority: _priority) {
+        key = LeafKey.Focus;
+        timerMax = _timerMax;
+        timer = UnityEngine.Random.Range(0.4f, timerMax);
+        mover = _mover;
+        body = _body;
+    }
+
+    public override NodeState GetState() {
+        if (!started) {
+            started = true;
+            Vector2 target = (mover.Target - body.weapon.pointer.ForcePoint).normalized;
+            target = mover.transform.InverseTransformDirection(target);
+            target = new Vector2(target.x + UnityEngine.Random.Range(-0.1f, 0.1f), target.y).normalized;
+            mover.SetTarget(mover.transform.TransformDirection(target));
+        }
+        timer -= Time.deltaTime;
+        mover.Brace();
+        if (timer <= 0) {
+            timer = UnityEngine.Random.Range(0.4f, timerMax);
+            started = false;
+            return NodeState.Success;
+        }
+        return NodeState.Running;
+    }
+}
+
+public class ShootLeaf : Leaf {
+    bool fired = false;
+    Body body;
+    float timerMax;
+    float timer;
+
+    public ShootLeaf(Body _body, float _timerMax, string _name = "Shoot", int _priority = 5) : base(_name, priority: _priority) {
+        key = LeafKey.Shoot;
+        timerMax = _timerMax;
+        timer = UnityEngine.Random.Range(0.4f, timerMax);
+        body = _body;
+    }
+
+    public override NodeState GetState() {
+        if (!fired) {
+            fired = true;
+            ((RangedWeapon)body.weapon).Trigger();
+        }
+        timer -= Time.deltaTime;
+        if (timer <= 0) {
+            timer = UnityEngine.Random.Range(0.4f, timerMax);
+            fired = false;
+            return NodeState.Success;
+        }
+        return NodeState.Running;
+    }
+}
+
 
 public class MedicLeaf : Leaf {
     Mover mover;
