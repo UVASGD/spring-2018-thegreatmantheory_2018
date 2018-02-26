@@ -60,36 +60,36 @@ public class MaintainLeaf : Leaf {
     bool started = false;
     float timerMax;
     float timer;
-    Mover mover;
+    Bot bot;
     Transform pos;
     Vector2 target;
     int prefDist;
     int leeway;
 
-    public MaintainLeaf(Mover _mover, float _timerMax, int _prefDist, int _leeway, string _name = "Maintain", int _priority = 1) : base(_name, priority: _priority) {
+    public MaintainLeaf(Bot _bot, float _timerMax, int _prefDist, int _leeway, int _priority = 1) : base(priority: _priority) {
         key = LeafKey.Maintain;
         timerMax = _timerMax;
         timer = timerMax;
-        mover = _mover;
-        pos = mover.transform;
-        target = mover.Target;
+        bot = _bot;
+        pos = bot.transform;
+        target = bot.Target;
         prefDist = _prefDist;
         leeway = _leeway;
     }
 
     public override NodeState GetState() {
         if (!started) {
-            mover.Hold();
+            bot.Hold();
             started = true;
         }
         timer -= Time.deltaTime;
-        target = mover.Target;
+        target = bot.Target;
         target = ((Vector2)pos.position - target).normalized * prefDist;
-        mover.SetTarget(target);
+        bot.SetTarget(target);
         if (timer <= 0) {
             timer = timerMax;
             started = false;
-            mover.Hold(false);
+            bot.Hold(false);
             return (Mathf.Abs(prefDist - Vector2.Distance(pos.position, target)) < leeway) ? NodeState.Success : NodeState.Failure;
         }
         return NodeState.Running;
@@ -103,17 +103,17 @@ public class WiggleLeaf : Leaf {
     float maxWig;
     float swingMax;
     float swingTimer;
-    Mover mover;
+    Bot bot;
     Vector2 target;
     float randoDist;
 
 
-    public WiggleLeaf(Mover _mover, float _timerMax, float _maxWig, float _randoDist, string _name = "Wiggle", int _priority = 2) : base(_name, priority: _priority) {
+    public WiggleLeaf(Bot _bot, float _timerMax, float _maxWig, float _randoDist, int _priority = 2) : base(priority: _priority) {
         key = LeafKey.Wiggle;
         timerMax = _timerMax;
         timer = timerMax;
-        mover = _mover;
-        target = mover.Target;
+        bot = _bot;
+        target = bot.Target;
         randoDist = _randoDist;
         maxWig = _maxWig;
         swingMax = UnityEngine.Random.Range(0.2f, _maxWig);
@@ -123,16 +123,16 @@ public class WiggleLeaf : Leaf {
     public override NodeState GetState() {
         if (!started) {
             started = true;
-            target = mover.Target + (UnityEngine.Random.insideUnitCircle * randoDist);
-            mover.SetTarget(target);
+            target = bot.Target + (UnityEngine.Random.insideUnitCircle * randoDist);
+            bot.SetTarget(target);
             swingMax = UnityEngine.Random.Range(0.2f, maxWig);
             swingTimer = swingMax;
         }
         swingTimer -= Time.deltaTime;
         if (swingTimer <= 0) {
             swingTimer = swingMax;
-            target = mover.Target + (UnityEngine.Random.insideUnitCircle * randoDist);
-            mover.SetTarget(target);
+            target = bot.Target + (UnityEngine.Random.insideUnitCircle * randoDist);
+            bot.SetTarget(target);
         }
         timer -= Time.deltaTime;
         if (timer <= 0) {
@@ -148,22 +148,22 @@ public class ChargeLeaf : Leaf {
     bool started = false;
     float timerMax;
     float timer;
-    Mover mover;
+    Bot bot;
 
-    public ChargeLeaf(Mover _mover, float _timerMax, string _name = "Charge", int _priority = 3) : base(_name, priority: _priority) {
+    public ChargeLeaf(Bot _bot, float _timerMax, int _priority = 3) : base(priority: _priority) {
         key = LeafKey.Charge;
         timerMax = _timerMax;
         timer = timerMax;
-        mover = _mover;
+        bot = _bot;
     }
 
     public override NodeState GetState() {
         if (!started) {
             started = true;
-            mover.SetTarget(mover.Target);
+            bot.SetTarget(bot.Target);
         }
         timer -= Time.deltaTime;
-        mover.Dash();
+        bot.Dash();
         if (timer <= 0) {
             timer = timerMax;
             started = false;
@@ -176,29 +176,29 @@ public class ChargeLeaf : Leaf {
 
 public class FocusLeaf : Leaf {
     bool started = false;
-    Mover mover;
+    Bot bot;
     Body body;
     float timerMax;
     float timer;
 
-    public FocusLeaf(Mover _mover, Body _body, float _timerMax, string _name = "Focus", int _priority = 2) : base(_name, priority: _priority) {
+    public FocusLeaf(Bot _bot, Body _body, float _timerMax, int _priority = 2) : base(priority: _priority) {
         key = LeafKey.Focus;
         timerMax = _timerMax;
         timer = UnityEngine.Random.Range(0.4f, timerMax);
-        mover = _mover;
+        bot = _bot;
         body = _body;
     }
 
     public override NodeState GetState() {
         if (!started) {
             started = true;
-            Vector2 target = (mover.Target - body.weapon.pointer.ForcePoint).normalized;
-            target = mover.transform.InverseTransformDirection(target);
+            Vector2 target = (bot.Target - body.weapon.pointer.ForcePoint).normalized;
+            target = bot.transform.InverseTransformDirection(target);
             target = new Vector2(target.x + UnityEngine.Random.Range(-0.1f, 0.1f), target.y).normalized;
-            mover.SetTarget(mover.transform.TransformDirection(target));
+            bot.SetTarget(bot.transform.TransformDirection(target));
         }
         timer -= Time.deltaTime;
-        mover.Brace();
+        bot.Brace();
         if (timer <= 0) {
             timer = UnityEngine.Random.Range(0.4f, timerMax);
             started = false;
@@ -214,7 +214,7 @@ public class ShootLeaf : Leaf {
     float timerMax;
     float timer;
 
-    public ShootLeaf(Body _body, float _timerMax, string _name = "Shoot", int _priority = 5) : base(_name, priority: _priority) {
+    public ShootLeaf(Body _body, float _timerMax, int _priority = 5) : base(priority: _priority) {
         key = LeafKey.Shoot;
         timerMax = _timerMax;
         timer = UnityEngine.Random.Range(0.4f, timerMax);
@@ -238,70 +238,94 @@ public class ShootLeaf : Leaf {
 
 
 public class MedicLeaf : Leaf {
-    Mover mover;
+    bool started = false;
+    Bot bot;
 	Transform target;
+    Transform pos;
 
 
-	public MedicLeaf(Mover _mover, string _name = "Medic", int _priority = 5) : base(_name, priority: _priority) {
+	public MedicLeaf(Bot _bot, int _priority = 5) : base(priority: _priority) {
         key = LeafKey.Medic;
-        mover = _mover;
-		target = null;
+        bot = _bot;
+        target = null;
+        pos = bot.transform;
 	}
 
     public override NodeState GetState() {
-		target = mover.GetCommander().FindMedic();
+        if (!started) {
+            started = true;
+            target = bot.GetCommander().FindMedic();
+        }
 		if (target == null) {
 			return NodeState.Failure;
-		} else if (((Vector2)mover.gameObject.transform.position - (Vector2)target.position).magnitude > 1) {
-			mover.SetTarget (target.position);
+		}
+        if (Vector2.Distance(target.position, pos.position) > 0.5f) {
+			bot.SetTarget (target.position);
 			return NodeState.Running;
 		} else {
+            started = false;
 			return NodeState.Success;
 		}
     }
 }
 
 public class MoveLeaf : Leaf {
-	Mover mover;
+    bool started = false;
+	Bot bot;
 	Transform target;
+    Transform pos;
 
-	public MoveLeaf(Mover _mover, string _name = "MoveTo", int _priority = 4) : base(_name, priority: _priority) {
+	public MoveLeaf(Bot _bot, int _priority = 4) : base(priority: _priority) {
 		key = LeafKey.Move;
-		mover = _mover;
-		target = null;
+		bot = _bot;
+        target = null;
+        pos = bot.transform;
 	}
 
 	public override NodeState GetState() {
-		target = mover.GetCommander().FindTarget();
+        if (!started) {
+            started = true;
+            target = bot.GetCommander().FindTarget();
+        }
 		if (target == null) {
 			return NodeState.Failure;
-		} else if (((Vector2)mover.gameObject.transform.position - (Vector2)target.position).magnitude > 1) {
-			mover.SetTarget (target.position);
+		}
+        if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
+			bot.SetTarget (target.position);
 			return NodeState.Running;
 		} else {
+            started = false;
 			return NodeState.Success;
 		}
 	}
 }
 
 public class RegroupLeaf : Leaf {
-	Mover mover;
+    bool started = false;
+	Bot bot;
 	Transform target;
+    Transform pos;
 
-	public RegroupLeaf(Mover _mover, string _name = "Regroup", int _priority = 4) : base(_name, priority: _priority) {
+	public RegroupLeaf(Bot _bot, int _priority = 4) : base(priority: _priority) {
 		key = LeafKey.Regroup;
-		mover = _mover;
+		bot = _bot;
 		target = null;
+        pos = bot.transform;
 	}
 
 	public override NodeState GetState() {
-		target = mover.GetCommander().FindOfficer();
+        if (!started) {
+            started = true;
+            target = bot.GetCommander().FindOfficer();
+        }
 		if (target == null) {
 			return NodeState.Failure;
-		} else if (((Vector2)mover.gameObject.transform.position - (Vector2)target.position).magnitude > mover.GetCommander().SquadRadius()) {
-			mover.SetTarget (target.position);
+		}
+        if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
+			bot.SetTarget (target.position);
 			return NodeState.Running;
 		} else {
+            started = false;
 			return NodeState.Success;
 		}
 	}
@@ -309,21 +333,21 @@ public class RegroupLeaf : Leaf {
 
 public class FleeLeaf : Leaf {
     bool started = false;
-    Mover mover;
+    Bot bot;
     int fleeDir;
 
-    public FleeLeaf(Mover _mover, int _fleeDir, string _name = "Flee", int _priority = 5) : base(_name, priority: _priority) {
+    public FleeLeaf(Bot _bot, int _fleeDir, int _priority = 5) : base(priority: _priority) {
         key = LeafKey.Flee;
-        mover = _mover;
+        bot = _bot;
         fleeDir = _fleeDir;
     }
 
     public override NodeState GetState() {
         if (!started) {
             started = true;
-            mover.SetTarget(new Vector2(mover.transform.position.x, fleeDir));
+            bot.SetTarget(new Vector2(bot.transform.position.x, fleeDir));
         }
-        mover.Dash();
+        bot.Dash();
         return NodeState.Running;
     }
 }

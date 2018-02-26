@@ -13,23 +13,31 @@ public class ArmySquad : Squad {
 		minions = new List<ICommandable> ();
 		foreach (Transform t in transform) {
 			foreach (Transform t2 in t) {
-				if (t2.GetComponent<Mover>() != null) {
-					minions.Add (t2.GetComponent<Mover> ());
-					t2.GetComponent<Mover> ().SetCommander (this);
+				if (t2.GetComponent<Bot>() != null) {
+					minions.Add (t2.GetComponent<Bot> ());
+					t2.GetComponent<Bot> ().SetCommander (this);
 					Debug.Log ("Added a mover!");
 				}
 			}
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    //TODO let's move this functionality to the Officer.
+    //Basically, when someone leaves his exits his trigger collider, he'll push out a command to the squad to regroup.
+    void Update () {
+        if (target) {
+            for (int i = 0; i < minions.Count; i++) {
+                ((Bot)minions[i]).targetObj = target;
+            }
+        }
+    }
+        /*
 		for (int i = 0; i < minions.Count; i++) {
-			if((minions[i].GetGameObject().transform.position - this.GetGameObject().transform.position).sqrMagnitude > SquadRadius()) {
+			if((minions[i].GetGameObject().transform.position - officer.position).sqrMagnitude > SquadRadius()) {
 				minions [i].SetCommand (LeafKey.Regroup, 4);
 			}
 		}
-	}
+        */
 
 	public override GameObject GetGameObject () {
 		return officer.gameObject;
@@ -39,8 +47,8 @@ public class ArmySquad : Squad {
 		if (officer == null) {
 			//replace officer
 			for (int i = 0; i < minions.Count; i++) {
-				if(minions[i].GetGameObject().tag == "Officer") {
-					officer = minions[i].GetGameObject().transform;
+				if(minions[i].GetGameObject().transform.parent.CompareTag("Officer")) { //Check whether the parent container of the body is tagged 'Officer'
+                    officer = minions[i].GetGameObject().transform;
 					break;
 				}
 			}
@@ -53,7 +61,7 @@ public class ArmySquad : Squad {
 		if (medic == null) {
 			//replace medic
 			for (int i = 0; i < minions.Count; i++) {
-				if(minions[i].GetGameObject().tag == "Medic") {
+				if(minions[i].GetGameObject().transform.parent.CompareTag("Medic")) { //Check whether the parent container of the body is tagged 'Medic'
 					officer = minions[i].GetGameObject().transform;
 					break;
 				}

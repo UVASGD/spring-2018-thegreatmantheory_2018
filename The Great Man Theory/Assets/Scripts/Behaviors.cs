@@ -5,7 +5,7 @@ using UnityEngine;
 public class BehaviorTree : ICommandable {
 
     protected Body body;
-    protected Mover mover;
+    protected Bot bot;
     protected Leaf command;
     protected int currentPriority = 0;
 
@@ -15,9 +15,9 @@ public class BehaviorTree : ICommandable {
     protected List<Leaf> commandList; //Maybe change this to node, but probably not
 
 
-    public BehaviorTree(Body _body, Mover _mover) {
+    public BehaviorTree(Body _body, Bot _bot) {
         body = _body;
-        mover = _mover;
+        bot = _bot;
     }
 
     protected Node rootNode;
@@ -55,17 +55,17 @@ public class BehaviorTree : ICommandable {
 }
 
 public class MeleeBehavior : BehaviorTree {
-    public MeleeBehavior(Body _body, Mover _mover, int fleeDir, float mainTimer, int mainDist, int mainLeeway, float charTimer, float wigTimer, float maxWig, float wigDist) 
-        : base(_body, _mover) {
+    public MeleeBehavior(Body _body, Bot _bot, int fleeDir, float mainTimer, int mainDist, int mainLeeway, float charTimer, float wigTimer, float maxWig, float wigDist) 
+        : base(_body, _bot) {
 
-        MedicLeaf medic = new MedicLeaf(mover);
-        FleeLeaf flee = new FleeLeaf(mover, fleeDir);
+        MedicLeaf medic = new MedicLeaf(bot);
+        FleeLeaf flee = new FleeLeaf(bot, fleeDir);
 
-        MaintainLeaf maintain = new MaintainLeaf(mover, mainTimer, mainDist, mainLeeway);
-        ChargeLeaf charge = new ChargeLeaf(mover, charTimer);
-        WiggleLeaf wiggle = new WiggleLeaf(mover, wigTimer, maxWig, wigDist);
+        MaintainLeaf maintain = new MaintainLeaf(bot, mainTimer, mainDist, mainLeeway);
+        ChargeLeaf charge = new ChargeLeaf(bot, charTimer);
+        WiggleLeaf wiggle = new WiggleLeaf(bot, wigTimer, maxWig, wigDist);
 
-		commandList = new List<Leaf>() { medic, flee, maintain, charge, wiggle, new MoveLeaf(_mover), new RegroupLeaf(_mover)};
+		commandList = new List<Leaf>() { medic, flee, maintain, charge, wiggle, new MoveLeaf(_bot), new RegroupLeaf(_bot)};
 
         List<Node> WoundedList = new List<Node>() {
             medic, //timer, medic target from squad -- medic target == null
@@ -87,7 +87,7 @@ public class MeleeBehavior : BehaviorTree {
                 delegate() { return (body.Wounded()) ? NodeState.Running : NodeState.Failure; },
                 WoundedList), // n/a -- health < (maxHealth * 0.1)
             new RandomSelector("Fight", 
-                delegate() { return (mover.targetObj) ? NodeState.Running : NodeState.Failure; }, 
+                delegate() { return (bot.targetObj) ? NodeState.Running : NodeState.Failure; }, 
                 FightList) // n/a -- (target) && squad.Fight
         };
 
@@ -96,14 +96,14 @@ public class MeleeBehavior : BehaviorTree {
 }
 
 public class RangedBehavior : BehaviorTree {
-    public RangedBehavior(Body _body, Mover _mover, int fleeDir) : base(_body, _mover) {
-        MedicLeaf medic = new MedicLeaf(mover);
-        FleeLeaf flee = new FleeLeaf(mover, fleeDir);
+    public RangedBehavior(Body _body, Bot _bot, int fleeDir) : base(_body, _bot) {
+        MedicLeaf medic = new MedicLeaf(bot);
+        FleeLeaf flee = new FleeLeaf(bot, fleeDir);
 
-        FocusLeaf focus = new FocusLeaf(mover, body, 1.5f);
+        FocusLeaf focus = new FocusLeaf(bot, body, 1.5f);
         ShootLeaf shoot = new ShootLeaf(body, 1);
 
-		commandList = new List<Leaf>() { medic, flee, focus, shoot, new MoveLeaf(mover), new RegroupLeaf(mover)};
+		commandList = new List<Leaf>() { medic, flee, focus, shoot, new MoveLeaf(bot), new RegroupLeaf(bot)};
 
         List<Node> WoundedList = new List<Node>() {
             medic, //timer, medic target from squad -- medic target == null
@@ -120,7 +120,7 @@ public class RangedBehavior : BehaviorTree {
                 delegate() { return (body.Wounded()) ? NodeState.Running : NodeState.Failure; },
                 WoundedList), // n/a -- health < (maxHealth * 0.1)
             new RandomSelector("Fight",
-                delegate() { return (mover.targetObj) ? NodeState.Running : NodeState.Failure; },
+                delegate() { return (bot.targetObj) ? NodeState.Running : NodeState.Failure; },
                 ShootList) // n/a -- (target) && squad.Fight
         };
 

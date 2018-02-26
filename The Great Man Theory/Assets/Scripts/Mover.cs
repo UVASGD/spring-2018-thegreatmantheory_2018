@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum MoveState { end = -1, off = 0, on = 1, start = 2 }
 
-public class Mover : MonoBehaviour, ICommandable {
+public class Mover : MonoBehaviour {
 
     protected delegate void MoveDel();
 
@@ -16,7 +16,7 @@ public class Mover : MonoBehaviour, ICommandable {
 
     protected Vector2 target;
     public Vector2 Target { get { return (targetObj) ? (Vector2)targetObj.transform.position : target; } }
-    public GameObject targetObj;
+    public Transform targetObj;
 
     float originalDrag;
     float dashDrag;
@@ -36,9 +36,9 @@ public class Mover : MonoBehaviour, ICommandable {
     JointAngleLimits2D[] originalLimits;
     public bool hasArms = true;
 
-	protected ICommander commander;
-
     void Start() {
+        targetObj = null;
+
         SetMover();
 
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -72,12 +72,6 @@ public class Mover : MonoBehaviour, ICommandable {
     }
 
     protected virtual void SetMover() {
-        switch (body.unitType) {
-            case UnitType.Pike:
-                behavior = new MeleeBehavior(body, this, -100, 1.5f, 3, 8, 1.5f, 3, 0.4f, 8);
-                break;
-
-        }
     }
 
     void Update() {
@@ -193,19 +187,7 @@ public class Mover : MonoBehaviour, ICommandable {
             hold = MoveState.end; }
     }
 
-	public bool SetCommand(LeafKey key, int priority) {
-		return behavior.SetCommand (key, priority);
-	}
 
-	public GameObject GetGameObject() {
-		return gameObject;
-	}
 
-	public void SetCommander(ICommander comm) {
-		commander = comm;
-	}
 
-	public ICommander GetCommander() {
-		return commander;
-	}
 }
