@@ -12,21 +12,30 @@ public class RangedWeapon : Weapon {
 
     int shotNum = 0;
 
+    public float maxrange = 100f;
+
     Vector2 barrelEnd;
 
     public ParticleSystem[] fxs;
+    LineRenderer line;
 
     protected override void Start() {
         base.Start();
         fxs = GetComponentsInChildren<ParticleSystem>();
+        line = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
     protected override void Update() {
         base.Update();
-        GetInput();
+
+        if (player)
+            GetInput();
+
         if (reload < reloadTime)
             reload += Time.deltaTime;
+        if (reload > 0.1f)
+            line.enabled = false;
     }
 
     void GetInput() {
@@ -46,34 +55,41 @@ public class RangedWeapon : Weapon {
     }
 
     void Shoot() {
+        bool gotem = false;
         barrelEnd = transform.position + (transform.up * 1.25f);
-        RaycastHit2D[] hits = Physics2D.RaycastAll(barrelEnd, transform.up);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(barrelEnd, transform.up, maxrange);
 
         foreach (RaycastHit2D hit in hits) {
             Body target = hit.rigidbody.GetComponent<Body>();
             if (target) {
                 float damage = 125 - hit.distance;
                 target.Hit(damage / 2, hit.point);
-                Debug.Log(damage);
+                ShowLine(hit.distance);
+                gotem = true;
                 break;
             }
         }
+        if (!gotem)
+            ShowLine(maxrange);
 
     }
 
     void Recoil() {
-        Debug.Log("BANG" + shotNum.ToString());
         Vector2 backwards = -transform.up;
         rb.AddForce(backwards * recoilStrength);
-        Debug.Log(backwards);
     }
 
     void FX() {
-        Debug.Log(fxs);
         foreach (ParticleSystem fx in fxs) {
             fx.Play();
         }
     }
 
+    void ShowLine(float dist) {
+        var the_line = transform.up * dist;
+        line.enabled = true;
+        line.SetPosition(0, new Vector3(barrelEnd.x, barrelEnd.y, 0f));
+        line.SetPosition(1, new Vector3(barrelEnd.x, barrelEnd.y, 0f) + the_line);
+    }
 
 }
