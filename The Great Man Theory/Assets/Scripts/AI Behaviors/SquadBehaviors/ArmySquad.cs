@@ -13,10 +13,10 @@ public class ArmySquad : Squad {
 		minions = new List<ICommandable> ();
 		foreach (Transform t in transform) {
 			foreach (Transform t2 in t) {
-				if (t2.GetComponent<Bot>() != null) {
-					minions.Add (t2.GetComponent<Bot> ());
-					t2.GetComponent<Bot> ().SetCommander (this);
-					Debug.Log ("Added a mover!");
+				if (t2.GetComponent<ICommandable>() != null) {
+					minions.Add (t2.GetComponent<ICommandable> ());
+					t2.GetComponent<ICommandable> ().SetCommander (this);
+					//Debug.Log ("Added a mover!");
 				}
 			}
 		}

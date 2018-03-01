@@ -39,12 +39,15 @@ public class Mover : MonoBehaviour {
     void Start() {
         targetObj = null;
 
-        SetMover();
-
         rb = gameObject.GetComponent<Rigidbody2D>();
+        if (!body) {
+            body = GetComponent<Body>();
+        }
 
         originalDrag = rb.drag;
         dashDrag = originalDrag * 0.1f;
+
+        SetMover();
 
         if (hasArms) {
             HingeJoint2D[] RightArm = transform.Find("RightArm").GetComponentsInChildren<HingeJoint2D>();
