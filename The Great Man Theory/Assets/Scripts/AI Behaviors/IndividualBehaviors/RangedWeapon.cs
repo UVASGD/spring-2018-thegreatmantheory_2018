@@ -5,7 +5,7 @@ using UnityEngine;
 public class RangedWeapon : Weapon {
 
     public float reloadTime = 2f;
-    float recoilStrength = 8000f;
+    float recoilStrength = 5000f;
 
     float reload;
     float damage = 100f;
