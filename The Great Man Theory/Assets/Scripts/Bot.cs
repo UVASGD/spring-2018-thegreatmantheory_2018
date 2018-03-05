@@ -11,6 +11,9 @@ public class Bot : Mover, ICommandable {
             case UnitType.Pike:
                 behavior = new MeleeBehavior(body, this, -100, 1.5f, 3, 8, 1.5f, 3, 0.4f, 8);
                 break;
+            case UnitType.Arquebus:
+                behavior = new RangedBehavior(body, this, -100);
+                break;
             default:
                 behavior = new MeleeBehavior(body, this, -100, 1.5f, 3, 8, 1.5f, 3, 0.4f, 8);
                 break;
