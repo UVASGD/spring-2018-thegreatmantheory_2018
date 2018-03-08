@@ -48,17 +48,20 @@ public class Body : MonoBehaviour {
     public float height; //TODO make this a thing for elevation, and maybe use it in collisions? 
                          //make sure to set weapon's height equal to body height
 
+    BodySoundbox soundbox;
+
     void Start () {
         rb = GetComponent<Rigidbody2D>();
         health = maxHealth;
 		fx = effectGen.GetComponent<ParticleSystem> ();
 		fxMain = fx.main;
 
+        soundbox = GetComponentInChildren<BodySoundbox>();
+
         SetColors();
         ApplyColors();
         CheckHealth();
     }
-
 
 
     public void Hit(float force, Vector2 hitPoint, bool puncturing = false, bool playerHit = false) {
@@ -103,6 +106,7 @@ public class Body : MonoBehaviour {
             }
 
             Damage(force);
+            HitSound(force);
         }
 
     }
@@ -127,6 +131,8 @@ public class Body : MonoBehaviour {
                 weaponRB.angularVelocity = 0;
                 weapon.layer = LayerMask.NameToLayer("Ground");
             }*/
+            soundbox.transform.parent = deadBody;
+            DeadSound();
             Destroy(transform.parent.gameObject);
         }
     }
@@ -173,5 +179,14 @@ public class Body : MonoBehaviour {
     void ColorPart(SpriteRenderer part, Color color) {
         if (part)
             part.color = color;
+    }
+
+    void HitSound(float force) {
+        float volume = 50f / force;
+        soundbox.Hit(volume);
+    }
+
+    void DeadSound() {
+        soundbox.Death();
     }
 }
