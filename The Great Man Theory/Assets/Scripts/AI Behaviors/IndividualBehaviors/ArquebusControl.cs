@@ -40,6 +40,8 @@ public class ArquebusControl : Weapon {
     }
 
     public void Trigger() {
+        shotNum++;
+        reload = 0f;
         Shoot();
         Recoil();
         FX();

@@ -64,7 +64,7 @@ public class Body : MonoBehaviour {
     public void Hit(float force, Vector2 hitPoint, bool puncturing = false, bool playerHit = false) {
         //Debug.Log(force);
         if (force > threshold) {
-            Debug.Log(force);
+            //Debug.Log(force);
             Vector2 spankForce = (hitPoint - (Vector2)transform.position).normalized; //Yes, we are calling it this.
             if (force > (threshold * 4) && playerHit && greatHittable) {
                 //Particle effect, push away from hitPoint big, play cheer sound, shake camera
