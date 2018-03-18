@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class ArmySquad : Squad {
 
-	public Flag flag;
+    List<Transform> enemies = new List<Transform>();
+    Body thisBody;
+
+    public Flag flag;
 	public Transform medic;
-	public Transform target;
+    public Transform target;
 
 	// Use this for initialization
 	void Start () {
-		minions = new List<ICommandable> ();
+        target = new GameObject("Target").transform;
+        minions = new List<ICommandable> ();
 		foreach (Transform t in transform) {
 			foreach (Transform t2 in t) {
 				if (t2.GetComponent<ICommandable>() != null) {
@@ -39,7 +43,7 @@ public class ArmySquad : Squad {
         */
     }
 
-	public override GameObject GetGameObject () {
+    public override GameObject GetGameObject () {
 		return flag.gameObject;
 	}
 
@@ -75,11 +79,11 @@ public class ArmySquad : Squad {
 		return target;
 	}
 
-    public override Transform FindEnemy() {
-        return 
+    public Transform FindEnemy() {
+        return flag.FindEnemy();
     }
 
-	public override float SquadRadius() {
+    public override float SquadRadius() {
 		return 4 * minions.Count;
 	}
 }

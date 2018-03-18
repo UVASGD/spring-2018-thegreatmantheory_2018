@@ -6,7 +6,7 @@ public abstract class Squad : MonoBehaviour, ICommandable, ICommander {
 
 	public List<ICommandable> minions;
 
-	public ICommander commander;
+    public ICommander commander;
 
 	// Use this for initialization
 	void Start () {

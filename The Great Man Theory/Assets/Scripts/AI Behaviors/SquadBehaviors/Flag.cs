@@ -7,9 +7,15 @@ public class Flag : MonoBehaviour {
     List<Transform> enemies = new List<Transform>();
     Body thisBody;
 
-    void SetBody(Body body) {
-        thisBody = body;
-    }
+    // Use this for initialization
+    void Start () {
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
 
     private void OnCollisionEnter2D(Collision2D collision) {
         Collider2D collider = collision.collider;
