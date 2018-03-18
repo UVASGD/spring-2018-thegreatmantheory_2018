@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ArmySquad : Squad {
 
-	public Transform officer;
+	public Flag flag;
 	public Transform medic;
 	public Transform target;
 
@@ -24,27 +24,28 @@ public class ArmySquad : Squad {
 
     //TODO let's move this functionality to the Officer.
     //Basically, when someone leaves his exits his trigger collider, he'll push out a command to the squad to regroup.
-    void Update () {
-        if (target) {
+    void Update() {
+        /*if (target) {
             for (int i = 0; i < minions.Count; i++) {
                 ((Bot)minions[i]).targetObj = target;
             }
         }
-    }
-        /*
+
 		for (int i = 0; i < minions.Count; i++) {
 			if((minions[i].GetGameObject().transform.position - officer.position).sqrMagnitude > SquadRadius()) {
 				minions [i].SetCommand (LeafKey.Regroup, 4);
 			}
 		}
         */
+    }
 
 	public override GameObject GetGameObject () {
-		return officer.gameObject;
+		return flag.gameObject;
 	}
 
 	public override Transform FindOfficer() {
-		if (officer == null) {
+        /*
+		if (flag.transform.parent == null) {
 			//replace officer
 			for (int i = 0; i < minions.Count; i++) {
 				if(minions[i].GetGameObject().transform.parent.CompareTag("Officer")) { //Check whether the parent container of the body is tagged 'Officer'
@@ -52,9 +53,9 @@ public class ArmySquad : Squad {
 					break;
 				}
 			}
-		}
+		}*/
 
-		return officer;
+		return flag.transform;
 	}
 
 	public override Transform FindMedic() {
@@ -62,7 +63,7 @@ public class ArmySquad : Squad {
 			//replace medic
 			for (int i = 0; i < minions.Count; i++) {
 				if(minions[i].GetGameObject().transform.parent.CompareTag("Medic")) { //Check whether the parent container of the body is tagged 'Medic'
-					officer = minions[i].GetGameObject().transform;
+					medic = minions[i].GetGameObject().transform;
 					break;
 				}
 			}
@@ -73,6 +74,10 @@ public class ArmySquad : Squad {
 	public override Transform FindTarget() {
 		return target;
 	}
+
+    public override Transform FindEnemy() {
+        return 
+    }
 
 	public override float SquadRadius() {
 		return 4 * minions.Count;

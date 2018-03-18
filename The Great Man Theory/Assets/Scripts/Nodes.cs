@@ -191,6 +191,7 @@ public class FocusLeaf : Leaf {
 
     public override NodeState GetState() {
         if (!started) {
+            Debug.Log("OOF");
             started = true;
             Vector2 target = (bot.Target - body.weapon.pointer.ForcePoint).normalized;
             target = bot.transform.InverseTransformDirection(target);
@@ -444,11 +445,13 @@ public class RandomSelector : Node {
 	public override NodeState GetState() {
         currPriority = priority;
         if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
+        Debug.Log("AAAA");
         for (int i = currentNodeOffset; i < children.Count; i++) {
-			NodeState childState = children [(i + currentStartIndex) % children.Count].GetState ();
+            NodeState childState = children [(i + currentStartIndex) % children.Count].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeOffset = i;
                 currPriority = children[i].currPriority;
+                Debug.Log(children[i]);
 				return NodeState.Running;
 			} else if (childState == NodeState.Success) {
 				currentStartIndex = GetRandomIndex();

@@ -37,7 +37,7 @@ public class Mover : MonoBehaviour {
     public bool hasArms = true;
 
     void Start() {
-        targetObj = null;
+        //targetObj = null;
 
         rb = gameObject.GetComponent<Rigidbody2D>();
         if (!body) {
