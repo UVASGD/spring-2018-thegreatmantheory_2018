@@ -48,6 +48,8 @@ public class Body : MonoBehaviour {
     public float height; //TODO make this a thing for elevation, and maybe use it in collisions? 
                          //make sure to set weapon's height equal to body height
 
+    bool alreadyDead = false;
+
     BodySoundbox soundbox;
 
     void Start () {
@@ -118,7 +120,8 @@ public class Body : MonoBehaviour {
 
     void CheckHealth() {
         if (health <= 0) {
-            if (deadBody) {
+            if (deadBody && !alreadyDead) {
+                alreadyDead = true;
                 Transform dead = Instantiate(deadBody, transform.position, Quaternion.Euler(0, 0, (Vector2.SignedAngle(Vector2.up, rb.velocity))));
                 dead.GetComponent<SpriteRenderer>().color = bodyColor;
                 dead.GetComponent<Rigidbody2D>().AddForce(rb.velocity*5, ForceMode2D.Impulse);
