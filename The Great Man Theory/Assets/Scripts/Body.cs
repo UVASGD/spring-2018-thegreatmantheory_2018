@@ -134,7 +134,6 @@ public class Body : MonoBehaviour {
                 weaponRB.angularVelocity = 0;
                 weapon.layer = LayerMask.NameToLayer("Ground");
             }*/
-            soundbox.transform.parent = deadBody;
             DeadSound();
             Destroy(transform.parent.gameObject);
         }

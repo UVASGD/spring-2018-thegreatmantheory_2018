@@ -20,7 +20,7 @@ public class Weapon : MonoBehaviour {
     public Rigidbody2D rb;
     public FollowPointer pointer;
 
-
+    public SoundBox soundBox;
 
     protected bool shouldCheck = false;
 
