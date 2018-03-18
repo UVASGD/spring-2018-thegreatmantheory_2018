@@ -8,6 +8,7 @@ public class AudioManager : MonoBehaviour {
     public AudioClip ded_egh;
     public AudioClip blade_hit;
     public AudioClip wood_thunk;
+    public AudioClip gun_shot;
 
     Dictionary<string, AudioClip> dict;
 
@@ -17,7 +18,8 @@ public class AudioManager : MonoBehaviour {
             { "body_death", ded_egh },
             { "body_hit", roblox_oof },
             { "blade_hit", blade_hit },
-            { "haft_hit", wood_thunk },
+            { "generic_collision", wood_thunk },
+            { "gun_shot", gun_shot },
         };
     }
 	

@@ -19,6 +19,6 @@ public class WeaponSoundbox : MonoBehaviour {
 
     public void Hit(float volume) {
         source.volume = volume;
-        source.PlayOneShot(am.GetSound("blade_hit"));
+        source.PlayOneShot(am.GetSound("generic_collision"));
     }
 }

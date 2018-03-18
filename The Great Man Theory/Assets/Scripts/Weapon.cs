@@ -20,7 +20,7 @@ public class Weapon : MonoBehaviour {
     public Rigidbody2D rb;
     public FollowPointer pointer;
 
-    public SoundBox soundBox;
+    public WeaponSoundbox soundbox;
 
     protected bool shouldCheck = false;
 
@@ -39,6 +39,8 @@ public class Weapon : MonoBehaviour {
         if (!pointer) {
             pointer = GetComponent<FollowPointer>();
         }
+
+        soundbox = GetComponentInChildren<WeaponSoundbox>();
     }
 
     protected virtual void Update() {
@@ -70,6 +72,9 @@ public class Weapon : MonoBehaviour {
                 HitCalc(contactPoint, hitBody, collision);
             }
         }
+        if (soundbox)
+            soundbox.Hit(collision.relativeVelocity.magnitude / 100f);
+        // soundbox.Hit(1f);
     }
 
     protected virtual void HitCalc(Vector2 contactPoint, Body targetBodyScript, Collision2D collision) {
