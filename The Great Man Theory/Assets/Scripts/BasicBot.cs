@@ -23,15 +23,30 @@ public class BasicBot : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		maintree.Traverse ();
+
+
 	}
 
-	//public void command()
+	public void cull() {
+		for (int i = commandlist.Count; i >= 0; i--) {
+			commandlist [i].timeLeft -= Time.deltaTime;
+			if (commandlist [i].timeLeft <= 0) {
+				commandlist [i].subtree.expired = true;
+				commandlist.RemoveAt (i);
+			}
+		}
+	}
+
+	public void command(Command comm, int priority) {
+		commandlist.Add (comm);
+		maintree.insertAtPriority (comm, priority);
+	}
 }
 
 public class DefaultTree {
 	protected Node rootNode;
 
-	List<Sequencer> priorityBuckets;
+	List<Node> priorityBuckets;
 
 	public DefaultTree(Body body, Flag flag) {
 
@@ -49,7 +64,7 @@ public class DefaultTree {
 			})
 		};
 
-		rootNode = new Selector("root", priorityBuckets);
+		rootNode = new Selector("root", (priorityBuckets));
 	}
 
 	public NodeState Traverse() {
@@ -58,6 +73,6 @@ public class DefaultTree {
 
 	public void insertAtPriority(Command comm, int priority) {
 		priority = Mathf.Clamp (priority, 0, priorityBuckets.Count - 1);
-		priorityBuckets [priority].insertChild (comm.subtree);
+		((Selector)(priorityBuckets [priority])).insertChild (comm.subtree);
 	}
 }

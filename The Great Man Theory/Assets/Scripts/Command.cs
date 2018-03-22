@@ -5,7 +5,7 @@ using UnityEngine;
 public class Command {
 
     public Node subtree;
-    float timeLeft;
+    public float timeLeft;
 
     public Command(Node _subtree, float _timeLeft) {
         subtree = _subtree;
