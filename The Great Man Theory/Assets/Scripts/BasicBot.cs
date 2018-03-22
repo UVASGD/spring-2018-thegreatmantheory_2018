@@ -7,6 +7,7 @@ public class BasicBot : MonoBehaviour {
 	DefaultTree maintree;
 
 	public Body body;
+    public FollowPointer pointer;
 
 	public Flag flag;
 
@@ -21,6 +22,12 @@ public class BasicBot : MonoBehaviour {
 	void Update () {
 		maintree.Traverse ();
 	}
+
+    public void Move(Vector2 target) {
+        if (!pointer) pointer = body.weapon.pointer;
+        pointer.TargetPos = (target - pointer.ForcePoint);
+        pointer.Forces();
+    }
 }
 
 public class DefaultTree {

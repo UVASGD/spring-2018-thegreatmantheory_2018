@@ -163,7 +163,7 @@ public class Mover : MonoBehaviour {
 
     void SetForces() {
         // pointer.SetTarget(mousePos);
-        pointer.TargetPos = (target - pointer.ForcePoint); // * dashMultiplier;
+        pointer.TargetPos = (target - pointer.ForcePoint);
         pointer.Forces();
     }
 

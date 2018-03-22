@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class BehaviorTree {
 
-    protected Body body;
-    protected Bot bot;
+    protected BasicBot bot;
 
     protected List<Leaf> commandList; //Maybe change this to node, but probably not
 
 
-    public BehaviorTree(Body _body, Bot _bot) {
-        body = _body;
+    public BehaviorTree(BasicBot _bot) {
         bot = _bot;
     }
 
@@ -23,11 +21,11 @@ public class BehaviorTree {
 }
 
 public class MeleeBehavior : BehaviorTree {
-    public MeleeBehavior(Body _body, Bot _bot, int fleeDir, float mainTimer, int mainDist, int mainLeeway, float charTimer, float wigTimer, float maxWig, float wigDist) 
-        : base(_body, _bot) {
+    public MeleeBehavior(BasicBot _bot, float mainTimer = 1.5f, int mainDist = 3, int mainLeeway = 8, float charTimer = 1.5f, float wigTimer = 3, float maxWig = 0.4f, float wigDist = 8) 
+        : base(_bot) {
 
         MedicLeaf medic = new MedicLeaf(bot);
-        FleeLeaf flee = new FleeLeaf(bot, fleeDir);
+        FleeLeaf flee = new FleeLeaf(bot);
 
         MaintainLeaf maintain = new MaintainLeaf(bot, mainTimer, mainDist, mainLeeway);
         ChargeLeaf charge = new ChargeLeaf(bot, charTimer);
@@ -62,12 +60,12 @@ public class MeleeBehavior : BehaviorTree {
 }
 
 public class RangedBehavior : BehaviorTree {
-    public RangedBehavior(Body _body, Bot _bot, int fleeDir) : base(_body, _bot) {
+    public RangedBehavior(Body _body, BasicBot _bot, int fleeDir) : base(_bot) {
         MedicLeaf medic = new MedicLeaf(bot);
-        FleeLeaf flee = new FleeLeaf(bot, fleeDir);
+        FleeLeaf flee = new FleeLeaf(bot);
 
-        FocusLeaf focus = new FocusLeaf(bot, body, 1.5f);
-        ShootLeaf shoot = new ShootLeaf(body, 1);
+        FocusLeaf focus = new FocusLeaf(bot, 1.5f);
+        ShootLeaf shoot = new ShootLeaf(bot, 1);
 
         List<Node> WoundedList = new List<Node>() {
             medic, //timer, medic target from squad -- medic target == null
