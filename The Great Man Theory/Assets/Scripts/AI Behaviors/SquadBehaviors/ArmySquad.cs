@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArmySquad : Squad {
+/* public class ArmySquad : Squad {
 
     List<Transform> enemies = new List<Transform>();
     Body thisBody;
@@ -41,7 +41,7 @@ public class ArmySquad : Squad {
 			}
 		}
         */
-    }
+    /*}
 
     public override GameObject GetGameObject () {
 		return flag.gameObject;
@@ -59,7 +59,7 @@ public class ArmySquad : Squad {
 			}
 		}*/
 
-		return flag.transform;
+	/*	return flag.transform;
 	}
 
 	public override Transform FindMedic() {
@@ -86,4 +86,4 @@ public class ArmySquad : Squad {
     public override float SquadRadius() {
 		return 4 * minions.Count;
 	}
-}
+} */

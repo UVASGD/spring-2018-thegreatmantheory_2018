@@ -255,7 +255,7 @@ public class MedicLeaf : Leaf {
     public override NodeState GetState() {
         if (!started) {
             started = true;
-            target = bot.GetCommander().FindMedic();
+            //target = bot.GetCommander().FindMedic();
         }
 		if (target == null) {
 			return NodeState.Failure;
@@ -286,18 +286,19 @@ public class MoveLeaf : Leaf {
 	public override NodeState GetState() {
         if (!started) {
             started = true;
-            target = bot.GetCommander().FindTarget();
+            //target = bot.GetCommander().FindTarget();
         }
 		if (target == null) {
 			return NodeState.Failure;
 		}
-        if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
+        /* if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
 			bot.SetTarget (target.position);
 			return NodeState.Running;
 		} else {
             started = false;
 			return NodeState.Success;
-		}
+		} */
+		return NodeState.Failure;
 	}
 }
 
@@ -317,18 +318,19 @@ public class RegroupLeaf : Leaf {
 	public override NodeState GetState() {
         if (!started) {
             started = true;
-            target = bot.GetCommander().FindOfficer();
+            //target = bot.GetCommander().FindOfficer();
         }
 		if (target == null) {
 			return NodeState.Failure;
 		}
-        if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
+        /*if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
 			bot.SetTarget (target.position);
 			return NodeState.Running;
 		} else {
             started = false;
 			return NodeState.Success;
-		}
+		}*/
+		return NodeState.Failure;
 	}
 }
 

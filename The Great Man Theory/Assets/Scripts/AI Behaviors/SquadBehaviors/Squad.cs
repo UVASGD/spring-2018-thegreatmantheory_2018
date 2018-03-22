@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Squad : MonoBehaviour, ICommandable, ICommander {
+/* public abstract class Squad : MonoBehaviour, ICommandable, ICommander {
 
 	public List<ICommandable> minions;
 
@@ -39,4 +39,4 @@ public abstract class Squad : MonoBehaviour, ICommandable, ICommander {
 	public abstract Transform FindMedic();
 
 	public abstract Transform FindTarget();
-}
+} */

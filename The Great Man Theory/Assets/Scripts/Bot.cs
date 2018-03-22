@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bot : Mover, ICommandable {
+public class Bot : Mover {
 
-    protected ICommander commander;
+    //protected ICommander commander;
 
     protected override void SetMover() {
         switch (body.unitType) {
@@ -21,11 +21,11 @@ public class Bot : Mover, ICommandable {
         }
     }
 
-    public bool SetCommand(LeafKey key, int priority) {
+    /*public bool SetCommand(LeafKey key, int priority) {
         return behavior.SetCommand(key, priority);
-    }
+    } */
 
-    public GameObject GetGameObject() {
+    /*public GameObject GetGameObject() {
         return gameObject;
     }
 
@@ -35,5 +35,5 @@ public class Bot : Mover, ICommandable {
 
     public ICommander GetCommander() {
         return commander;
-    }
+    } */
 }

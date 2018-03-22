@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICommandable {
+/*public interface ICommandable {
 	/* * 
 	 * void SetCommand
 	 * 
@@ -11,7 +11,7 @@ public interface ICommandable {
 	 * @return true if behavior was affected, false if not.
 	 * 
 	 */
-	bool SetCommand (LeafKey comm, int priority);
+	/*bool SetCommand (LeafKey comm, int priority);
 
 	/* *
 	 * GameObject GetGameObject
@@ -19,7 +19,7 @@ public interface ICommandable {
 	 * @return the gameobject this is associated with
 	 * 
 	 */
-	GameObject GetGameObject();
+	/*GameObject GetGameObject();
 
 	/* *
 	 * void SetCommander
@@ -27,7 +27,7 @@ public interface ICommandable {
 	 * @param 
 	 * 
 	 */
-	void SetCommander (ICommander commander);
+	/*void SetCommander (ICommander commander);
 }
 
 public interface ICommander {
@@ -35,4 +35,4 @@ public interface ICommander {
 	Transform FindMedic ();
 	Transform FindTarget ();
 	float SquadRadius ();
-}
+} */
