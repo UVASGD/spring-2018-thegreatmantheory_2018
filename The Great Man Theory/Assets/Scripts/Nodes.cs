@@ -354,6 +354,11 @@ public class Selector : Node {
 		currentNodeIndex = 0;
 		return NodeState.Failure;
 	}
+
+
+	public void insertChild(Node n) {
+		children.Insert (0, n);
+	}
 }
 
 public class RandomSelector : Node {
