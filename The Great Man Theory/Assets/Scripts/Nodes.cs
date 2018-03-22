@@ -469,6 +469,10 @@ public class Sequencer : Node {
 		currentNodeIndex = 0;
 		return NodeState.Success;
 	}
+
+	public void insertChild(Node n) {
+		children.Insert (0, n);
+	}
 }
 
 public class Gate : Node {
