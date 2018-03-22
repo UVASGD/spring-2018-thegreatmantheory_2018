@@ -9,33 +9,16 @@ public enum  NodeState {
 	Running
 }
 
-public enum LeafKey {
-    Maintain,
-    Wiggle,
-    Charge,
-    Focus,
-    Shoot,
-    Repo,
-    Medic,
-    Flee,
-	Move,
-	Regroup
-}
-
 public delegate NodeState NodeDel();
 
 
 public abstract class Node {
     protected string name = "node";
     protected NodeDel nodeDel;
-    protected int priority;
-    public int currPriority;
 
-    public Node(string _name = "Default Node", NodeDel _nodeDel = null, int _priority = 0) {
+    public Node(string _name = "Default Node", NodeDel _nodeDel = null) {
         nodeDel = _nodeDel;
         name = _name;
-        priority = _priority;
-        currPriority = priority;
 }
 
     public abstract NodeState GetState();
@@ -45,10 +28,7 @@ public abstract class Node {
 
 public class Leaf : Node {
 
-    protected LeafKey key;
-    public LeafKey Key { get { return key; } }
-
-    public Leaf(string _name = "Leaf", int priority = 0) : base(_name, _priority: priority) {
+    public Leaf(string _name = "Leaf") : base(_name) {
     }
 
     public override NodeState GetState() {
@@ -66,8 +46,7 @@ public class MaintainLeaf : Leaf {
     int prefDist;
     int leeway;
 
-    public MaintainLeaf(Bot _bot, float _timerMax, int _prefDist, int _leeway, int _priority = 1) : base(priority: _priority) {
-        key = LeafKey.Maintain;
+    public MaintainLeaf(Bot _bot, float _timerMax, int _prefDist, int _leeway) : base() {
         timerMax = _timerMax;
         timer = timerMax;
         bot = _bot;
@@ -108,8 +87,7 @@ public class WiggleLeaf : Leaf {
     float randoDist;
 
 
-    public WiggleLeaf(Bot _bot, float _timerMax, float _maxWig, float _randoDist, int _priority = 2) : base(priority: _priority) {
-        key = LeafKey.Wiggle;
+    public WiggleLeaf(Bot _bot, float _timerMax, float _maxWig, float _randoDist) : base() {
         timerMax = _timerMax;
         timer = timerMax;
         bot = _bot;
@@ -150,8 +128,7 @@ public class ChargeLeaf : Leaf {
     float timer;
     Bot bot;
 
-    public ChargeLeaf(Bot _bot, float _timerMax, int _priority = 3) : base(priority: _priority) {
-        key = LeafKey.Charge;
+    public ChargeLeaf(Bot _bot, float _timerMax) : base() {
         timerMax = _timerMax;
         timer = timerMax;
         bot = _bot;
@@ -181,8 +158,7 @@ public class FocusLeaf : Leaf {
     float timerMax;
     float timer;
 
-    public FocusLeaf(Bot _bot, Body _body, float _timerMax, int _priority = 2) : base(priority: _priority) {
-        key = LeafKey.Focus;
+    public FocusLeaf(Bot _bot, Body _body, float _timerMax) : base() {
         timerMax = _timerMax;
         timer = UnityEngine.Random.Range(0.4f, timerMax);
         bot = _bot;
@@ -215,8 +191,7 @@ public class ShootLeaf : Leaf {
     float timerMax;
     float timer;
 
-    public ShootLeaf(Body _body, float _timerMax, int _priority = 5) : base(priority: _priority) {
-        key = LeafKey.Shoot;
+    public ShootLeaf(Body _body, float _timerMax) : base() {
         timerMax = _timerMax;
         timer = UnityEngine.Random.Range(0.4f, timerMax);
         body = _body;
@@ -245,8 +220,7 @@ public class MedicLeaf : Leaf {
     Transform pos;
 
 
-	public MedicLeaf(Bot _bot, int _priority = 5) : base(priority: _priority) {
-        key = LeafKey.Medic;
+	public MedicLeaf(Bot _bot) : base() {
         bot = _bot;
         target = null;
         pos = bot.transform;
@@ -276,8 +250,7 @@ public class MoveLeaf : Leaf {
 	Transform target;
     Transform pos;
 
-	public MoveLeaf(Bot _bot, int _priority = 4) : base(priority: _priority) {
-		key = LeafKey.Move;
+	public MoveLeaf(Bot _bot) : base() {
 		bot = _bot;
         target = null;
         pos = bot.transform;
@@ -308,8 +281,7 @@ public class RegroupLeaf : Leaf {
 	Transform target;
     Transform pos;
 
-	public RegroupLeaf(Bot _bot, int _priority = 4) : base(priority: _priority) {
-		key = LeafKey.Regroup;
+	public RegroupLeaf(Bot _bot, int _priority = 4) : base() {
 		bot = _bot;
 		target = null;
         pos = bot.transform;
@@ -339,8 +311,7 @@ public class FleeLeaf : Leaf {
     Bot bot;
     int fleeDir;
 
-    public FleeLeaf(Bot _bot, int _fleeDir, int _priority = 5) : base(priority: _priority) {
-        key = LeafKey.Flee;
+    public FleeLeaf(Bot _bot, int _fleeDir) : base() {
         bot = _bot;
         fleeDir = _fleeDir;
     }
@@ -366,16 +337,12 @@ public class Selector : Node {
 	}
 
 	public override NodeState GetState() {
-        currPriority = priority;
-        int highestState = 0;
         if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
 
 		for (int i = currentNodeIndex; i < children.Count; i++) {
 			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeIndex = i;
-                highestState = (children[i].currPriority > highestState) ? children[i].currPriority : highestState;
-                currPriority = highestState;
 				return NodeState.Running;
 			} else if (childState == NodeState.Success) {
 				currentNodeIndex = 0;
@@ -445,15 +412,11 @@ public class RandomSelector : Node {
 	}
 
 	public override NodeState GetState() {
-        currPriority = priority;
         if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
-        Debug.Log("AAAA");
         for (int i = currentNodeOffset; i < children.Count; i++) {
             NodeState childState = children [(i + currentStartIndex) % children.Count].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeOffset = i;
-                currPriority = children[i].currPriority;
-                Debug.Log(children[i]);
 				return NodeState.Running;
 			} else if (childState == NodeState.Success) {
 				currentStartIndex = GetRandomIndex();
@@ -477,13 +440,11 @@ public class Sequencer : Node {
 	}
 
 	public override NodeState GetState() {
-        currPriority = priority;
         if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
         for (int i = currentNodeIndex; i < children.Count; i++) {
 			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeIndex = i;
-                currPriority = children[i].currPriority;
 				return NodeState.Running;
 			} else if (childState == NodeState.Failure) {
 				currentNodeIndex = 0;
