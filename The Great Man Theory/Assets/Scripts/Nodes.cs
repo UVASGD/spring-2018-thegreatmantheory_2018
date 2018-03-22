@@ -281,7 +281,7 @@ public class RegroupLeaf : Leaf {
 	Transform target;
     Transform pos;
 
-	public RegroupLeaf(Bot _bot, int _priority = 4) : base() {
+	public RegroupLeaf(Bot _bot) : base() {
 		bot = _bot;
 		target = null;
         pos = bot.transform;
