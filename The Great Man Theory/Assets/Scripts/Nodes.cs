@@ -14,10 +14,8 @@ public delegate NodeState NodeDel();
 
 public abstract class Node {
     protected string name = "node";
-    protected NodeDel nodeDel;
 
-    public Node(string _name = "Default Node", NodeDel _nodeDel = null) {
-        nodeDel = _nodeDel;
+    public Node(string _name = "Default Node") {
         name = _name;
 }
 
@@ -331,13 +329,12 @@ public class Selector : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public Selector(string _name = "Selector", NodeDel _nodeDel = null, List < Node> _children = null) : base(_name, _nodeDel) {
+	public Selector(string _name = "Selector", NodeDel _nodeDel = null, List < Node> _children = null) : base(_name) {
 		children =  (_children == null) ? new List<Node>() : _children;
 		currentNodeIndex = 0;
 	}
 
 	public override NodeState GetState() {
-        if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
 
 		for (int i = currentNodeIndex; i < children.Count; i++) {
 			NodeState childState = children [i].GetState ();
@@ -373,7 +370,7 @@ public class RandomSelector : Node {
 	 * 
 	 */
 	public RandomSelector(string _name = "Random Selector", NodeDel _nodeDel = null, List < Node> _children = null, List<int> _frequencies = null) 
-        : base(_name, _nodeDel) {
+        : base(_name) {
         children = (_children == null) ? new List<Node>() : _children;
 		generateCumulativeFrequencies (_frequencies);
 		currentStartIndex = GetRandomIndex ();
@@ -412,7 +409,6 @@ public class RandomSelector : Node {
 	}
 
 	public override NodeState GetState() {
-        if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
         for (int i = currentNodeOffset; i < children.Count; i++) {
             NodeState childState = children [(i + currentStartIndex) % children.Count].GetState ();
 			if (childState == NodeState.Running) {
@@ -434,13 +430,12 @@ public class Sequencer : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public Sequencer(string _name = "Sequencer", NodeDel _nodeDel = null, List < Node> _children = null) : base(_name, _nodeDel) {
+	public Sequencer(string _name = "Sequencer", NodeDel _nodeDel = null, List < Node> _children = null) : base(_name) {
         children = (_children == null) ? new List<Node>() : _children;
         currentNodeIndex = 0;
 	}
 
 	public override NodeState GetState() {
-        if (nodeDel != null && nodeDel() == NodeState.Failure) { return NodeState.Failure; }
         for (int i = currentNodeIndex; i < children.Count; i++) {
 			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
@@ -454,4 +449,16 @@ public class Sequencer : Node {
 		currentNodeIndex = 0;
 		return NodeState.Success;
 	}
+}
+
+public class Gate : Node {
+    NodeDel del;
+
+    public Gate(NodeDel _del) {
+        del = _del;
+    }
+
+    public override NodeState GetState() {
+        return del();
+    }
 }
