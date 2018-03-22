@@ -15,6 +15,8 @@ public delegate NodeState NodeDel();
 public abstract class Node {
     protected string name = "node";
 
+	public bool expired = false;
+
     public Node(string _name = "Default Node") {
         name = _name;
 }
@@ -337,6 +339,12 @@ public class Selector : Node {
 	public override NodeState GetState() {
 
 		for (int i = currentNodeIndex; i < children.Count; i++) {
+			if (children [i].expired) {
+				children.RemoveAt (i);
+				if (i >= children.Count) {
+					break;
+				}
+			}
 			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeIndex = i;
@@ -410,6 +418,12 @@ public class RandomSelector : Node {
 
 	public override NodeState GetState() {
         for (int i = currentNodeOffset; i < children.Count; i++) {
+			if (children [(i + currentStartIndex) % children.Count].expired) {
+				children.RemoveAt ((i + currentStartIndex) % children.Count);
+				if (i >= children.Count) {
+					break;
+				}
+			}
             NodeState childState = children [(i + currentStartIndex) % children.Count].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeOffset = i;
@@ -437,6 +451,12 @@ public class Sequencer : Node {
 
 	public override NodeState GetState() {
         for (int i = currentNodeIndex; i < children.Count; i++) {
+			if (children [i].expired) {
+				children.RemoveAt (i);
+				if (i >= children.Count) {
+					break;
+				}
+			}
 			NodeState childState = children [i].GetState ();
 			if (childState == NodeState.Running) {
 				currentNodeIndex = i;
