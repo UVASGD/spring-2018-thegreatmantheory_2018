@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BehaviorTree : ICommandable {
+public class BehaviorTree {
 
     protected Body body;
     protected Bot bot;
-    protected Leaf command;
-    protected int currentPriority = 0;
-
-	protected ICommander commander;
-    //squad
 
     protected List<Leaf> commandList; //Maybe change this to node, but probably not
 
@@ -23,35 +18,8 @@ public class BehaviorTree : ICommandable {
     protected Node rootNode;
 
     public void Traverse() {
-        if (command != null) {
-            if (command.GetState() == NodeState.Running)
-                currentPriority = command.currPriority;
-            else
-                command = null;
-        }
-        else {
-            rootNode.GetState();
-            currentPriority = rootNode.currPriority;
-        }
+        rootNode.GetState();
     }
-
-    public bool SetCommand(LeafKey key, int priority) {
-        if (priority > currentPriority)
-            foreach (Leaf l in commandList)
-                if (key == l.Key) {
-                    command = l;
-                    return true;
-                }
-        return false;
-    }
-
-	public void SetCommander(ICommander comm) {
-		commander = comm;
-	}
-
-	public GameObject GetGameObject() {
-		return body.gameObject;
-	}
 }
 
 public class MeleeBehavior : BehaviorTree {
@@ -64,8 +32,6 @@ public class MeleeBehavior : BehaviorTree {
         MaintainLeaf maintain = new MaintainLeaf(bot, mainTimer, mainDist, mainLeeway);
         ChargeLeaf charge = new ChargeLeaf(bot, charTimer);
         WiggleLeaf wiggle = new WiggleLeaf(bot, wigTimer, maxWig, wigDist);
-
-		commandList = new List<Leaf>() { medic, flee, maintain, charge, wiggle, new MoveLeaf(_bot), new RegroupLeaf(_bot)};
 
         List<Node> WoundedList = new List<Node>() {
             medic, //timer, medic target from squad -- medic target == null
@@ -102,8 +68,6 @@ public class RangedBehavior : BehaviorTree {
 
         FocusLeaf focus = new FocusLeaf(bot, body, 1.5f);
         ShootLeaf shoot = new ShootLeaf(body, 1);
-
-		commandList = new List<Leaf>() { medic, flee, focus, shoot, new MoveLeaf(bot), new RegroupLeaf(bot)};
 
         List<Node> WoundedList = new List<Node>() {
             medic, //timer, medic target from squad -- medic target == null
