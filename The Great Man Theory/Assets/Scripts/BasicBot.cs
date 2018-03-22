@@ -27,16 +27,16 @@ public class DefaultTree {
 	protected Node rootNode;
 
 	public DefaultTree(Body body, Flag flag) {
-		rootNode = new Selector("root", null, new List<Node>() {
-			new Selector("priority 0", null, new List<Node>() {}),
-			new Selector("priority 1", null, new List<Node>() {
+		rootNode = new Selector("root", new List<Node>() {
+			new Selector("priority 0", new List<Node>() {}),
+			new Selector("priority 1", new List<Node>() {
 				//Wounded node here
 			}),
-			new Selector("priority 2", null, new List<Node>() {
+			new Selector("priority 2", new List<Node>() {
 				//Default Attack goes here
 			}),
-			new Selector("priority 3", null, new List<Node>() {}),
-			new Selector("priority 4", null, new List<Node>() {
+			new Selector("priority 3", new List<Node>() {}),
+			new Selector("priority 4", new List<Node>() {
 				//Idle node here
 			})
 		});

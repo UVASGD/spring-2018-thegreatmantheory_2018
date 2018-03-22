@@ -329,7 +329,7 @@ public class Selector : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public Selector(string _name = "Selector", NodeDel _nodeDel = null, List < Node> _children = null) : base(_name) {
+	public Selector(string _name = "Selector", List < Node> _children = null) : base(_name) {
 		children =  (_children == null) ? new List<Node>() : _children;
 		currentNodeIndex = 0;
 	}
@@ -369,7 +369,7 @@ public class RandomSelector : Node {
 	 * * Example, for a node with 4 children, the list [1, 3, 4, 2] would have a 1/10 chance for node 0, 3/10 for node 1, 4/10 for node 2, and 2/10 for node 3
 	 * 
 	 */
-	public RandomSelector(string _name = "Random Selector", NodeDel _nodeDel = null, List < Node> _children = null, List<int> _frequencies = null) 
+	public RandomSelector(string _name = "Random Selector", List < Node> _children = null, List<int> _frequencies = null) 
         : base(_name) {
         children = (_children == null) ? new List<Node>() : _children;
 		generateCumulativeFrequencies (_frequencies);
@@ -430,7 +430,7 @@ public class Sequencer : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
 
-	public Sequencer(string _name = "Sequencer", NodeDel _nodeDel = null, List < Node> _children = null) : base(_name) {
+	public Sequencer(string _name = "Sequencer", List < Node> _children = null) : base(_name) {
         children = (_children == null) ? new List<Node>() : _children;
         currentNodeIndex = 0;
 	}

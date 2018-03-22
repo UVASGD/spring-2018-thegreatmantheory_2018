@@ -50,10 +50,10 @@ public class MeleeBehavior : BehaviorTree {
 
         List<Node> RootList = new List<Node>() {
             new RandomSelector("Wounded", 
-                delegate() { return (body.Wounded()) ? NodeState.Running : NodeState.Failure; },
+                //delegate() { return (body.Wounded()) ? NodeState.Running : NodeState.Failure; },
                 WoundedList), // n/a -- health < (maxHealth * 0.1)
             new RandomSelector("Fight", 
-                delegate() { return (bot.targetObj) ? NodeState.Running : NodeState.Failure; }, 
+                //delegate() { return (bot.targetObj) ? NodeState.Running : NodeState.Failure; }, 
                 FightList) // n/a -- (target) && squad.Fight
         };
 
@@ -81,10 +81,10 @@ public class RangedBehavior : BehaviorTree {
 
         List<Node> RootList = new List<Node>() {
             new RandomSelector("Wounded",
-                delegate() { return (body.Wounded()) ? NodeState.Running : NodeState.Failure; },
+                //delegate() { return (body.Wounded()) ? NodeState.Running : NodeState.Failure; },
                 WoundedList), // n/a -- health < (maxHealth * 0.1)
             new RandomSelector("Fight",
-                delegate() { return (bot.targetObj) ? NodeState.Running : NodeState.Failure; },
+                //delegate() { return (bot.targetObj) ? NodeState.Running : NodeState.Failure; },
                 ShootList) // n/a -- (target) && squad.Fight
         };
 
