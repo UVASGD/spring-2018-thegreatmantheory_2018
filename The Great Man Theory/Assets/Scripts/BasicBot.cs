@@ -10,6 +10,8 @@ public class BasicBot : MonoBehaviour {
 
 	public Flag flag;
 
+    public Transform attackTarget; //Current Attack Target
+
 	// Use this for initialization
 	void Start () {
 		maintree = new DefaultTree (body, flag);
