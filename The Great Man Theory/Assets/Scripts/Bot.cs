@@ -9,13 +9,13 @@ public class Bot : Mover {
     protected override void SetMover() {
         switch (body.unitType) {
             case UnitType.Pike:
-                behavior = new MeleeBehavior(body, this, -100, 1.5f, 3, 8, 1.5f, 3, 0.4f, 8);
+                //behavior = new MeleeBehavior(new BasicBot(), 1.5f, 3, 8, 1.5f, 3, 0.4f, 8);
                 break;
             case UnitType.Arquebus:
-                behavior = new RangedBehavior(body, this, -100);
+                //behavior = new RangedBehavior(this);
                 break;
             default:
-                behavior = new MeleeBehavior(body, this, -100, 1.5f, 3, 8, 1.5f, 3, 0.4f, 8);
+                //behavior = new MeleeBehavior(body, this, -100, 1.5f, 3, 8, 1.5f, 3, 0.4f, 8);
                 break;
 
         }

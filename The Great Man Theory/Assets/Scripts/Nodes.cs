@@ -58,7 +58,7 @@ public class MaintainLeaf : Leaf {
 
     public override NodeState GetState() {
         if (!started) {
-            //bot.Hold();
+            bot.Hold();
             started = true;
         }
         timer -= Time.deltaTime;
@@ -68,7 +68,7 @@ public class MaintainLeaf : Leaf {
         if (timer <= 0) {
             timer = timerMax;
             started = false;
-            //bot.Hold(false);
+            bot.Hold(false);
             return (Mathf.Abs(prefDist - Vector2.Distance(pos.position, target.position)) < leeway) ? NodeState.Success : NodeState.Failure;
         }
         return NodeState.Running;
@@ -139,7 +139,7 @@ public class ChargeLeaf : Leaf {
             bot.Move(bot.attackTarget.position);
         }
         timer -= Time.deltaTime;
-        //bot.Dash();
+        bot.Dash();
         if (timer <= 0) {
             timer = timerMax;
             started = false;
@@ -174,7 +174,7 @@ public class FocusLeaf : Leaf {
             bot.Move(bot.transform.TransformDirection(target));
         }
         timer -= Time.deltaTime;
-        //bot.Brace();
+        bot.Brace();
         if (timer <= 0) {
             timer = UnityEngine.Random.Range(0.4f, timerMax);
             started = false;
@@ -318,7 +318,7 @@ public class FleeLeaf : Leaf {
             started = true;
             bot.Move(new Vector2(bot.transform.position.x, 100)); //TODO Get flee direction from squad or something
         }
-        //bot.Dash();
+        bot.Dash();
         return NodeState.Running;
     }
 }
