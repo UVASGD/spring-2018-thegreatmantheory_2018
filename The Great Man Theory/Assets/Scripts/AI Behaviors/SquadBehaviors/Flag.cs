@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Flag : MonoBehaviour {
 
+    DefaultTree maintree;
+
     List<Transform> enemies = new List<Transform>();
-    Body thisBody;
+    public BasicBot carrier;
 
     // Use this for initialization
     void Start () {
@@ -17,17 +19,16 @@ public class Flag : MonoBehaviour {
 		
 	}
 
-    private void OnCollisionEnter2D(Collision2D collision) {
-        Collider2D collider = collision.collider;
+    private void OnTriggerEnter2D(Collider2D collider) {
         if (collider.CompareTag("Body") || !enemies.Contains(collider.transform)) {
-            if (collider.GetComponent<Body>().team != thisBody.team) {
+            if (collider.GetComponent<Body>().team != carrier.body.team) {
                 enemies.Add(collider.transform);
             }
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision) {
-        enemies.Remove(collision.transform);
+    private void OnTriggerExit2D(Collider2D collider) {
+        enemies.Remove(collider.transform);
         //If it's a friendly, tell em to regroup
     }
 

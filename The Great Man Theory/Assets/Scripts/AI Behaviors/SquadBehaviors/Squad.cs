@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public abstract class Squad : MonoBehaviour { }
+
 /* public abstract class Squad : MonoBehaviour, ICommandable, ICommander {
 
 	public List<ICommandable> minions;

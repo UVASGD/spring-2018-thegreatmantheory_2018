@@ -84,20 +84,18 @@ public class DialogueManager : MonoBehaviour {
         string lang = sentence.language.ToString();
 
         int i = 0;
-        int j = 0;
+        // int j = 0;
         int end = text.Length;
-        while (i < end || j < end) {
-            if (i < end) {
-                string typeLetter = text[i++].ToString();
-                dialogueText.text += typeLetter;
-            }
-
+        while (i < end) {
             if (count < waitTime)
                 count += Time.deltaTime;
 
-            if (count >= waitTime && j < end) {
+            if (count >= waitTime && i < end) {
+                string typeLetter = text[i].ToString();
+                dialogueText.text += typeLetter;
+
                 count = 0f;
-                string sayLetter = text[j++].ToString().ToUpper();
+                string sayLetter = text[i++].ToString().ToUpper();
                 AudioClip toPlay = am.GetSound(lang + "_" + sayLetter);
                 if (toPlay)
                     source1.PlayOneShot(toPlay);

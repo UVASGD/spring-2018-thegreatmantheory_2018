@@ -2,6 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public class ArmySquad : Squad {
+
+    public Flag flag;
+    public BasicBot officer;
+    public BasicBot medic;
+
+    List<BasicBot> minions;
+
+
+    void Start() {
+        foreach (Transform t in transform) {
+            foreach (Transform t2 in t) {
+                BasicBot b = t2.GetComponent<BasicBot>();
+                if (b) {
+                    minions.Add(b);
+                    b.squad = this;
+                    officer = (t.CompareTag("Officer") && !officer) ? b : officer;
+                    medic = (t.CompareTag("Medic") && !medic) ? b : medic;
+                }
+            }
+        }
+
+        if (!officer)
+            officer = minions[Random.Range(0, minions.Count)];
+
+        flag.carrier = officer; 
+    }
+
+
+
+}
+
 /* public class ArmySquad : Squad {
 
     List<Transform> enemies = new List<Transform>();

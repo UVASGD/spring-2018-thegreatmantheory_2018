@@ -6,15 +6,17 @@ public class BasicBot : MonoBehaviour {
 
 	DefaultTree maintree;
 
-	public Body body;
+    Rigidbody2D rb;
+    public Body body;
     public FollowPointer pointer;
 
-	public Flag flag;
+	public ArmySquad squad;
 
     public Transform attackTarget; //Current Attack Target
 
 	protected List<Command> commandlist;
 
+    //Variables for dashing
     float originalDrag;
     float dashDrag;
     int dashMax = 1;
@@ -22,20 +24,20 @@ public class BasicBot : MonoBehaviour {
     float dashThreshold;
     protected MoveState dash = MoveState.off;
 
+    //Variables for bracing
     protected int holdButton = 0;
     protected int braceButton = 1;
     protected MoveState brace = MoveState.off;
 
-    protected MoveState hold = MoveState.off;
-
-    Rigidbody2D rb;
+    //Variables for holding
     HingeJoint2D[] armJoints;
     JointAngleLimits2D[] originalLimits;
     public bool hasArms = true;
+    protected MoveState hold = MoveState.off;
 
     // Use this for initialization
     void Start () {
-		maintree = new DefaultTree (body, flag);
+		maintree = new DefaultTree (this);
 		commandlist = new List<Command> ();
 
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -192,7 +194,7 @@ public class DefaultTree {
 
 	List<Node> priorityBuckets;
 
-	public DefaultTree(Body body, Flag flag) {
+	public DefaultTree(BasicBot bot) {
 
 		priorityBuckets = new List<Node> () {
 			new Selector("priority 0", new List<Node>() {}),
