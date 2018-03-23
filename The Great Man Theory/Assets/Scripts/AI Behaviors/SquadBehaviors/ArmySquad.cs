@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum SquadType { Hold, Advance }
 
 public class ArmySquad : Squad {
+
+    public Team team;
+    public SquadType squadType;
 
     public Flag flag;
     public BasicBot officer;
     public BasicBot medic;
+
+    public int direction = 1;
+
+    public float SquadRadius { get { return 2 * minions.Count; } } 
 
     List<BasicBot> minions;
 
@@ -19,6 +27,9 @@ public class ArmySquad : Squad {
                 if (b) {
                     minions.Add(b);
                     b.squad = this;
+                    b.body.team = team;
+                    b.body.SetColors();
+                    b.body.ApplyColors();
                     officer = (t.CompareTag("Officer") && !officer) ? b : officer;
                     medic = (t.CompareTag("Medic") && !medic) ? b : medic;
                 }
@@ -31,8 +42,15 @@ public class ArmySquad : Squad {
         flag.carrier = officer; 
     }
 
-
-
+    public void SetCommands(SquadType s) {
+        switch (s) {
+            case SquadType.Hold:
+                
+                break;
+            case SquadType.Advance:
+                break;
+        }
+    }
 }
 
 /* public class ArmySquad : Squad {

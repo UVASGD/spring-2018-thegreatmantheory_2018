@@ -2,6 +2,74 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class DefaultTree {
+    protected Node rootNode;
+
+    protected List<Node> priorityBuckets;
+
+    public DefaultTree(BasicBot bot) {
+
+        priorityBuckets = new List<Node>() {
+            new Selector("priority 0", new List<Node>() {}),
+            new Selector("priority 1", new List<Node>() {
+				//Wounded node here
+			}),
+            new Selector("priority 2", new List<Node>() {
+				//Default Attack goes here
+			}),
+            new Selector("priority 3", new List<Node>() {}),
+            new Selector("priority 4", new List<Node>() {
+				//Idle node here
+			})
+        };
+
+        rootNode = new Selector("root", (priorityBuckets));
+    }
+
+    public NodeState Traverse() {
+        return rootNode.GetState();
+    }
+
+    public void insertAtPriority(Command comm, int priority) {
+        priority = Mathf.Clamp(priority, 0, priorityBuckets.Count - 1);
+        ((Selector)(priorityBuckets[priority])).insertChild(comm.subtree);
+    }
+}
+
+public class MeleeTree : DefaultTree {
+    public MeleeTree(BasicBot bot) : base(bot) {
+        priorityBuckets = new List<Node>() {
+            new Selector("priority 0", new List<Node>() {}),
+            new Selector("priority 1", new List<Node>() {
+                new RandomSelector("Wounded", new List<Node>() {
+                    new FleeLeaf(bot),
+                    new MedicLeaf(bot)
+                })
+			}),
+            new Selector("priority 2", new List<Node>() {
+                new Gate(delegate() {
+                    return (!bot.attackTarget || Vector2.Distance(bot.transform.position, bot.attackTarget.position) > 10) 
+                    ? NodeState.Success: NodeState.Failure;
+                }),
+				new RandomSelector("Fight", new List<Node>() {               
+                    new WiggleLeaf(bot),
+                    new Sequencer("Prepare", new List<Node>() {
+                        new MaintainLeaf(bot),
+                        new ChargeLeaf(bot)
+                    })
+                })
+			}),
+            new Selector("priority 3", new List<Node>() {}),
+            new Selector("priority 4", new List<Node>() {
+				//Idle node here
+			})
+        };
+
+        rootNode = new Selector("root", (priorityBuckets));
+    }
+}
+
+/*
 public class BehaviorTree {
 
     protected BasicBot bot;
@@ -89,3 +157,4 @@ public class RangedBehavior : BehaviorTree {
         rootNode = new Selector("RootNode", _children: RootList);
     }
 }
+*/

@@ -145,7 +145,7 @@ public class Body : MonoBehaviour {
 
     //COLORING AND SPRITING THE DUDE
 
-    void SetColors() {
+    public void SetColors() {
         switch (team) {
             case (Team.GoodGuys):
                 bodyColor = Color.blue;
@@ -165,7 +165,7 @@ public class Body : MonoBehaviour {
         }
     }
 
-    void ApplyColors() {
+    public void ApplyColors() {
         if (bodySprites.Length > 0 && bodyRender)
             bodyRender.sprite = bodySprites[Random.Range(0, bodySprites.Length)];
         if (headSprites.Length > 0 && headRender)

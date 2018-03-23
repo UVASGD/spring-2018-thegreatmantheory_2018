@@ -43,6 +43,7 @@ public class MaintainLeaf : Leaf {
     BasicBot bot;
     Transform pos;
     Transform target;
+    Vector2 targetPos;
     int prefDist;
     int leeway;
 
@@ -63,13 +64,13 @@ public class MaintainLeaf : Leaf {
         }
         timer -= Time.deltaTime;
         target = bot.attackTarget;
-        target.position = (pos.position - target.position).normalized * prefDist;
-        bot.Move(target.position);
+        targetPos = (pos.position - target.position).normalized * prefDist;
+        bot.Move(targetPos);
         if (timer <= 0) {
             timer = timerMax;
             started = false;
             bot.Hold(false);
-            return (Mathf.Abs(prefDist - Vector2.Distance(pos.position, target.position)) < leeway) ? NodeState.Success : NodeState.Failure;
+            return (Mathf.Abs(prefDist - Vector2.Distance(pos.position, targetPos)) < leeway) ? NodeState.Success : NodeState.Failure;
         }
         return NodeState.Running;
     }
@@ -84,6 +85,7 @@ public class WiggleLeaf : Leaf {
     float swingTimer;
     BasicBot bot;
     Transform target;
+    Vector2 targetPos;
     float randoDist;
 
     public WiggleLeaf(BasicBot _bot, float _timerMax = 3, float _maxWig = 0.4f, float _randoDist = 8) : base() {
@@ -100,7 +102,7 @@ public class WiggleLeaf : Leaf {
     public override NodeState GetState() {
         if (!started) {
             started = true;
-            target.position = (Vector2)bot.attackTarget.position + (UnityEngine.Random.insideUnitCircle * randoDist);
+            targetPos = (Vector2)bot.attackTarget.position + (UnityEngine.Random.insideUnitCircle * randoDist);
             bot.Move(target.position);
             swingMax = UnityEngine.Random.Range(0.2f, maxWig);
             swingTimer = swingMax;
@@ -108,8 +110,8 @@ public class WiggleLeaf : Leaf {
         swingTimer -= Time.deltaTime;
         if (swingTimer <= 0) {
             swingTimer = swingMax;
-            target.position = (Vector2)bot.attackTarget.position + (UnityEngine.Random.insideUnitCircle * randoDist);
-            bot.Move(target.position);
+            targetPos = (Vector2)bot.attackTarget.position + (UnityEngine.Random.insideUnitCircle * randoDist);
+            bot.Move(targetPos);
         }
         timer -= Time.deltaTime;
         if (timer <= 0) {
@@ -166,7 +168,6 @@ public class FocusLeaf : Leaf {
 
     public override NodeState GetState() {
         if (!started) {
-            Debug.Log("OOF");
             started = true;
             Vector2 target = ((Vector2)bot.attackTarget.position - body.weapon.pointer.ForcePoint).normalized;
             target = bot.transform.InverseTransformDirection(target);
@@ -228,7 +229,7 @@ public class MedicLeaf : Leaf {
     public override NodeState GetState() {
         if (!started) {
             started = true;
-            //target = bot.GetCommander().FindMedic();
+            //target = bot.squad.FindMedic();
         }
 		if (target == null) {
 			return NodeState.Failure;
@@ -243,26 +244,18 @@ public class MedicLeaf : Leaf {
     }
 }
 
-public class MoveLeaf : Leaf {
-    bool started = false;
-	BasicBot bot;
+public class MoveTargetLeaf : Leaf {
+    BasicBot bot;
 	Transform target;
     Transform pos;
 
-	public MoveLeaf(BasicBot _bot) : base() {
-		bot = _bot;
-        target = null;
+	public MoveTargetLeaf(BasicBot _bot, Transform _target) : base() {
+        bot = _bot;
+        target = _target;
         pos = bot.transform;
 	}
 
 	public override NodeState GetState() {
-        if (!started) {
-            started = true;
-            //target = bot.GetCommander().FindTarget();
-        }
-		if (target == null) {
-			return NodeState.Failure;
-		}
         /* if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
 			bot.SetTarget (target.position);
 			return NodeState.Running;
@@ -274,6 +267,30 @@ public class MoveLeaf : Leaf {
 	}
 }
 
+public class MoveLeaf : Leaf {
+    BasicBot bot;
+    Vector2 target;
+    Transform pos;
+
+    public MoveLeaf(BasicBot _bot, Vector2 _target) : base() {
+        bot = _bot;
+        target = _target;
+        pos = bot.transform;
+    }
+
+    public override NodeState GetState() {
+        /* if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
+			bot.SetTarget (target.position);
+			return NodeState.Running;
+		} else {
+            started = false;
+			return NodeState.Success;
+		} */
+        return NodeState.Failure;
+    }
+}
+
+//TODO Maybe just replace RegroupLeaf with MoveTarget?
 public class RegroupLeaf : Leaf {
     bool started = false;
 	BasicBot bot;
@@ -289,7 +306,7 @@ public class RegroupLeaf : Leaf {
 	public override NodeState GetState() {
         if (!started) {
             started = true;
-            //target = bot.GetCommander().FindOfficer();
+            //target = bot.squad.officer();
         }
 		if (target == null) {
 			return NodeState.Failure;

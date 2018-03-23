@@ -9,16 +9,6 @@ public class Flag : MonoBehaviour {
     List<Transform> enemies = new List<Transform>();
     public BasicBot carrier;
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     private void OnTriggerEnter2D(Collider2D collider) {
         if (collider.CompareTag("Body") || !enemies.Contains(collider.transform)) {
             if (collider.GetComponent<Body>().team != carrier.body.team) {
@@ -41,5 +31,9 @@ public class Flag : MonoBehaviour {
                 enemies.RemoveAt(i);
 
         return enemies[Random.Range(0, enemies.Count)];
+    }
+
+    public void SetTree(DefaultTree tree) {
+        maintree = tree;
     }
 }
