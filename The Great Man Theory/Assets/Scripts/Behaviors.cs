@@ -7,7 +7,7 @@ public class DefaultTree {
 
     protected List<Node> priorityBuckets;
 
-    public DefaultTree(BasicBot bot) {
+    public DefaultTree() {
 
         priorityBuckets = new List<Node>() {
             new Selector("priority 0", new List<Node>() {}),
@@ -26,7 +26,7 @@ public class DefaultTree {
         rootNode = new Selector("root", (priorityBuckets));
     }
 
-    public NodeState Traverse() {
+    public virtual NodeState Traverse() {
         return rootNode.GetState();
     }
 
@@ -37,7 +37,7 @@ public class DefaultTree {
 }
 
 public class MeleeTree : DefaultTree {
-    public MeleeTree(BasicBot bot) : base(bot) {
+    public MeleeTree(BasicBot bot) {
         priorityBuckets = new List<Node>() {
             new Selector("priority 0", new List<Node>() {}),
             new Selector("priority 1", new List<Node>() {
@@ -60,6 +60,58 @@ public class MeleeTree : DefaultTree {
                 })
 			}),
             new Selector("priority 3", new List<Node>() {}),
+            new Selector("priority 4", new List<Node>() {
+				//Idle node here
+			})
+        };
+
+        rootNode = new Selector("root", (priorityBuckets));
+    }
+}
+
+public class SquadHoldTree : DefaultTree {
+    public SquadHoldTree(Squad squad) {
+        priorityBuckets = new List<Node>() {
+            new Selector("priority 0", new List<Node>() {}),
+            new Selector("priority 1", new List<Node>() {}),
+            new Selector("priority 2", new List<Node>() {
+				//Default Attack goes here
+			}),
+            new Selector("priority 3", new List<Node>() {}),
+            new Selector("priority 4", new List<Node>() {
+				//Idle node here
+			})
+        };
+
+        rootNode = new Selector("root", (priorityBuckets));
+    }
+}
+
+public class SquadAdvanceTree : DefaultTree {
+    float orderTimeMax = 20;
+    float orderTime;
+
+    public SquadAdvanceTree(ArmySquad squad) {
+        orderTime = orderTimeMax;
+
+        priorityBuckets = new List<Node>() {
+            new Selector("priority 0", new List<Node>() {}),
+            new Selector("priority 1", new List<Node>() {}),
+            new Selector("priority 2", new List<Node>() {
+				//Default Attack goes here
+			}),
+            new Selector("priority 3", new List<Node>() {
+                new Sequencer("Advance", new List<Node>() {
+                    new Gate(delegate() {
+                        orderTime -= Time.deltaTime;
+                        if (orderTime <= 0) {
+                            orderTime = orderTimeMax;
+                            //squad.Command(); TODO Add MoveCommand
+                        }
+                        return NodeState.Running;
+                    })
+                })
+            }),
             new Selector("priority 4", new List<Node>() {
 				//Idle node here
 			})

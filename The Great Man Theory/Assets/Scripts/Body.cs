@@ -55,6 +55,10 @@ public class Body : MonoBehaviour {
     void Start () {
         rb = GetComponent<Rigidbody2D>();
         health = maxHealth;
+
+        if (!weapon)
+            weapon = transform.parent.GetComponentInChildren<Weapon>();
+
 		fx = effectGen.GetComponent<ParticleSystem> ();
 		fxMain = fx.main;
 

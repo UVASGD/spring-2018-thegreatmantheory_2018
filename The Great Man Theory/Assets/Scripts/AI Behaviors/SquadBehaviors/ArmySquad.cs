@@ -6,6 +6,8 @@ public enum SquadType { Hold, Advance }
 
 public class ArmySquad : Squad {
 
+    public DefaultTree maintree;
+
     public Team team;
     public SquadType squadType;
 
@@ -17,7 +19,8 @@ public class ArmySquad : Squad {
 
     public float SquadRadius { get { return 2 * minions.Count; } } 
 
-    List<BasicBot> minions;
+    List<BasicBot> minions = new List<BasicBot>();
+    public List<Transform> enemies = new List<Transform>();
 
 
     void Start() {
@@ -39,16 +42,34 @@ public class ArmySquad : Squad {
         if (!officer)
             officer = minions[Random.Range(0, minions.Count)];
 
-        flag.carrier = officer; 
+        flag.carrier = officer;
     }
 
-    public void SetCommands(SquadType s) {
+    public Transform FindEnemy() {
+        if (enemies.Count == 0)
+            return null;
+
+        for (int i = 0; i < enemies.Count; i++)
+            if (!enemies[i])
+                enemies.RemoveAt(i);
+
+        return enemies[Random.Range(0, enemies.Count)];
+    }
+
+    public void SetTree(SquadType s) {
         switch (s) {
             case SquadType.Hold:
-                
+                maintree = new SquadHoldTree(this);
                 break;
             case SquadType.Advance:
+                maintree = new SquadAdvanceTree(this);
                 break;
+        }
+    }
+
+    public void Command(Command comm, int priority) {
+        foreach (BasicBot b in minions) {
+            b.Command(comm, priority);
         }
     }
 }

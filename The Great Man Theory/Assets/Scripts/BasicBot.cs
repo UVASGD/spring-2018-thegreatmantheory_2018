@@ -37,7 +37,13 @@ public class BasicBot : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		maintree = new DefaultTree (this);
+		switch (body.unitType) {
+            case UnitType.Pike:
+            case UnitType.Longsword:
+            case UnitType.Sword:
+                maintree = new MeleeTree(this);
+                break;
+        }
 		commandlist = new List<Command> ();
 
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -76,11 +82,11 @@ public class BasicBot : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		maintree.Traverse ();
-        cull();
+        Cull();
         SetMoveState();
 	}
 
-	public void cull() {
+	public void Cull() {
 		for (int i = commandlist.Count; i >= 0; i--) {
 			commandlist [i].timeLeft -= Time.deltaTime;
 			if (commandlist [i].timeLeft <= 0) {
@@ -90,7 +96,7 @@ public class BasicBot : MonoBehaviour {
 		}
 	}
 
-	public void command(Command comm, int priority) {
+	public void Command(Command comm, int priority) {
 		commandlist.Add (comm);
 		maintree.insertAtPriority (comm, priority);
 	}
@@ -187,38 +193,4 @@ public class BasicBot : MonoBehaviour {
             hold = MoveState.end;
         }
     }
-}
-
-public class DefaultTree {
-	protected Node rootNode;
-
-	List<Node> priorityBuckets;
-
-	public DefaultTree(BasicBot bot) {
-
-		priorityBuckets = new List<Node> () {
-			new Selector("priority 0", new List<Node>() {}),
-			new Selector("priority 1", new List<Node>() {
-				//Wounded node here
-			}),
-			new Selector("priority 2", new List<Node>() {
-				//Default Attack goes here
-			}),
-			new Selector("priority 3", new List<Node>() {}),
-			new Selector("priority 4", new List<Node>() {
-				//Idle node here
-			})
-		};
-
-		rootNode = new Selector("root", (priorityBuckets));
-	}
-
-	public NodeState Traverse() {
-		return rootNode.GetState ();
-	}
-
-	public void insertAtPriority(Command comm, int priority) {
-		priority = Mathf.Clamp (priority, 0, priorityBuckets.Count - 1);
-		((Selector)(priorityBuckets [priority])).insertChild (comm.subtree);
-	}
 }
