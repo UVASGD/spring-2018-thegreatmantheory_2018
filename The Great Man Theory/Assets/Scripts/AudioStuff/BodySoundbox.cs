@@ -18,11 +18,17 @@ public class BodySoundbox : MonoBehaviour {
 	}
 
     public void Hit(float volume) {
+		if (am == null) {
+			return;
+		}
         source.volume = volume;
         source.PlayOneShot(am.GetSound("body_hit"));
     }
 
     public void Death() {
+		if (am == null) {
+			return;
+		}
         source.volume = 1f;
         source.PlayOneShot(am.GetSound("body_death"));
     }

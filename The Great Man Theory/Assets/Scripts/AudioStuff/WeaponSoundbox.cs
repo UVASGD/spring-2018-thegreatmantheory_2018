@@ -18,6 +18,9 @@ public class WeaponSoundbox : MonoBehaviour {
 	}
 
     public void Hit(float volume) {
+		if (am == null) {
+			return;
+		}
         source.volume = volume;
         source.PlayOneShot(am.GetSound("generic_collision"));
     }

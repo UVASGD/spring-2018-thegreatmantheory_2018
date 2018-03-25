@@ -19,6 +19,9 @@ public class GunSoundbox : WeaponSoundbox {
     }
 
     public void Shoot() {
+		if (am == null) {
+			return;
+		}
         fireSound.volume = 1f;
         fireSound.PlayOneShot(am.GetSound("gun_shot"));
     }
