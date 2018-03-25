@@ -189,4 +189,13 @@ public class BasicBot : MonoBehaviour {
             hold = MoveState.end;
         }
     }
+
+	void OnCollisionEnter2D(Collision2D other) {
+		if (other.collider.CompareTag ("Weapon")) {
+			Team side = other.collider.transform.parent.GetComponentInChildren<Body>().team;
+			if (side != body.team) {
+				attackTarget = other.collider.transform;
+			}
+		}
+	}
 }
