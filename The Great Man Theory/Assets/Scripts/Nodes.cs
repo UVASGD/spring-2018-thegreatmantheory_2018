@@ -389,7 +389,7 @@ public class IntervalGate : Node {
             time = interval;
             return (fail) ? NodeState.Failure : NodeState.Success;
         }
-        return NodeState.Running;  
+        return (fail) ? NodeState.Success : NodeState.Failure;  
     }
 }
 

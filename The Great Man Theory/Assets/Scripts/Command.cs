@@ -21,7 +21,9 @@ public class OpenCommand : Command {
 public class MoveCommand : Command {
 
     public MoveCommand(Vector2 target, float _timeLeft) : base(_timeLeft) {
-        //subtree = 
+        subtree = new Sequencer("Move", new List<Node>() {
+
+        });
     }
 }
 
