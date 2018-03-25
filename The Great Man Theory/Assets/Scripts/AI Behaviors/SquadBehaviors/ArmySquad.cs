@@ -68,9 +68,13 @@ public class ArmySquad : Squad {
     }
 
     public void Command(Command comm, int priority) {
-        foreach (BasicBot b in minions) {
-            b.Command(comm, priority);
+        foreach (BasicBot bot in minions) {
+            bot.Command(comm, priority);
         }
+    }
+
+    public void Command(BasicBot bot, Command comm, int priority) {
+        bot.Command(comm, priority);
     }
 }
 

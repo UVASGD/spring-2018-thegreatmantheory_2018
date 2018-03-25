@@ -4,8 +4,8 @@ using UnityEngine;
 
 public enum MoveState { end = -1, off = 0, on = 1, start = 2 }
 
-public class Mover : MonoBehaviour {
-
+public class Mover : MonoBehaviour { }
+/*
     protected delegate void MoveDel();
 
     public BehaviorTree behavior;
@@ -189,8 +189,5 @@ public class Mover : MonoBehaviour {
             rb.freezeRotation = false;
             hold = MoveState.end; }
     }
-
-
-
-
 }
+*/

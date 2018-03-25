@@ -2,13 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Command {
+public abstract class Command {
 
     public Node subtree;
     public float timeLeft;
 
-    public Command(Node _subtree, float _timeLeft) {
-        subtree = _subtree;
+    public Command(float _timeLeft) {
         timeLeft = _timeLeft;
     }
+}
+
+public class OpenCommand : Command {
+    public OpenCommand(Node _subtree, float _timeLeft) : base(_timeLeft) {
+        subtree = _subtree;
+    }
+}
+
+public class MoveCommand : Command {
+
+    public MoveCommand(Vector2 target, float _timeLeft) : base(_timeLeft) {
+        //subtree = 
+    }
+}
+
+public class MoveTargetCommand {
+
 }

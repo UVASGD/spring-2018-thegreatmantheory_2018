@@ -341,6 +341,55 @@ public class FleeLeaf : Leaf {
 }
 
 
+public class Gate : Node {
+    NodeDel del;
+
+    public Gate(NodeDel _del) {
+        del = _del;
+    }
+
+    public override NodeState GetState() {
+        return del();
+    }
+}
+
+public class IntervalGate : Node {
+    float interval;
+    float time;
+    bool fail;
+
+    public IntervalGate(float _interval, bool _fail = false) {
+        interval = _interval;
+        time = interval;
+        fail = _fail;
+    }
+
+    public override NodeState GetState() {
+        time -= Time.deltaTime;
+        if (time <= 0) {
+            time = interval;
+            return (fail) ? NodeState.Failure : NodeState.Success;
+        }
+        return NodeState.Running;  
+    }
+}
+
+public class OneShotGate : Node {
+    bool fail;
+    bool done = false;
+
+    public OneShotGate(bool _fail = false) {
+        fail = _fail;
+    }
+
+    public override NodeState GetState() {
+        if (!done)
+            done = true;
+        return (fail) ? NodeState.Failure : NodeState.Success;
+    }
+}
+
+
 public class Selector : Node {
 	protected List<Node> children;
 	protected int currentNodeIndex = 0;
@@ -488,16 +537,4 @@ public class Sequencer : Node {
 		currentNodeIndex = 0;
 		return NodeState.Success;
 	}
-}
-
-public class Gate : Node {
-    NodeDel del;
-
-    public Gate(NodeDel _del) {
-        del = _del;
-    }
-
-    public override NodeState GetState() {
-        return del();
-    }
 }
