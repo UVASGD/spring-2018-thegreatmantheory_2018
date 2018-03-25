@@ -71,10 +71,9 @@ public class MeleeTree : DefaultTree {
 
 public class SquadHoldTree : DefaultTree {
     Vector2 pos;
-    float orderTimeMax = 20;
-    float orderTime;
+    float orderTime = Random.Range(10, 15);
 
-    public SquadHoldTree(Squad squad) {
+    public SquadHoldTree(ArmySquad squad) {
         pos = squad.transform.position;
 
         priorityBuckets = new List<Node>() {
@@ -82,11 +81,13 @@ public class SquadHoldTree : DefaultTree {
             new Selector("priority 1", new List<Node>() {}),
             new Selector("priority 2", new List<Node>() {}),
             new Selector("priority 3", new List<Node>() {
-                //Add MoveCommand Node
+                new Sequencer("Hold", new List<Node>() {
+                    new IntervalGate(orderTime),
+                    new CommandNode(squad, 
+                        new MoveCommand(pos, orderTime), 3)
+                })
             }),
-            new Selector("priority 4", new List<Node>() {
-				//Idle node here
-			})
+            new Selector("priority 4", new List<Node>() {})
         };
 
         rootNode = new Selector("root", (priorityBuckets));
@@ -111,9 +112,7 @@ public class SquadAdvanceTree : DefaultTree {
                         new MoveCommand(new Vector2(0, squad.direction*1000), moveInterval), 3)
                 })
             }),
-            new Selector("priority 4", new List<Node>() {
-				//Idle node here
-			})
+            new Selector("priority 4", new List<Node>() {})
         };
 
         rootNode = new Selector("root", (priorityBuckets));
