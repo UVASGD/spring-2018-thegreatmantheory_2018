@@ -103,7 +103,7 @@ public class WiggleLeaf : Leaf {
 		Debug.Log ("wiggle-wiggle");
         if (!started) {
             started = true;
-            targetPos = (Vector2)bot.attackTarget.position + (UnityEngine.Random.insideUnitCircle * randoDist);
+            targetPos = (Vector2)target.position + (UnityEngine.Random.insideUnitCircle * randoDist);
  
             swingMax = UnityEngine.Random.Range(0.2f, maxWig);
             swingTimer = swingMax;
@@ -111,7 +111,7 @@ public class WiggleLeaf : Leaf {
         swingTimer -= Time.deltaTime;
         if (swingTimer <= 0) {
             swingTimer = swingMax;
-            targetPos = (Vector2)bot.attackTarget.position + (UnityEngine.Random.insideUnitCircle * randoDist);
+            targetPos = (Vector2)target.position + (UnityEngine.Random.insideUnitCircle * randoDist);
             
         }
 		bot.Move(targetPos);
@@ -250,12 +250,10 @@ public class MedicLeaf : Leaf {
 public class MoveTargetLeaf : Leaf {
     BasicBot bot;
 	Transform target;
-    Transform pos;
 
 	public MoveTargetLeaf(BasicBot _bot, Transform _target) : base() {
         bot = _bot;
         target = _target;
-        pos = bot.transform;
 	}
 
 	public override NodeState GetState() {
@@ -268,12 +266,10 @@ public class MoveTargetLeaf : Leaf {
 public class MoveLeaf : Leaf {
     BasicBot bot;
     Vector2 target;
-    Transform pos;
 
     public MoveLeaf(BasicBot _bot, Vector2 _target) : base() {
         bot = _bot;
         target = _target;
-        pos = bot.transform;
     }
 
     public override NodeState GetState() {
@@ -283,6 +279,7 @@ public class MoveLeaf : Leaf {
     }
 }
 
+/*
 //TODO Maybe just replace RegroupLeaf with MoveTarget?
 public class RegroupLeaf : Leaf {
     bool started = false;
@@ -310,10 +307,11 @@ public class RegroupLeaf : Leaf {
 		} else {
             started = false;
 			return NodeState.Success;
-		}*/
+		}
 		return NodeState.Failure;
 	}
 }
+*/
 
 public class FleeLeaf : Leaf {
     bool started = false;

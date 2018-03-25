@@ -22,7 +22,7 @@ public class MouseControl : MonoBehaviour {
     float dashDrag;
     int dashMax = 1;
     float dashTimer;
-    float dashThreshold;
+    //float dashThreshold;
 
     MoveState dash = MoveState.off;
 
@@ -74,7 +74,7 @@ public class MouseControl : MonoBehaviour {
         }
 
         dashTimer = dashMax;
-        dashThreshold = dashMax * 0.75f;
+        //dashThreshold = dashMax * 0.75f;
     }
 
 

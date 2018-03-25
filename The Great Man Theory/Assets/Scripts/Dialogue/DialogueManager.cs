@@ -15,7 +15,6 @@ public class DialogueManager : MonoBehaviour {
     public AudioManager am;
 
     AudioSource source1;
-    AudioSource source2;
 
     #region Singleton
 
@@ -34,7 +33,6 @@ public class DialogueManager : MonoBehaviour {
         am = AudioManager.Instance;
         AudioSource[] sources = GetComponents<AudioSource>();
         source1 = sources[0];
-        source2 = sources[1];
 	}
 
     public void StartDialogue(Dialogue dialogue) {

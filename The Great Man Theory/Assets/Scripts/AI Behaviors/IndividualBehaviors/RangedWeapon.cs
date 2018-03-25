@@ -66,8 +66,8 @@ public class RangedWeapon : Weapon {
         foreach (RaycastHit2D hit in hits) {
             Body target = hit.rigidbody.GetComponent<Body>();
             if (target) {
-                float damage = 125 - hit.distance;
-                target.Hit(damage / 2, hit.point);
+                float dam = damage - hit.distance;
+                target.Hit(dam / 2, hit.point);
                 ShowLine(hit.distance);
                 gotem = true;
                 break;

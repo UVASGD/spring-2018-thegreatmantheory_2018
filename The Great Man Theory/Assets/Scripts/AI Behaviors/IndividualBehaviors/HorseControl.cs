@@ -9,7 +9,7 @@ public class HorseControl : MonoBehaviour {
 
     Vector2 target;
 
-    Rigidbody2D body;
+    //Rigidbody2D body;
 
     Camera cam;
 
@@ -21,7 +21,7 @@ public class HorseControl : MonoBehaviour {
     bool mouseDown = false;
 	// Use this for initialization
 	void Start () {
-        body = GetComponent<Rigidbody2D>();
+        //body = GetComponent<Rigidbody2D>();
         bodyPointer = GetComponent<FollowPointer>();
         cam = Camera.main;
 	}
