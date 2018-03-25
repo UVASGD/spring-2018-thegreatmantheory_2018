@@ -341,6 +341,24 @@ public class FleeLeaf : Leaf {
 }
 
 
+public class CommandNode : Node {
+    ArmySquad squad;
+    Command comm;
+    int priority;
+
+    public CommandNode(ArmySquad _squad, Command _comm, int _priority) {
+        squad = _squad;
+        comm = _comm;
+        priority = _priority;
+    }
+
+    public override NodeState GetState() {
+        squad.Command(comm, priority);
+        return NodeState.Success;
+    }
+}
+
+
 public class Gate : Node {
     NodeDel del;
 

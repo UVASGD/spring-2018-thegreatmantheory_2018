@@ -96,6 +96,7 @@ public class SquadHoldTree : DefaultTree {
 public class SquadAdvanceTree : DefaultTree {
 
     public SquadAdvanceTree(ArmySquad squad) {
+        float moveInterval = Random.Range(20, 30);
 
         priorityBuckets = new List<Node>() {
             new Selector("priority 0", new List<Node>() {}),
@@ -105,8 +106,9 @@ public class SquadAdvanceTree : DefaultTree {
 			}),
             new Selector("priority 3", new List<Node>() {
                 new Sequencer("Advance", new List<Node>() {
-                    //Add interval Gate
-                    //TODO Add MoveCommand node
+                    new IntervalGate(moveInterval),
+                    new CommandNode(squad, 
+                        new MoveCommand(new Vector2(0, squad.direction*1000), moveInterval), 3)
                 })
             }),
             new Selector("priority 4", new List<Node>() {
