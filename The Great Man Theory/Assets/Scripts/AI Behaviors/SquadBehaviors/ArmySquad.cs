@@ -19,7 +19,7 @@ public class ArmySquad : Squad {
 
     public float SquadRadius { get { return 2 * minions.Count; } } 
 
-    List<BasicBot> minions = new List<BasicBot>();
+    public List<BasicBot> minions = new List<BasicBot>();
     public List<Transform> enemies = new List<Transform>();
 
 

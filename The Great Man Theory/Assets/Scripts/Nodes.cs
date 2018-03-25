@@ -333,20 +333,46 @@ public class FleeLeaf : Leaf {
     }
 }
 
-
+//COMMAND NODES
 public class CommandNode : Node {
-    ArmySquad squad;
-    Command comm;
-    int priority;
+    protected ArmySquad squad;
+    protected int priority;
+    protected float timeLeft;
 
-    public CommandNode(ArmySquad _squad, Command _comm, int _priority) {
+    public CommandNode(ArmySquad _squad, int _priority, float _timeLeft) {
         squad = _squad;
-        comm = _comm;
         priority = _priority;
+        timeLeft = _timeLeft;
     }
 
     public override NodeState GetState() {
-        squad.Command(comm, priority);
+        return NodeState.Failure;
+    }
+}
+
+public class MoveCommand : CommandNode {
+
+    Vector2 target;
+
+    public MoveCommand(ArmySquad _squad, int _priority, float _timeLeft, Vector2 _target) : base(_squad, _priority, _timeLeft) {
+        target = _target;
+    }
+
+    public override NodeState GetState() {
+        foreach (BasicBot b in squad.minions) {
+            squad.Command(b, new Command(
+                    new Sequencer("Move", new List<Node>() {
+                        new Gate(delegate () {
+                            if (Vector2.Distance(target, b.transform.position) > b.squad.SquadRadius) {
+                                return NodeState.Success;
+                            }
+                            return NodeState.Failure;
+                        }),
+                        new MoveLeaf(b, target)
+                        }),
+                    timeLeft
+                    ), priority);
+        }
         return NodeState.Success;
     }
 }
