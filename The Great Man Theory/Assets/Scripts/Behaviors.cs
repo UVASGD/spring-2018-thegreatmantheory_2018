@@ -90,7 +90,7 @@ public class SquadHoldTree : DefaultTree {
             new Selector("priority 3", new List<Node>() {
                 new Sequencer("Hold", new List<Node>() {
                     new IntervalGate(orderTime),
-                    new CommandNode(squad, 
+                    //new CommandNode(squad, 
                         //new MoveCommand(pos, orderTime), 3)
                 })
             }),
@@ -115,7 +115,7 @@ public class SquadAdvanceTree : DefaultTree {
             new Selector("priority 3", new List<Node>() {
                 new Sequencer("Advance", new List<Node>() {
                     new IntervalGate(moveInterval),
-                    new CommandNode(squad, 
+                    //new CommandNode(squad, 
                         //new MoveCommand(new Vector2(0, squad.direction*1000), moveInterval), 3)
                 })
             }),
