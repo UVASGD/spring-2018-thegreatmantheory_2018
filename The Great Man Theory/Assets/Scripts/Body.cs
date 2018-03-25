@@ -82,7 +82,7 @@ public class Body : MonoBehaviour {
 				if (!fx.isPlaying)
 					fxMain.duration = 1.5f;
 				fx.Play ();
-                Debug.Log("GREAT HIT!");
+                // Debug.Log("GREAT HIT!");
             }
             else if (force > (threshold * 3)) {
                 //Particle effect, play sound large, push away from hitPoint medium
@@ -91,7 +91,7 @@ public class Body : MonoBehaviour {
 				if (!fx.isPlaying)
 					fxMain.duration = 1f;
 				fx.Play ();
-                Debug.Log("Large hit");
+                // Debug.Log("Large hit");
             }
             else if (force > (threshold * 2)) {
                 //Particle effect, play sound medium, push away from hitPoint small
@@ -101,14 +101,14 @@ public class Body : MonoBehaviour {
 				if (!fx.isPlaying)
 					fxMain.duration = 0.75f;
 				fx.Play ();
-                Debug.Log("Medium hit");
+                // Debug.Log("Medium hit");
             }
             else {
                 //play sound quiet
 				if (!fx.isPlaying)
 					fxMain.duration = 0.2f;
 				fx.Play ();
-                Debug.Log("Small hit");
+                // Debug.Log("Small hit");
             }
 
             Damage(force);

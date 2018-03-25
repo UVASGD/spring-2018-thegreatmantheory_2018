@@ -83,13 +83,19 @@ public class MouseControl : MonoBehaviour {
 
         //DASHING
         if (Input.GetKeyDown(KeyCode.LeftShift)) {
-            Dash();
+            dash = MoveState.start;
+            StartDash();
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift)) {
             dash = MoveState.end;
+            EndDash();
         }
-        else if (dashTimer <= 0) {
+        else if (dashTimer <= 0 && dash == MoveState.on) {
             dash = MoveState.end;
+            EndDash();
+        }
+        else if (Input.GetKey(KeyCode.LeftShift)) {
+            Dash();
         }
 
         //BRACING
@@ -114,7 +120,24 @@ public class MouseControl : MonoBehaviour {
     }
 
     public void Dash() {
-        if (dashTimer > dashThreshold && (int)brace < 1 && (int)dash < 1) dash = MoveState.start;
+        if (dash == MoveState.on && dashTimer > 0) { //Decrement drag timer if dashing
+            dashTimer -= Time.deltaTime;
+        }
+        else if (dashTimer < dashMax) { //Rejuvenate drag timer
+            dashTimer += Time.deltaTime * 2.5f;
+        }
+    }
+
+    void StartDash() {
+        originalDrag = rb.drag;
+        dashDrag = rb.drag * 0.01f;
+        rb.drag = dashDrag;
+        dash = MoveState.on;
+    }
+
+    void EndDash() {
+        rb.drag = originalDrag;
+        dash = MoveState.off;
     }
 
     void SetForces() {
