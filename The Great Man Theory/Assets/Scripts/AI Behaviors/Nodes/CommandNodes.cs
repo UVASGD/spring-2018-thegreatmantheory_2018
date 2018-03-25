@@ -45,3 +45,30 @@ public class MoveCommand : CommandNode {
         return NodeState.Success;
     }
 }
+
+public class MoveTargetCommand : CommandNode {
+
+    Transform target;
+
+    public MoveTargetCommand(ArmySquad _squad, int _priority, float _timeLeft, Transform _target) : base(_squad, _priority, _timeLeft) {
+        target = _target;
+    }
+
+    public override NodeState GetState() {
+        foreach (BasicBot b in squad.minions) {
+            squad.Command(b, new Command(
+                    new Sequencer("Move", new List<Node>() {
+                        new Gate(delegate () {
+                            if (Vector2.Distance(target.position, b.transform.position) > b.squad.SquadRadius) {
+                                return NodeState.Success;
+                            }
+                            return NodeState.Failure;
+                        }),
+                        new MoveTargetLeaf(b, target)
+                        }),
+                    timeLeft
+                    ), priority);
+        }
+        return NodeState.Success;
+    }
+}
