@@ -19,14 +19,14 @@ public class RangedWeapon : Weapon {
     public ParticleSystem[] fxs;
     LineRenderer line;
 
-    GunSoundbox soundbox;
+    GunSoundbox gunbox;
 
     protected override void Start() {
         base.Start();
         fxs = GetComponentsInChildren<ParticleSystem>();
         line = GetComponent<LineRenderer>();
 
-        soundbox = GetComponentInChildren<GunSoundbox>();
+        gunbox = GetComponentInChildren<GunSoundbox>();
     }
 
     // Update is called once per frame
@@ -87,7 +87,7 @@ public class RangedWeapon : Weapon {
         foreach (ParticleSystem fx in fxs) {
             fx.Play();
         }
-        soundbox.Shoot();
+        gunbox.Shoot();
     }
 
     void ShowLine(float dist) {

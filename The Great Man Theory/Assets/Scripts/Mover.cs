@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MoveState { end = -1, off = 0, on = 1, start = 2 }
-
 public class Mover : MonoBehaviour { 
 
     protected delegate void MoveDel();

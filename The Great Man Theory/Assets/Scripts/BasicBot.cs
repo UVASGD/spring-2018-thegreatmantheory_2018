@@ -135,44 +135,38 @@ public class BasicBot : MonoBehaviour {
         }
 
         //BRACING
-        if ((int)brace > 0) { //Increase drag and turn on brace state
-            if ((int)brace > 1) {
-                rb.drag = 50000;
-                brace = MoveState.on;
-            }
+        if (brace == MoveState.start) { //Increase drag and turn on brace state
+            rb.drag = 50000;
+            brace = MoveState.on;
         }
 
-        else if ((int)brace < 1) { //Restore drag and turn off brace state
-            if ((int)brace < 0) {
-                rb.drag = originalDrag;
-                brace = MoveState.off;
-            }
+        else if (brace == MoveState.end) { //Restore drag and turn off brace state
+            rb.drag = originalDrag;
+            brace = MoveState.off;
         }
 
         //HOLDING
-        if ((int)hold > 0) { //Set limits on arm joints and turn on hold state
-            if ((int)hold > 1) {
-                for (int i = 0; i < 4; i++) {
-                    HingeJoint2D joint = armJoints[i];
-                    float angle = joint.jointAngle;
-                    JointAngleLimits2D newLimits = new JointAngleLimits2D();
-                    newLimits.max = angle + 5f;
-                    newLimits.min = angle - 5f;
-                    joint.limits = newLimits;
-                }
-                hold = MoveState.on;
+        //Set limits on arm joints and turn on hold state
+        if (hold == MoveState.start) {
+            for (int i = 0; i < 4; i++) {
+                HingeJoint2D joint = armJoints[i];
+                float angle = joint.jointAngle;
+                JointAngleLimits2D newLimits = new JointAngleLimits2D();
+                newLimits.max = angle + 5f;
+                newLimits.min = angle - 5f;
+                joint.limits = newLimits;
             }
+            hold = MoveState.on;
         }
 
-        else if ((int)hold < 1) { //Restore limits of arm joints and turn off hold state
-            if ((int)hold < 0) {
-                for (int i = 0; i < 4; i++) {
-                    HingeJoint2D joint = armJoints[i];
-                    float angle = joint.jointAngle;
-                    joint.limits = originalLimits[i];
-                }
-                hold = MoveState.off;
+
+        else if (hold == MoveState.end) { //Restore limits of arm joints and turn off hold state
+            for (int i = 0; i < 4; i++) {
+                HingeJoint2D joint = armJoints[i];
+                float angle = joint.jointAngle;
+                joint.limits = originalLimits[i];
             }
+            hold = MoveState.off;
         }
     }
 

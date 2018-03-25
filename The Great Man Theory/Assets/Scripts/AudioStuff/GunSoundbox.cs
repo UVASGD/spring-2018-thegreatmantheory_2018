@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class GunSoundbox : WeaponSoundbox {
 
+    public AudioSource fireSound;
+
     // Use this for initialization
     void Start() {
-        source = GetComponent<AudioSource>();
+        AudioSource[] sources = GetComponents<AudioSource>();
+        source = sources[0];
+        fireSound = sources[1];
     }
 
     // Update is called once per frame
@@ -15,7 +19,7 @@ public class GunSoundbox : WeaponSoundbox {
     }
 
     public void Shoot() {
-        source.volume = 1f;
-        source.PlayOneShot(am.GetSound("gun_shot"));
+        fireSound.volume = 1f;
+        fireSound.PlayOneShot(am.GetSound("gun_shot"));
     }
 }
