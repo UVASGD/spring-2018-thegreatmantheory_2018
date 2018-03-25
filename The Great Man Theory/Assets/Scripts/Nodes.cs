@@ -259,13 +259,12 @@ public class MoveTargetLeaf : Leaf {
 	}
 
 	public override NodeState GetState() {
-        /* if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
-			bot.SetTarget (target.position);
+		if (Vector2.Distance(target.position, bot.gameObject.transform.position) > bot.squad.SquadRadius) {
+			bot.Move (target.position);
 			return NodeState.Running;
 		} else {
-            started = false;
 			return NodeState.Success;
-		} */
+		}
 		return NodeState.Failure;
 	}
 }
@@ -282,13 +281,12 @@ public class MoveLeaf : Leaf {
     }
 
     public override NodeState GetState() {
-        /* if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
-			bot.SetTarget (target.position);
+		if (Vector2.Distance(target, bot.gameObject.transform.position) > bot.squad.SquadRadius) {
+			bot.Move (target);
 			return NodeState.Running;
 		} else {
-            started = false;
 			return NodeState.Success;
-		} */
+		}
         return NodeState.Failure;
     }
 }
