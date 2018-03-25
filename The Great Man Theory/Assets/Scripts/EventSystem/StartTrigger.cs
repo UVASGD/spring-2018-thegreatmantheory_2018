@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AwakeTrigger : EventTrigger {
+public class StartTrigger : EventTrigger {
     
-    void OnAwake() {
+    void Start() {
         strEvent.Invoke("");
     }
 }
