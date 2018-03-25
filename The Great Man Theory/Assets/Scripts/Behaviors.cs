@@ -41,10 +41,15 @@ public class MeleeTree : DefaultTree {
         priorityBuckets = new List<Node>() {
             new Selector("priority 0", new List<Node>() {}),
             new Selector("priority 1", new List<Node>() {
-                new RandomSelector("Wounded", new List<Node>() {
-                    new FleeLeaf(bot),
-                    new MedicLeaf(bot)
-                })
+				new Sequencer("wounded", new List<Node>() {
+					new Gate(delegate () {
+						return NodeState.Failure;
+					}),
+					new RandomSelector("Wounded Action", new List<Node>() {
+						new FleeLeaf(bot),
+						new MedicLeaf(bot)
+					})
+				})
 			}),
             new Selector("priority 2", new List<Node>() {
                 new Gate(delegate() {
@@ -57,7 +62,9 @@ public class MeleeTree : DefaultTree {
                         new MaintainLeaf(bot),
                         new ChargeLeaf(bot)
                     })
-                })
+				}, new List<int>() {
+					1, 0
+				})
 			}),
             new Selector("priority 3", new List<Node>() {}),
             new Selector("priority 4", new List<Node>() {
