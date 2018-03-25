@@ -89,7 +89,7 @@ public class BasicBot : MonoBehaviour {
 	}
 
 	public void Cull() {
-		for (int i = commandlist.Count; i >= 0; i--) {
+		for (int i = commandlist.Count - 1; i >= 0; i--) {
 			commandlist [i].timeLeft -= Time.deltaTime;
 			if (commandlist [i].timeLeft <= 0) {
 				commandlist [i].subtree.expired = true;
