@@ -41,10 +41,15 @@ public class MeleeTree : DefaultTree {
         priorityBuckets = new List<Node>() {
             new Selector("priority 0", new List<Node>() {}),
             new Selector("priority 1", new List<Node>() {
-                new RandomSelector("Wounded", new List<Node>() {
-                    new FleeLeaf(bot),
-                    new MedicLeaf(bot)
-                })
+				new Sequencer("wounded", new List<Node>() {
+					new Gate(delegate () {
+						return NodeState.Failure;
+					}),
+					new RandomSelector("Wounded Action", new List<Node>() {
+						new FleeLeaf(bot),
+						new MedicLeaf(bot)
+					})
+				})
 			}),
             new Selector("priority 2", new List<Node>() {
                 new Gate(delegate() {
@@ -57,7 +62,9 @@ public class MeleeTree : DefaultTree {
                         new MaintainLeaf(bot),
                         new ChargeLeaf(bot)
                     })
-                })
+				}, new List<int>() {
+					1, 0
+				})
 			}),
             new Selector("priority 3", new List<Node>() {}),
             new Selector("priority 4", new List<Node>() {
@@ -71,10 +78,9 @@ public class MeleeTree : DefaultTree {
 
 public class SquadHoldTree : DefaultTree {
     Vector2 pos;
-    float orderTimeMax = 20;
-    float orderTime;
+    float orderTime = Random.Range(10, 15);
 
-    public SquadHoldTree(Squad squad) {
+    public SquadHoldTree(ArmySquad squad) {
         pos = squad.transform.position;
 
         priorityBuckets = new List<Node>() {
@@ -82,11 +88,13 @@ public class SquadHoldTree : DefaultTree {
             new Selector("priority 1", new List<Node>() {}),
             new Selector("priority 2", new List<Node>() {}),
             new Selector("priority 3", new List<Node>() {
-                //Add MoveCommand Node
+                new Sequencer("Hold", new List<Node>() {
+                    new IntervalGate(orderTime),
+                    new CommandNode(squad, 
+                        new MoveCommand(pos, orderTime), 3)
+                })
             }),
-            new Selector("priority 4", new List<Node>() {
-				//Idle node here
-			})
+            new Selector("priority 4", new List<Node>() {})
         };
 
         rootNode = new Selector("root", (priorityBuckets));
@@ -96,6 +104,7 @@ public class SquadHoldTree : DefaultTree {
 public class SquadAdvanceTree : DefaultTree {
 
     public SquadAdvanceTree(ArmySquad squad) {
+        float moveInterval = Random.Range(20, 30);
 
         priorityBuckets = new List<Node>() {
             new Selector("priority 0", new List<Node>() {}),
@@ -105,13 +114,12 @@ public class SquadAdvanceTree : DefaultTree {
 			}),
             new Selector("priority 3", new List<Node>() {
                 new Sequencer("Advance", new List<Node>() {
-                    //Add interval Gate
-                    //TODO Add MoveCommand node
+                    new IntervalGate(moveInterval),
+                    new CommandNode(squad, 
+                        new MoveCommand(new Vector2(0, squad.direction*1000), moveInterval), 3)
                 })
             }),
-            new Selector("priority 4", new List<Node>() {
-				//Idle node here
-			})
+            new Selector("priority 4", new List<Node>() {})
         };
 
         rootNode = new Selector("root", (priorityBuckets));
