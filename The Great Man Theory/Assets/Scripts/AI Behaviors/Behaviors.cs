@@ -81,7 +81,7 @@ public class SquadHoldTree : DefaultTree {
     float orderTime = Random.Range(10, 15);
 
     public SquadHoldTree(ArmySquad squad) {
-        pos = squad.transform.position;
+        pos = squad.flag.transform.position;
 
         priorityBuckets = new List<Node>() {
             new Selector("priority 0", new List<Node>() {}),
