@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class AreaTrigger : EventTrigger {
 
+    public Collider2D[] triggers;
+
     void OnTriggerEnter2D(Collider2D other) {
-        strEvent.Invoke("");
+        foreach (Collider2D collider in triggers) {
+            if (other == collider) {
+                strEvent.Invoke("");
+                break;
+            }
+        }
     }
 }
