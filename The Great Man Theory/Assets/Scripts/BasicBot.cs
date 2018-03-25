@@ -43,7 +43,7 @@ public class BasicBot : MonoBehaviour {
             case UnitType.Pike:
             case UnitType.Longsword:
             case UnitType.Sword:
-                maintree = new MeleeTree(this);
+                maintree = new SwordTree(this);
                 break;
         }
 		commandlist = new List<Command> ();

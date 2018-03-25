@@ -36,8 +36,8 @@ public class DefaultTree {
     }
 }
 
-public class MeleeTree : DefaultTree {
-    public MeleeTree(BasicBot bot) {
+public class SwordTree : DefaultTree {
+    public SwordTree(BasicBot bot) {
         priorityBuckets = new List<Node>() {
             new Selector("priority 0", new List<Node>() {}),
             new Selector("priority 1", new List<Node>() {
