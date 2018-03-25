@@ -259,13 +259,9 @@ public class MoveTargetLeaf : Leaf {
 	}
 
 	public override NodeState GetState() {
-		if (Vector2.Distance(target.position, bot.gameObject.transform.position) > bot.squad.SquadRadius) {
-			bot.Move (target.position);
-			return NodeState.Running;
-		} else {
-			return NodeState.Success;
-		}
-		return NodeState.Failure;
+		//if (Vector2.Distance(target.position, bot.gameObject.transform.position) > bot.squad.SquadRadius) {
+		bot.Move (target.position);
+		return NodeState.Success;
 	}
 }
 
@@ -281,13 +277,9 @@ public class MoveLeaf : Leaf {
     }
 
     public override NodeState GetState() {
-		if (Vector2.Distance(target, bot.gameObject.transform.position) > bot.squad.SquadRadius) {
-			bot.Move (target);
-			return NodeState.Running;
-		} else {
-			return NodeState.Success;
-		}
-        return NodeState.Failure;
+		//if (Vector2.Distance(target, bot.gameObject.transform.position) > bot.squad.SquadRadius) {
+		bot.Move (target);
+		return NodeState.Success;
     }
 }
 
@@ -402,9 +394,11 @@ public class OneShotGate : Node {
     }
 
     public override NodeState GetState() {
-        if (!done)
-            done = true;
-        return (fail) ? NodeState.Failure : NodeState.Success;
+		if (!done) {
+			done = true;
+			return (fail) ? NodeState.Failure : NodeState.Success;
+		}
+		return (fail) ? NodeState.Success : NodeState.Failure;
     }
 }
 
