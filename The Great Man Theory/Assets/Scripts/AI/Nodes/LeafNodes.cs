@@ -71,7 +71,7 @@ public class WiggleLeaf : Leaf {
         target = bot.attackTarget;
         randoDist = _randoDist;
         maxWig = _maxWig;
-        swingMax = UnityEngine.Random.Range(0.2f, _maxWig);
+        swingMax = Random.Range(0.2f, _maxWig);
         swingTimer = swingMax;
     }
 
@@ -79,15 +79,15 @@ public class WiggleLeaf : Leaf {
         Debug.Log("wiggle-wiggle");
         if (!started) {
             started = true;
-            targetPos = (Vector2)target.position + (UnityEngine.Random.insideUnitCircle * randoDist);
+            targetPos = (Vector2)target.position + (Random.insideUnitCircle * randoDist);
 
-            swingMax = UnityEngine.Random.Range(0.2f, maxWig);
+            swingMax = Random.Range(0.2f, maxWig);
             swingTimer = swingMax;
         }
         swingTimer -= Time.deltaTime;
         if (swingTimer <= 0) {
             swingTimer = swingMax;
-            targetPos = (Vector2)target.position + (UnityEngine.Random.insideUnitCircle * randoDist);
+            targetPos = (Vector2)target.position + (Random.insideUnitCircle * randoDist);
 
         }
         bot.Move(targetPos);

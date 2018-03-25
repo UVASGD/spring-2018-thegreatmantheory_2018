@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum SquadType { Hold, Advance }
 
-public class ArmySquad : MonoBehaviour {
+public class Squad : MonoBehaviour {
 
     public DefaultTree maintree;
 
@@ -78,7 +78,7 @@ public class ArmySquad : MonoBehaviour {
     }
 }
 
-/* public class ArmySquad : Squad {
+/* public class Squad : Squad {
 
     List<Transform> enemies = new List<Transform>();
     Body thisBody;

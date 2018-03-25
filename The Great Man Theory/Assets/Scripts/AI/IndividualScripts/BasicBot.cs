@@ -12,7 +12,7 @@ public class BasicBot : MonoBehaviour {
     public Body body;
     public FollowPointer pointer;
 
-	public ArmySquad squad;
+	public Squad squad;
 
     public Transform attackTarget; //Current Attack Target
 

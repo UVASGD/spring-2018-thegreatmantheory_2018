@@ -4,11 +4,11 @@ using UnityEngine;
 
 //COMMAND NODES
 public class CommandNode : Node {
-    protected ArmySquad squad;
+    protected Squad squad;
     protected int priority;
     protected float timeLeft;
 
-    public CommandNode(ArmySquad _squad, int _priority, float _timeLeft) {
+    public CommandNode(Squad _squad, int _priority, float _timeLeft) {
         squad = _squad;
         priority = _priority;
         timeLeft = _timeLeft;
@@ -23,7 +23,7 @@ public class MoveCommand : CommandNode {
 
     Vector2 target;
 
-    public MoveCommand(ArmySquad _squad, int _priority, float _timeLeft, Vector2 _target) : base(_squad, _priority, _timeLeft) {
+    public MoveCommand(Squad _squad, int _priority, float _timeLeft, Vector2 _target) : base(_squad, _priority, _timeLeft) {
         target = _target;
     }
 
@@ -50,7 +50,7 @@ public class MoveTargetCommand : CommandNode {
 
     Transform target;
 
-    public MoveTargetCommand(ArmySquad _squad, int _priority, float _timeLeft, Transform _target) : base(_squad, _priority, _timeLeft) {
+    public MoveTargetCommand(Squad _squad, int _priority, float _timeLeft, Transform _target) : base(_squad, _priority, _timeLeft) {
         target = _target;
     }
 
