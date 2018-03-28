@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour {
 
+    private static bool created = false;
+
+    void Awake() {
+        if (!created) {
+            DontDestroyOnLoad(this.gameObject);
+            created = true;
+        }
+    }
+
     public void Run(string coroutine) {
         Debug.Log("InRun");
         StartCoroutine(coroutine);

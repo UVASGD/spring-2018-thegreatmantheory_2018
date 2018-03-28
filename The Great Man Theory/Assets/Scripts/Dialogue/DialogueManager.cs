@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour {
 
+    private static bool created = false;
+
     public Text nameText;
     public Text dialogueText;
 
@@ -23,6 +25,11 @@ public class DialogueManager : MonoBehaviour {
     #endregion
 
     private void Awake() {
+        if (!created) {
+            DontDestroyOnLoad(this.gameObject);
+            created = true;
+        }
+
         Instance = this;
     }
 
