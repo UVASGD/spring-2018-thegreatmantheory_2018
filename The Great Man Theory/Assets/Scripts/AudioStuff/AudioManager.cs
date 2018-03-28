@@ -5,6 +5,8 @@ using UnityEditor;
 
 public class AudioManager : MonoBehaviour {
 
+    private static bool created = false;
+
     public AudioClip roblox_oof;
     public AudioClip ded_egh;
     public AudioClip blade_hit;
@@ -20,6 +22,10 @@ public class AudioManager : MonoBehaviour {
     #endregion
 
     void Awake() {
+        if (!created) {
+            DontDestroyOnLoad(this.gameObject);
+            created = true;
+        }
         Instance = this;
     }
 
