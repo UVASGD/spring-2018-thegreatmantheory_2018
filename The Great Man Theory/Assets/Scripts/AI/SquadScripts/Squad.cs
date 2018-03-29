@@ -43,6 +43,7 @@ public class Squad : MonoBehaviour {
             officer = minions[Random.Range(0, minions.Count)];
 
         flag.carrier = officer;
+        SetTree(squadType);
     }
 
     public Transform FindEnemy() {
