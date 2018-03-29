@@ -17,7 +17,7 @@ public class LevelOneEvents : EventManager {
         Node getim = new Sequencer("Attack Dude", getimChildren);
         Command attackTarget = new Command(getim, 1f);
 
-        boundingEnemies.maintree.insertAtPriority(attackTarget, 0);
+        boundingEnemies.Command(attackTarget, 0);
 
         yield return null;
     }

@@ -8,6 +8,8 @@ public class Squad : MonoBehaviour {
 
     public DefaultTree maintree;
 
+    protected List<Command> commandlist = new List<Command>();
+
     public Team team;
     public SquadType squadType;
 
@@ -46,6 +48,26 @@ public class Squad : MonoBehaviour {
         SetTree(squadType);
     }
 
+    private void Update() {
+        maintree.Traverse();
+        Cull();
+    }
+
+    public void Command(Command comm, int priority) {
+        commandlist.Add(comm);
+        maintree.insertAtPriority(comm.subtree, priority);
+    }
+
+    public void Cull() {
+        for (int i = commandlist.Count - 1; i >= 0; i--) {
+            commandlist[i].timeLeft -= Time.deltaTime;
+            if (commandlist[i].timeLeft <= 0) {
+                commandlist[i].subtree.expired = true;
+                commandlist.RemoveAt(i);
+            }
+        }
+    }
+
     public Transform FindEnemy() {
         if (enemies.Count == 0)
             return null;
@@ -65,12 +87,6 @@ public class Squad : MonoBehaviour {
             case SquadType.Advance:
                 maintree = new SquadAdvanceTree(this);
                 break;
-        }
-    }
-
-    public void Command(Command comm, int priority) {
-        foreach (BasicBot bot in minions) {
-            bot.Command(comm, priority);
         }
     }
 

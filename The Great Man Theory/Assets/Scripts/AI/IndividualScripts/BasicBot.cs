@@ -99,8 +99,8 @@ public class BasicBot : MonoBehaviour {
 	}
 
 	public void Command(Command comm, int priority) {
-		commandlist.Add (comm);
-		maintree.insertAtPriority (comm, priority);
+        commandlist.Add (comm);
+		maintree.insertAtPriority (comm.subtree, priority);
 	}
 
     public void Move(Vector2 target) {

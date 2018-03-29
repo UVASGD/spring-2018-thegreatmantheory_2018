@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SquadHoldTree : DefaultTree {
     Vector2 pos;
-    float interval = Random.Range(10, 15);
+    float interval = Random.Range(5, 10);
 
     public SquadHoldTree(Squad squad) {
         pos = squad.flag.transform.position;
@@ -29,7 +29,7 @@ public class SquadHoldTree : DefaultTree {
 public class SquadAdvanceTree : DefaultTree {
 
     public SquadAdvanceTree(Squad squad) {
-        float interval = Random.Range(20, 30);
+        float interval = Random.Range(5, 10);
 
         priorityBuckets = new List<Node>() {
             new Selector("priority 0", new List<Node>() {}),

@@ -30,9 +30,9 @@ public class DefaultTree {
         return rootNode.GetState();
     }
 
-    public void insertAtPriority(Command comm, int priority) {
+    public void insertAtPriority(Node subtree, int priority) {
         priority = Mathf.Clamp(priority, 0, priorityBuckets.Count - 1);
-        ((Selector)(priorityBuckets[priority])).insertChild(comm.subtree);
+        ((Selector)(priorityBuckets[priority])).insertChild(subtree);
     }
 }
 

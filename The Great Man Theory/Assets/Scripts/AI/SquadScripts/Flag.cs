@@ -18,7 +18,7 @@ public class Flag : MonoBehaviour {
         squad.enemies.Remove(collider.transform);
         if (collider.CompareTag("Body")) {
             if (collider.GetComponent<Body>().team == squad.team) {
-                squad.maintree.insertAtPriority(new Command(
+                squad.Command(new Command(
                     new Sequencer("Regroup", new List<Node>() {
                         new OneShotGate(),
                         new MoveTargetCommand(squad, 3, 5, transform)

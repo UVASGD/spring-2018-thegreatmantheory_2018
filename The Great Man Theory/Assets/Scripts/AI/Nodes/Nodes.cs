@@ -13,7 +13,7 @@ public delegate NodeState NodeDel();
 
 
 public abstract class Node {
-    protected string name = "node";
+    public string name = "node";
 
 	public bool expired = false;
 

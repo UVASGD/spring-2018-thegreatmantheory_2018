@@ -14,6 +14,7 @@ public class Selector : Node {
     public override NodeState GetState() {
 
         for (int i = currentNodeIndex; i < children.Count; i++) {
+            Debug.Log(children[i].name);
             if (children[i].expired) {
                 children.RemoveAt(i);
                 if (i >= children.Count) {
