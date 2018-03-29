@@ -20,8 +20,8 @@ public class Flag : MonoBehaviour {
             if (collider.GetComponent<Body>().team == squad.team) {
                 squad.maintree.insertAtPriority(new Command(
                     new Sequencer("Regroup", new List<Node>() {
-                    new OneShotGate(),
-                    new MoveTargetCommand(squad, 3, 5, transform)
+                        new OneShotGate(),
+                        new MoveTargetCommand(squad, 3, 5, transform)
                     }), 5),
                 1);
             }
