@@ -76,7 +76,6 @@ public class WiggleLeaf : Leaf {
     }
 
     public override NodeState GetState() {
-        Debug.Log("wiggle-wiggle");
         if (!started) {
             started = true;
             targetPos = (Vector2)target.position + (Random.insideUnitCircle * randoDist);

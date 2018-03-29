@@ -52,6 +52,7 @@ public class MoveTargetCommand : CommandNode {
 
     public MoveTargetCommand(Squad _squad, int _priority, float _timeLeft, Transform _target) : base(_squad, _priority, _timeLeft) {
         target = _target;
+        Debug.Log("COMMAND INSTANTIATED");
     }
 
     public override NodeState GetState() {

@@ -8,7 +8,6 @@ public class LevelOneEvents : EventManager {
     public Transform playerTransform;
 
 	public IEnumerator BoundingEnemiesTarget() {
-        Debug.Log("We gonna getchya");
 
         List<Node> getimChildren = new List<Node> {
             new IntervalGate(100f),
@@ -17,10 +16,6 @@ public class LevelOneEvents : EventManager {
 
         Node getim = new Sequencer("Attack Dude", getimChildren);
         Command attackTarget = new Command(getim, 1f);
-
-        Debug.Log("boundingEnemies: " + boundingEnemies.ToString());
-        Debug.Log("command: " + attackTarget.ToString());
-        Debug.Log("tree:" + boundingEnemies.maintree.ToString());
 
         boundingEnemies.maintree.insertAtPriority(attackTarget, 0);
 
