@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EventTrigger : MonoBehaviour {
+[System.Serializable]
+public class StrEvent : UnityEvent<string> { }
 
-    [System.Serializable]
-    public class StrEvent : UnityEvent<string> { }
+[System.Serializable]
+public class EventTrigger : MonoBehaviour {
 
     public StrEvent strEvent;
 }

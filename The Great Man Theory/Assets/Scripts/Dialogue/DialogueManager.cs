@@ -9,6 +9,7 @@ public class DialogueManager : MonoBehaviour {
 
     public Text nameText;
     public Text dialogueText;
+    public Image portrait;
 
     public Animator animator;
 
@@ -70,7 +71,11 @@ public class DialogueManager : MonoBehaviour {
 
         Sentence sentence = sentences.Dequeue();
 
-        nameText.text = sentence.speaker;
+        nameText.text = sentence.speaker.name;
+        portrait.sprite = sentence.speaker.portrait;
+
+        if (sentence.strEvent != null)
+            sentence.strEvent.Invoke("");
 
         StopAllCoroutines();
         StartCoroutine(TypeSentence(sentence));
@@ -86,7 +91,7 @@ public class DialogueManager : MonoBehaviour {
         dialogueText.text = "";
 
         char[] text = sentence.text.ToCharArray();
-        string lang = sentence.language.ToString();
+        string lang = sentence.speaker.language.ToString();
 
         int i = 0;
         // int j = 0;
@@ -109,4 +114,30 @@ public class DialogueManager : MonoBehaviour {
         }
     }
 
+    public void SkipDialogue() {
+        bool hasEvent = false;
+
+        StopAllCoroutines();
+        while (sentences.Count > 0 && !hasEvent) {
+
+            Sentence sentence = sentences.Dequeue();
+
+            nameText.text = sentence.speaker.name;
+            portrait.sprite = sentence.speaker.portrait;
+
+            if (sentence.strEvent.GetPersistentEventCount() != 0) {
+                Debug.Log(sentence.strEvent.GetPersistentTarget(0));
+                sentence.strEvent.Invoke("");
+
+                StopAllCoroutines();
+                StartCoroutine(TypeSentence(sentence));
+                hasEvent = true;
+            }
+        }
+
+        if (sentences.Count == 0 && !hasEvent) {
+            EndDialogue();
+            return;
+        }
+    }
 }
