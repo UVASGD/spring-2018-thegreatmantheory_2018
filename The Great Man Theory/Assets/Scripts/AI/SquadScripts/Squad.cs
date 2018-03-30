@@ -50,7 +50,7 @@ public class Squad : MonoBehaviour {
             officer = minions[Random.Range(0, minions.Count)];
 
         flag.carrier = officer;
-        //SetTree(squadType);
+        SetDefaultBehavior(squadType);
     }
 
     void Update() {
@@ -60,6 +60,16 @@ public class Squad : MonoBehaviour {
                 Command();
             }
             time = interval;
+        }
+    }
+
+    public void SetDefaultBehavior(SquadType s) {
+        switch (s) {
+            case SquadType.Hold:
+                break;
+            case SquadType.Advance:
+                Command = delegate () { MoveCommand(new Vector2(0, direction*500)); };
+                break;
         }
     }
 
