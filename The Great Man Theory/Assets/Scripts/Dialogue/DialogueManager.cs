@@ -71,6 +71,8 @@ public class DialogueManager : MonoBehaviour {
 
         Sentence sentence = sentences.Dequeue();
 
+
+
         nameText.text = sentence.speaker.name;
         portrait.sprite = sentence.speaker.portrait;
 
@@ -79,6 +81,11 @@ public class DialogueManager : MonoBehaviour {
 
         StopAllCoroutines();
         StartCoroutine(TypeSentence(sentence));
+
+        if (sentence.speaker.name == "Skip") {
+            DisplayNextSentence();
+            return;
+        }
 
         // Debug.Log(sentence);
         // dialogueText.text = sentence;

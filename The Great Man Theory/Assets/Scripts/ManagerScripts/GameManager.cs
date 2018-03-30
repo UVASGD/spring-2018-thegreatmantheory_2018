@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameState { Paused, Gameplay, Menu }
+
 public class GameManager : MonoBehaviour {
 
     public Camera mainCamera;
@@ -10,9 +12,12 @@ public class GameManager : MonoBehaviour {
     public float offset;
     public float wigglemax;
 
+    public static GameState state = GameState.Gameplay;
+
 	// Use this for initialization
 	void Start () {
         ManagerGetter.gm = this;
+        state = GameState.Gameplay;
 	}
 	
 	// Update is called once per frame

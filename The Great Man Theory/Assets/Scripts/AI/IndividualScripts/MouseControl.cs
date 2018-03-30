@@ -12,8 +12,8 @@ public class MouseControl : MonoBehaviour {
     Camera cam;
     Vector2 target;
 
-    int holdButton = 0;
-    int braceButton = 1;
+    int holdButton = 1;
+    int braceButton = 0;
     MoveState brace = MoveState.off;
 
     MoveState hold = MoveState.off;
@@ -32,12 +32,14 @@ public class MouseControl : MonoBehaviour {
     public bool hasArms = true;
 
     void Update() {
-        GetInput();
-        //if (behavior != null)
-        //behavior.Traverse();
-        // Move();
-        if (pointer)
-            SetForces();
+        if (GameManager.state == GameState.Gameplay) {
+            GetInput();
+            //if (behavior != null)
+            //behavior.Traverse();
+            // Move();
+            if (pointer)
+                SetForces();
+        }
     }
 
     void Start() {

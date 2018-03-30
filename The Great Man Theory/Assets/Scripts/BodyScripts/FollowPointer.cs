@@ -37,10 +37,11 @@ public class FollowPointer : MonoBehaviour {
 	}
 
     public void Forces() {
-        Vector2 force = Vector2.ClampMagnitude(targetPos * multiplier, clamp) *  CanMove;
+        Vector2 force = Vector2.ClampMagnitude(targetPos * multiplier, clamp) * CanMove;
 
         if (body.GetRelativePointVelocity(forcePoint).magnitude < maxSpeed) {
-             body.AddForceAtPosition(force, ForcePoint, ForceMode2D.Impulse);
+            body.AddForceAtPosition(force, ForcePoint, ForceMode2D.Impulse);
         }
+
     }
 }

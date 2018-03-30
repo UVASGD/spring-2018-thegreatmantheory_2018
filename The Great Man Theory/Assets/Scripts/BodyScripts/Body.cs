@@ -69,6 +69,13 @@ public class Body : MonoBehaviour {
         CheckHealth();
     }
 
+    void Update() {
+        if (GameManager.state != GameState.Gameplay) {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        else
+            rb.constraints = RigidbodyConstraints2D.None;
+    }
 
     public void Hit(float force, Vector2 hitPoint, bool puncturing = false, bool playerHit = false) {
         //Debug.Log(force);

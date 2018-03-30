@@ -83,9 +83,11 @@ public class BasicBot : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		maintree.Traverse ();
-        Cull();
-        SetMoveState();
+        if (GameManager.state == GameState.Gameplay) {
+            maintree.Traverse();
+            Cull();
+            SetMoveState();
+        }
 	}
 
 	public void Cull() {

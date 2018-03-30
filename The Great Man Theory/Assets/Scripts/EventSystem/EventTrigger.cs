@@ -10,4 +10,6 @@ public class StrEvent : UnityEvent<string> { }
 public class EventTrigger : MonoBehaviour {
 
     public StrEvent strEvent;
+    public bool onceOnly = false;
+    protected bool hasHappened = false;
 }
