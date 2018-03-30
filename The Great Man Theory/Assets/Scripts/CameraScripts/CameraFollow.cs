@@ -4,20 +4,29 @@ public class CameraFollow : MonoBehaviour {
 
     public Transform followPoint;
     public Vector3 offset;
-    public float smoothSpeed = 1f;
+    float smoothSpeed = 5f;
+
+    public bool OnTarget { get { return onTarget; } }
+    bool onTarget = false;
 
     private void Start() {
         offset = transform.position;
     }
 
     // Update is called once per frame
-    void FixedUpdate () {
+    void LateUpdate () {
         if (followPoint) {
-            if ((followPoint.position - transform.position).magnitude > 5) {
-                Vector3 target = followPoint.position + offset;
-                Vector3 smoothTarget = Vector3.Lerp(transform.position, target, smoothSpeed);
-                transform.position = smoothTarget;
+            //if ((followPoint.position - transform.position).magnitude > 5) {
+            Vector3 target = followPoint.position + offset;
+            float smoothVal = smoothSpeed * Time.deltaTime;
+            Vector3 smoothTarget = Vector3.Lerp(transform.position, target, smoothVal);
+            transform.position = smoothTarget;
+            //}
+            if ((target - transform.position).magnitude < 1) {
+                onTarget = true;
             }
+            else
+                onTarget = false;
         }
 	}
 

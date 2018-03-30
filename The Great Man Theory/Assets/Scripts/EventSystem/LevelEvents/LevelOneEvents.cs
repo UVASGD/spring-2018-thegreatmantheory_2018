@@ -39,9 +39,10 @@ public class LevelOneEvents : EventManager {
 
         follow.followPoint = focusPoint;
 
+        while (!follow.OnTarget) {
+            yield return null;
+        }
         focusText.TriggerDialogue();
-
-        yield return null;
     }
 
     public IEnumerator FocusOnPlayer() {
