@@ -197,6 +197,7 @@ public class BasicBot : MonoBehaviour {
 			Team side = other.collider.transform.parent.GetComponentInChildren<Body>().team;
 			if (side != body.team) {
 				attackTarget = other.collider.transform;
+                Debug.Log("SETTEM UP");
 			}
 		}
 	}

@@ -78,18 +78,21 @@ public class WiggleLeaf : Leaf {
     public override NodeState GetState() {
         if (!started) {
             started = true;
+            target = bot.attackTarget;
             targetPos = (Vector2)target.position + (Random.insideUnitCircle * randoDist);
 
             swingMax = Random.Range(0.2f, maxWig);
             swingTimer = swingMax;
         }
-        swingTimer -= Time.deltaTime;
-        if (swingTimer <= 0) {
-            swingTimer = swingMax;
-            targetPos = (Vector2)target.position + (Random.insideUnitCircle * randoDist);
+        if (target) {
+            swingTimer -= Time.deltaTime;
+            if (swingTimer <= 0) {
+                swingTimer = swingMax;
+                targetPos = (Vector2)target.position + (Random.insideUnitCircle * randoDist);
 
+            }
+            bot.Move(targetPos);
         }
-        bot.Move(targetPos);
         timer -= Time.deltaTime;
         if (timer <= 0) {
             timer = timerMax;

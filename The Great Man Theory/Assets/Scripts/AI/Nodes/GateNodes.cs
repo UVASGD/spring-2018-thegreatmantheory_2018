@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class Gate : Node {
     NodeDel del;
+    public string name;
 
-    public Gate(NodeDel _del) {
+    public Gate(NodeDel _del, string _gate = "gate") {
         del = _del;
+        name = _gate;
     }
 
     public override NodeState GetState() {
+        Debug.Log(name);
         return del();
     }
 }

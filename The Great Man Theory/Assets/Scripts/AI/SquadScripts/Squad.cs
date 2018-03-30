@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum SquadType { Hold, Advance }
+public delegate void SquadDel();
 
 public class Squad : MonoBehaviour {
 
-    public DefaultTree maintree;
-
-    protected List<Command> commandlist = new List<Command>();
+    public SquadDel Command;
 
     public Team team;
     public SquadType squadType;
+
+    public float interval;
+    private float time;
 
     public Flag flag;
     public BasicBot officer;
@@ -26,6 +28,9 @@ public class Squad : MonoBehaviour {
 
 
     void Start() {
+        interval = 0.5f;
+        time = interval;
+
         foreach (Transform t in transform) {
             foreach (Transform t2 in t) {
                 BasicBot b = t2.GetComponent<BasicBot>();
@@ -45,9 +50,72 @@ public class Squad : MonoBehaviour {
             officer = minions[Random.Range(0, minions.Count)];
 
         flag.carrier = officer;
-        SetTree(squadType);
+        //SetTree(squadType);
     }
 
+    void Update() {
+        time -= Time.deltaTime;
+        if (time <= 0) {
+            if (Command != null) {
+                Command();
+            }
+            time = interval;
+        }
+    }
+
+    public void MoveCommand(Vector2 target, float timeLeft = -1, int priority = 3) {
+        timeLeft = (timeLeft < 0) ? interval : timeLeft;
+        foreach (BasicBot b in minions) {
+            b.Command(new Command(
+                new Sequencer("Move", new List<Node>() {
+                    new Gate(delegate () {
+                        if (Vector2.Distance(target, b.transform.position) > b.squad.SquadRadius)
+                            return NodeState.Success;
+                        return NodeState.Failure;
+                    }, "Move Gate"),
+                    new MoveLeaf(b, target)
+                    }),
+                interval), 
+            priority);
+        }
+    }
+
+    public void TargetCommand(Transform target, float timeLeft = -1, int priority = 3) {
+        timeLeft = (timeLeft < 0) ? interval : timeLeft;
+        foreach (BasicBot b in minions) {
+            b.Command(new Command(
+                new Sequencer("MoveTarget", new List<Node>() {
+                    new Gate(delegate () {
+                        return (target && Vector2.Distance(target.position, b.transform.position) > b.squad.SquadRadius)
+                         ?NodeState.Success
+                         :NodeState.Failure;
+                    }, "MoveTarget Gate"),
+                    new MoveTargetLeaf(b, target)
+                    }),
+                interval),
+            priority);
+        }
+    }
+
+    public void AttackSquad(Squad targetSquad, float timeLeft = -1, int priority = 3) {
+        timeLeft = (timeLeft < 0) ? interval : timeLeft;
+        foreach (BasicBot b in minions) {
+            b.Command(new Command(
+                new Sequencer("Attack Squad", new List<Node>() {
+                    new Gate(delegate () {
+                        return (targetSquad.flag && Vector2.Distance(targetSquad.flag.transform.position, b.transform.position) > b.squad.SquadRadius)
+                         ?NodeState.Success
+                         :NodeState.Failure;
+                    }),
+                    new MoveTargetLeaf(b, targetSquad.flag.transform)
+                    }),
+                interval),
+            priority);
+        }
+    }
+
+
+    /*
     private void Update() {
         maintree.Traverse();
         Cull();
@@ -92,5 +160,5 @@ public class Squad : MonoBehaviour {
 
     public void Command(BasicBot bot, Command comm, int priority) {
         bot.Command(comm, priority);
-    }
+    }*/
 }

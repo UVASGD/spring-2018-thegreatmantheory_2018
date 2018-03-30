@@ -33,6 +33,8 @@ public class DefaultTree {
     public void insertAtPriority(Node subtree, int priority) {
         priority = Mathf.Clamp(priority, 0, priorityBuckets.Count - 1);
         ((Selector)(priorityBuckets[priority])).insertChild(subtree);
+        //Sequencer c = (Sequencer)((Selector)priorityBuckets[priority]).children[0];
+        //Debug.Log(((MoveTargetLeaf)c.children[1]).target);
     }
 }
 
