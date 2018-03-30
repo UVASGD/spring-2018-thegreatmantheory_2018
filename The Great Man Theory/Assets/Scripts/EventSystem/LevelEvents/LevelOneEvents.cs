@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class LevelOneEvents : EventManager {
 
+    public Transform enemyWaypoint;
+    public Transform frinedlyWaypoint;
+
     public DialogueTrigger focusText;
 
     public Squad boundingEnemies;

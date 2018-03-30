@@ -12,7 +12,7 @@ public class Gate : Node {
     }
 
     public override NodeState GetState() {
-        Debug.Log(name);
+        // Debug.Log(name);
         return del();
     }
 }
