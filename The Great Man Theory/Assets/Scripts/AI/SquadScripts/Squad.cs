@@ -63,26 +63,32 @@ public class Squad : MonoBehaviour {
         }
     }
 
-    public void MoveCommand(Vector2 target, float timeLeft = -1, int priority = 3) {
+    public void MoveCommand(Vector2 target, BasicBot bot = null, float timeLeft = -1, int priority = 3) {
         timeLeft = (timeLeft < 0) ? interval : timeLeft;
         foreach (BasicBot b in minions) {
+            if (bot)
+                if (b != bot)
+                    continue;
             b.Command(new Command(
                 new Sequencer("Move", new List<Node>() {
-                    new Gate(delegate () {
-                        if (Vector2.Distance(target, b.transform.position) > b.squad.SquadRadius)
-                            return NodeState.Success;
-                        return NodeState.Failure;
-                    }, "Move Gate"),
-                    new MoveLeaf(b, target)
+                new Gate(delegate () {
+                    if (Vector2.Distance(target, b.transform.position) > b.squad.SquadRadius)
+                        return NodeState.Success;
+                    return NodeState.Failure;
+                }, "Move Gate"),
+                new MoveLeaf(b, target)
                     }),
-                interval), 
+                interval),
             priority);
         }
     }
 
-    public void TargetCommand(Transform target, float timeLeft = -1, int priority = 3) {
+    public void TargetCommand(Transform target, BasicBot bot = null, float timeLeft = -1, int priority = 3) {
         timeLeft = (timeLeft < 0) ? interval : timeLeft;
         foreach (BasicBot b in minions) {
+            if (bot)
+                if (b != bot)
+                    continue;
             b.Command(new Command(
                 new Sequencer("MoveTarget", new List<Node>() {
                     new Gate(delegate () {
@@ -97,9 +103,12 @@ public class Squad : MonoBehaviour {
         }
     }
 
-    public void AttackSquad(Squad targetSquad, float timeLeft = -1, int priority = 3) {
+    public void AttackSquad(Squad targetSquad, BasicBot bot = null, float timeLeft = -1, int priority = 3) {
         timeLeft = (timeLeft < 0) ? interval : timeLeft;
         foreach (BasicBot b in minions) {
+            if (bot)
+                if (b != bot)
+                    continue;
             b.Command(new Command(
                 new Sequencer("Attack Squad", new List<Node>() {
                     new Gate(delegate () {
@@ -112,6 +121,16 @@ public class Squad : MonoBehaviour {
                 interval),
             priority);
         }
+    }
+
+    public void AttackIntruder(Transform target) {
+        if (enemies.Count == 0 || minions.Count == 0)
+            return;
+        int attackers = 1 / minions.Count;
+        if (attackers < 1)
+            return;
+        for (int i = 0; i < attackers; i++)
+            minions[Random.Range(0, minions.Count)].attackTarget = target;
     }
 
 
