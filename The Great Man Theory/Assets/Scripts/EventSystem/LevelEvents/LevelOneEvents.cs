@@ -18,16 +18,7 @@ public class LevelOneEvents : EventManager {
     }
 
 	public IEnumerator BoundingEnemiesTarget() {
-        Debug.Log("Getim");
-        List<Node> getimChildren = new List<Node> {
-            new IntervalGate(100f),
-            //new MoveTargetCommand(boundingEnemies, 0, 100f, playerTransform)
-        };
 
-        //Node getim = new Sequencer("Attack Dude", getimChildren);
-        //Command attackTarget = new Command(getim, 1f);
-
-        //boundingEnemies.Command(attackTarget, 0);
         boundingEnemies.Command = delegate () { boundingEnemies.TargetCommand(playerTransform); };
 
         yield return null;

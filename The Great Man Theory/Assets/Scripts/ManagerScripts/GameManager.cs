@@ -7,10 +7,6 @@ public enum GameState { Paused, Gameplay, Menu }
 public class GameManager : MonoBehaviour {
 
     public Camera mainCamera;
-    public float extraForce;
-    public float maxForce;
-    public float offset;
-    public float wigglemax;
 
     public static GameState state = GameState.Gameplay;
 

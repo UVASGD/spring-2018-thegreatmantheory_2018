@@ -27,7 +27,7 @@ public class DialogueManager : MonoBehaviour {
 
     private void Awake() {
         if (!created) {
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
             created = true;
         }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gate : Node {
     NodeDel del;
-    public string name;
+    public new string name;
 
     public Gate(NodeDel _del, string _gate = "gate") {
         del = _del;
