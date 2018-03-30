@@ -134,8 +134,11 @@ public class Squad : MonoBehaviour {
     }
 
     public void AttackIntruder(Transform target) {
-        if (enemies.Count == 0 || minions.Count == 0)
+        SetDefaultBehavior(SquadType.Hold);
+        if (enemies.Count == 0 || minions.Count == 0) {
+            SetDefaultBehavior(squadType);
             return;
+        }
         int attackers = 1 / minions.Count;
         if (attackers < 1)
             return;
