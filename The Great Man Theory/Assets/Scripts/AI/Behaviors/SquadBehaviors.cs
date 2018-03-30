@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
 public class SquadHoldTree : DefaultTree {
     Vector2 pos;
     float interval = Random.Range(5, 10);
@@ -73,3 +73,4 @@ public class SquadTargetTree : DefaultTree {
         rootNode = new Selector("root", (priorityBuckets));
     }
 }
+*/

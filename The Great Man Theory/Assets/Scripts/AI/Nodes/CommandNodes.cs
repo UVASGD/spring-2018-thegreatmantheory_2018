@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //COMMAND NODES
+/*
 public class CommandNode : Node {
     protected Squad squad;
     protected int priority;
@@ -72,3 +73,4 @@ public class MoveTargetCommand : CommandNode {
         return NodeState.Success;
     }
 }
+*/
