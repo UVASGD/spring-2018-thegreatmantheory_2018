@@ -64,10 +64,11 @@ public class ArquebusTree : DefaultTree {
 			new Selector("priority 2", new List<Node>() {
 				new Sequencer("fight!", new List<Node>() {
 					new Gate(delegate() {
+						Debug.Log("Acting: " + (bot.attackTarget != null && Vector2.Distance(bot.transform.position, bot.attackTarget.position) < 100));
 						return (bot.attackTarget && Vector2.Distance(bot.transform.position, bot.attackTarget.position) < 100)
 							? NodeState.Success: NodeState.Failure;
 					}, "Fight Gate"),
-					new IntervalGate(5),
+					//new IntervalGate(5),
 					new AimLeaf(bot)
 				})
 			}),
@@ -78,5 +79,8 @@ public class ArquebusTree : DefaultTree {
 				
 			})
 		};
+		Debug.Log("Arqubussy");
+
+		rootNode = new Selector("root", (priorityBuckets));
 	}
 }
