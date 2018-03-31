@@ -37,6 +37,9 @@ public class BasicBot : MonoBehaviour {
     public bool hasArms = true;
     protected MoveState hold = MoveState.off;
 
+    bool ded = false;
+    public bool Ded { get { return ded; } }
+
     // Use this for initialization
     void Start () {
 		switch (body.unitType) {
@@ -201,4 +204,8 @@ public class BasicBot : MonoBehaviour {
 			}
 		}
 	}
+
+    void OnDestroy() {
+        squad.UpdateMinions();    
+    }
 }

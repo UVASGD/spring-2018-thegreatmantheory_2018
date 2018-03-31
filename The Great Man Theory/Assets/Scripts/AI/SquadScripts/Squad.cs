@@ -148,7 +148,19 @@ public class Squad : MonoBehaviour {
             minions[Random.Range(0, minions.Count)].attackTarget = target;
     }
 
+    public void UpdateMinions() {
+        foreach (BasicBot b in minions) {
+            if (b.Ded)
+                minions.Remove(b);
+        }
+        if (minions.Count == 0)
+            Destroy(gameObject);
+        if (!flag.carrier) {
+            officer = minions[Random.Range(0, minions.Count)];
 
+            flag.carrier = officer;
+        }
+    }
     /*
     private void Update() {
         maintree.Traverse();
