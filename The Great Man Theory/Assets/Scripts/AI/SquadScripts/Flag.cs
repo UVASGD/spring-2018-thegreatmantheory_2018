@@ -17,7 +17,7 @@ public class Flag : MonoBehaviour {
         if (collider.CompareTag("Body") || !squad.enemies.Contains(collider.transform)) {
             Body colliderBody = collider.GetComponent<Body>();
             Debug.Log("collider body" + colliderBody);
-            if (colliderBody.team != carrier.body.team) {
+            if (colliderBody != null && colliderBody.team != carrier.body.team) {
                 squad.enemies.Add(collider.transform);
                 squad.Command = delegate () { squad.AttackIntruder(collider.transform); };
             }
