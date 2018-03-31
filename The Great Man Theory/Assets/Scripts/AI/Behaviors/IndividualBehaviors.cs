@@ -43,3 +43,40 @@ public class SwordTree : DefaultTree {
         rootNode = new Selector("root", (priorityBuckets));
     }
 }
+
+public class ArquebusTree : DefaultTree {
+	public ArquebusTree(BasicBot bot) {
+		priorityBuckets = new List<Node> () {
+			new Selector("priority 0", new List<Node>() {
+
+			}),
+			new Selector("priority 1", new List<Node>() {
+				new Sequencer("wounded", new List<Node>() {
+					new Gate(delegate () {
+						return NodeState.Failure;
+					}, "Wounded Gate"),
+					new RandomSelector("Wounded Action", new List<Node>() {
+						new FleeLeaf(bot),
+						new MedicLeaf(bot)
+					})
+				})
+			}),
+			new Selector("priority 2", new List<Node>() {
+				new Sequencer("fight!", new List<Node>() {
+					new Gate(delegate() {
+						return (bot.attackTarget && Vector2.Distance(bot.transform.position, bot.attackTarget.position) < 100)
+							? NodeState.Success: NodeState.Failure;
+					}, "Fight Gate"),
+					new IntervalGate(5),
+					new AimLeaf(bot)
+				})
+			}),
+			new Selector("priority 3", new List<Node>() {
+				
+			}),
+			new Selector("priority 4", new List<Node>() {
+				
+			})
+		};
+	}
+}
