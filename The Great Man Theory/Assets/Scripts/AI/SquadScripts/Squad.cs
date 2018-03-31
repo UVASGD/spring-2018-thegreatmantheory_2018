@@ -70,7 +70,7 @@ public class Squad : MonoBehaviour {
             case SquadType.Hold:
                 break;
             case SquadType.Advance:
-                Command = delegate () { MoveCommand(new Vector2(0, direction*500)); };
+                Command = delegate () { MoveCommand(new Vector2(0, direction*500000)); };
                 break;
         }
     }
