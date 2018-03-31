@@ -5,6 +5,7 @@ using UnityEngine;
 public class LevelOneEvents : EventManager {
 
     public Squad friendlyGuns;
+    public Squad enemyGuns;
 
     public Transform enemyWaypoint;
     public Transform frinedlyWaypoint;
@@ -63,6 +64,9 @@ public class LevelOneEvents : EventManager {
         // friendlyGuns.Command = delegate () { friendlyGuns.Halt(); };
         if (friendlyGuns.squadType != SquadType.FiringLine)
             friendlyGuns.SetDefaultBehavior(SquadType.FiringLine);
+
+        if (enemyGuns.squadType != SquadType.FiringLine)
+            enemyGuns.SetDefaultBehavior(SquadType.FiringLine);
         yield return null;
     }
 }
