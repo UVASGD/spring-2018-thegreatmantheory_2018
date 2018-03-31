@@ -107,6 +107,7 @@ public class BasicBot : MonoBehaviour {
 	}
 
 	public void Command(Command comm, int priority) {
+        Debug.Log("aghoiehwgo;ieahsg;lkl;eshgvioebsyafoshflewl");
         commandlist.Add (comm);
 		maintree.insertAtPriority (comm.subtree, priority);
 	}

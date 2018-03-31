@@ -64,13 +64,15 @@ public class RangedWeapon : Weapon {
         RaycastHit2D[] hits = Physics2D.RaycastAll(barrelEnd, transform.up, maxrange);
 
         foreach (RaycastHit2D hit in hits) {
-            Body target = hit.rigidbody.GetComponent<Body>();
-            if (target) {
-                float dam = damage - hit.distance;
-                target.Hit(dam / 2, hit.point);
-                ShowLine(hit.distance);
-                gotem = true;
-                break;
+            if (hit.rigidbody != null) {
+                Body target = hit.rigidbody.GetComponent<Body>();
+                if (target) {
+                    float dam = damage - hit.distance;
+                    target.Hit(dam / 2, hit.point);
+                    ShowLine(hit.distance);
+                    gotem = true;
+                    break;
+                }
             }
         }
         if (!gotem)
@@ -88,7 +90,8 @@ public class RangedWeapon : Weapon {
             fx.Play();
         }
 		if (gunbox != null) {
-			gunbox.Shoot ();
+            Debug.Log("BOOMBOOMBOOM");
+			gunbox.Shoot();
 		}
     }
 

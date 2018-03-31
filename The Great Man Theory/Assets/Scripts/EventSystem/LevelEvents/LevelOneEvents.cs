@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LevelOneEvents : EventManager {
 
+    public Squad friendlyGuns;
+
     public Transform enemyWaypoint;
     public Transform frinedlyWaypoint;
 
@@ -54,6 +56,13 @@ public class LevelOneEvents : EventManager {
 
     public IEnumerator Gameplay() {
         GameManager.state = GameState.Gameplay;
+        yield return null;
+    }
+
+    public IEnumerator StopFriendlyGuns() {
+        // friendlyGuns.Command = delegate () { friendlyGuns.Halt(); };
+        if (friendlyGuns.squadType != SquadType.FiringLine)
+            friendlyGuns.SetDefaultBehavior(SquadType.FiringLine);
         yield return null;
     }
 }

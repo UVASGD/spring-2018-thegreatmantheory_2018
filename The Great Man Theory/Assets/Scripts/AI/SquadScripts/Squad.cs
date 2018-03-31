@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SquadType { Hold, Advance }
+public enum SquadType { Hold, Advance, FiringLine }
 public delegate void SquadDel();
 
 public class Squad : MonoBehaviour {
@@ -68,9 +68,14 @@ public class Squad : MonoBehaviour {
     public void SetDefaultBehavior(SquadType s) {
         switch (s) {
             case SquadType.Hold:
+                Command = null;
                 break;
             case SquadType.Advance:
                 Command = delegate () { MoveCommand(new Vector2(0, direction*500000)); };
+                break;
+            case SquadType.FiringLine:
+                // fukkitup
+                Command = delegate () { FiringLine(); };
                 break;
         }
     }
@@ -160,6 +165,17 @@ public class Squad : MonoBehaviour {
 
             flag.carrier = officer;
         }
+    }
+
+    public void FiringLine() {
+        foreach (BasicBot b in minions) {
+            b.Command(new Command(
+                new VolleyLeaf(b, 
+                new Vector2(0f, direction * 100f)
+                ), 10000f)
+            , 0);
+        }
+        SetDefaultBehavior(SquadType.Hold);
     }
     /*
     private void Update() {
