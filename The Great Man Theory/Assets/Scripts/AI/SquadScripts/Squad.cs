@@ -122,35 +122,27 @@ public class Squad : MonoBehaviour {
 
     public void AttackSquad(Squad targetSquad, BasicBot bot = null, float timeLeft = -1, int priority = 3) {
         timeLeft = (timeLeft < 0) ? interval : timeLeft;
-        foreach (BasicBot b in minions) {
-            if (bot)
-                if (b != bot)
-                    continue;
-            b.Command(new Command(
-                new Sequencer("Attack Squad", new List<Node>() {
-                    new Gate(delegate () {
-                        return (targetSquad.flag && Vector2.Distance(targetSquad.flag.transform.position, b.transform.position) > b.squad.SquadRadius)
-                         ?NodeState.Success
-                         :NodeState.Failure;
-                    }),
-                    new MoveTargetLeaf(b, targetSquad.flag.transform)
-                    }),
-                interval),
-            priority);
+        foreach (BasicBot enemy in targetSquad.minions) {
+            foreach (BasicBot b in minions) {
+                if (bot)
+                    if (b != bot)
+                        continue;
+                if (!b.attackTarget) {
+                    if (enemies.Count > 0) {
+                        b.attackTarget = enemies[Random.Range(0, enemies.Count)];
+                        continue;
+                    }
+                }
+            }
         }
     }
 
     public void AttackIntruder(Transform target) {
         SetDefaultBehavior(SquadType.Hold);
-        if (enemies.Count == 0 || minions.Count == 0) {
-            SetDefaultBehavior(squadType);
-            return;
-        }
-        int attackers = 1 / minions.Count;
-        if (attackers < 1)
-            return;
-        for (int i = 0; i < attackers; i++)
-            minions[Random.Range(0, minions.Count)].attackTarget = target;
+        foreach (BasicBot b in minions)
+            if (!b.attackTarget) {
+                b.attackTarget = target;
+            }
     }
 
     public void UpdateMinions() {

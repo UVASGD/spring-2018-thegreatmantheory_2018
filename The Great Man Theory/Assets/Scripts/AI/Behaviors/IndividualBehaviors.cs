@@ -20,7 +20,7 @@ public class SwordTree : DefaultTree {
             new Selector("priority 2", new List<Node>() {
                 new Sequencer("fight", new List<Node>() {
                     new Gate(delegate() {
-                        return (bot.attackTarget && Vector2.Distance(bot.transform.position, bot.attackTarget.position) < 20)
+                        return (bot.attackTarget && Vector2.Distance(bot.transform.position, bot.attackTarget.position) < 100)
                         ? NodeState.Success: NodeState.Failure;
                     }, "Fight Gate"),
                     new RandomSelector("Fight", new List<Node>() {
@@ -30,7 +30,7 @@ public class SwordTree : DefaultTree {
                             new ChargeLeaf(bot)
                         })
                     }, new List<int>() {
-                        1, 0
+                        0, 1
                     })
                 })
             }),

@@ -13,7 +13,11 @@ public class Flag : MonoBehaviour {
     }
 
     public void Update() {
-        transform.position = carrier.transform.position;
+        if (carrier)
+            transform.position = carrier.transform.position;
+        foreach (Transform t in squad.enemies) {
+            squad.enemies.Remove(t);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
@@ -21,8 +25,16 @@ public class Flag : MonoBehaviour {
             Body colliderBody = collider.GetComponent<Body>();
             Debug.Log("collider body" + colliderBody);
             if (colliderBody != null && colliderBody.team != carrier.body.team) {
-                squad.enemies.Add(collider.transform);
-                squad.Command = delegate () { squad.AttackIntruder(collider.transform); };
+                if (!squad.enemies.Contains(collider.transform)) {
+                    squad.enemies.Add(collider.transform);
+                    if (collider.GetComponent<BasicBot>()) {
+                        if (collider.GetComponent<BasicBot>().squad)
+                            squad.AttackSquad(collider.GetComponent<BasicBot>().squad);
+                    }
+                    else {
+                        squad.AttackIntruder(collider.transform);
+                    }
+                }
             }
         }
     }
