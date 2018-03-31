@@ -10,7 +10,10 @@ public class Flag : MonoBehaviour {
     public void Setup() {
         zone = GetComponent<CircleCollider2D>();
         zone.radius = squad.SquadRadius;
-        
+    }
+
+    public void Update() {
+        transform.position = carrier.transform.position;
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
@@ -28,7 +31,9 @@ public class Flag : MonoBehaviour {
         squad.enemies.Remove(collider.transform);
         if (collider.CompareTag("Body"))
             if (collider.GetComponent<Body>().team == squad.team)
-                if (collider.GetComponent<BasicBot>())
-                    squad.Command = delegate () { squad.TargetCommand(squad.flag.transform, collider.GetComponent<BasicBot>()); };
+                if (collider.GetComponent<BasicBot>() != null) {
+                    BasicBot bot = collider.GetComponent<BasicBot>();
+                    squad.Command = delegate () { squad.TargetCommand(squad.flag.transform, bot); };
+                }
     }
 }
