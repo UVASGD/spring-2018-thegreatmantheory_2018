@@ -7,7 +7,7 @@ public class Flag : MonoBehaviour {
     public Squad squad;
     CircleCollider2D zone;
 
-    void Start() {
+    public void Setup() {
         zone = GetComponent<CircleCollider2D>();
         zone.radius = squad.SquadRadius;
     }

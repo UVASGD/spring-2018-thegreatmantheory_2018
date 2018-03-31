@@ -51,6 +51,8 @@ public class Squad : MonoBehaviour {
 
         flag.carrier = officer;
         SetDefaultBehavior(squadType);
+
+        flag.Setup();
     }
 
     void Update() {
