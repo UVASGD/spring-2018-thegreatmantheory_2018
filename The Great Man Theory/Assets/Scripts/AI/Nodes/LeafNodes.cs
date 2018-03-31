@@ -166,30 +166,62 @@ public class FocusLeaf : Leaf {
     }
 }
 
-public class ShootLeaf : Leaf {
-    bool fired = false;
-    RangedWeapon weapon;
-    float timerMax;
-    float timer;
+public class AimLeaf : Leaf {
+	float timer;
+	float scaleFactor;
 
-    public ShootLeaf(BasicBot bot, float _timerMax) : base() {
-        timerMax = _timerMax;
-        timer = UnityEngine.Random.Range(0.4f, timerMax);
+	bool started;
+
+	Vector2 aimTarget;
+
+	BasicBot bot;
+
+	public AimLeaf(BasicBot _bot, float _scaleFactor =  1) : base() {
+
+		scaleFactor = _scaleFactor;
+		bot = _bot;
+		if (bot.attackTarget != null) {
+			timer = Vector2.Distance (bot.transform.position, bot.attackTarget.position) * scaleFactor + Random.value;
+		}
+		started = false;
+	}
+
+	public override NodeState GetState() {
+		if (!started) {
+			if (bot.attackTarget == null) {
+				return NodeState.Failure;
+			}
+			started = true;
+			timer = Vector2.Distance (bot.transform.position, bot.attackTarget.position) * scaleFactor + Random.value;
+			aimTarget = (Vector2)bot.attackTarget.position + Random.insideUnitCircle * Mathf.Tan (0.5f);
+			bot.Brace();
+			return NodeState.Running;
+		}
+		if (started) {
+			timer -= Time.deltaTime;
+			bot.Move (aimTarget);
+			if (timer <= 0){
+				((RangedWeapon)bot.body.weapon).Trigger ();
+				bot.Brace (false);
+				return NodeState.Success;
+			}
+			return NodeState.Running;
+		}
+		return NodeState.Success;
+	}
+}
+
+public class ShootLeaf : Leaf {
+	
+    RangedWeapon weapon;
+
+    public ShootLeaf(BasicBot bot) : base() {
         weapon = (RangedWeapon)bot.body.weapon;
     }
 
     public override NodeState GetState() {
-        if (!fired) {
-            fired = true;
-            weapon.Trigger();
-        }
-        timer -= Time.deltaTime;
-        if (timer <= 0) {
-            timer = UnityEngine.Random.Range(0.4f, timerMax);
-            fired = false;
-            return NodeState.Success;
-        }
-        return NodeState.Running;
+        weapon.Trigger();
+		return NodeState.Success;
     }
 }
 
