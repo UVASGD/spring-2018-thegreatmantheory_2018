@@ -5,6 +5,12 @@ using UnityEngine;
 public class Flag : MonoBehaviour {
     public BasicBot carrier;
     public Squad squad;
+    CircleCollider2D zone;
+
+    void Start() {
+        zone = GetComponent<CircleCollider2D>();
+        zone.radius = squad.SquadRadius;
+    }
 
     private void OnTriggerEnter2D(Collider2D collider) {
         if (collider.CompareTag("Body") || !squad.enemies.Contains(collider.transform)) {
