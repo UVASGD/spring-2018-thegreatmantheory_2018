@@ -44,9 +44,7 @@ public class BasicBot : MonoBehaviour {
     void Start () {
 		switch (body.unitType) {
 		case UnitType.Pike:
-			break;
 		case UnitType.Longsword:
-			break;
 		case UnitType.Sword:
 			maintree = new SwordTree(this);
 			break;
