@@ -218,6 +218,54 @@ public class AimLeaf : Leaf {
 }
 
 
+public class VolleyLeaf : Leaf {
+    float shoottimer;
+
+    bool started;
+
+    Vector2 target;
+
+    Vector2 aimTarget;
+
+    BasicBot bot;
+
+    public VolleyLeaf(BasicBot _bot, Vector2 _target) : base() {
+        bot = _bot;
+        aimTarget = _target;
+        shoottimer = Vector2.Distance(bot.transform.position, aimTarget) + Random.Range(0.5f, 1.2f);
+
+        started = false;
+    }
+
+    public override NodeState GetState() {
+        if (!started) {
+            started = true;
+            shoottimer = Random.Range(1.5f, 2.5f);
+
+            return NodeState.Running;
+        }
+        if (started) {
+            //Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + shoottimer);
+
+            shoottimer -= Time.deltaTime;
+            bot.pointer = bot.body.weapon.pointer;
+            bot.pointer.TargetPos = (aimTarget - bot.pointer.ForcePoint);
+            bot.pointer.BalanceForces(bot.body.weapon.transform.position);
+            if (shoottimer <= 0) {
+
+                ((RangedWeapon)bot.body.weapon).Trigger();
+                started = false;
+                bot.Brace(false);
+                bot.Hold(false);
+                return NodeState.Success;
+            }
+            return NodeState.Running;
+        }
+        return NodeState.Success;
+    }
+}
+
+
 public class ShootLeaf : Leaf {
 	
     RangedWeapon weapon;

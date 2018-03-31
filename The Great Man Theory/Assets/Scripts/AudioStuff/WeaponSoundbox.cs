@@ -10,6 +10,7 @@ public class WeaponSoundbox : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         source = GetComponent<AudioSource>();
+        am = AudioManager.Instance;
 	}
 	
 	// Update is called once per frame

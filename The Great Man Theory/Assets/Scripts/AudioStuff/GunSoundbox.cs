@@ -11,6 +11,7 @@ public class GunSoundbox : WeaponSoundbox {
         AudioSource[] sources = GetComponents<AudioSource>();
         source = sources[0];
         fireSound = sources[1];
+        am = AudioManager.Instance;
     }
 
     // Update is called once per frame
