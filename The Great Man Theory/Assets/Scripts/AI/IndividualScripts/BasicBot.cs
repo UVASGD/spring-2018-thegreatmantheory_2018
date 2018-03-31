@@ -43,12 +43,17 @@ public class BasicBot : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		switch (body.unitType) {
-            case UnitType.Pike:
-            case UnitType.Longsword:
-            case UnitType.Sword:
-                maintree = new SwordTree(this);
-                break;
-        }
+		case UnitType.Pike:
+			break;
+		case UnitType.Longsword:
+			break;
+		case UnitType.Sword:
+			maintree = new SwordTree(this);
+			break;
+		case UnitType.Arquebus:
+			maintree = new ArquebusTree (this);
+			break;
+		}
 		commandlist = new List<Command> ();
 
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -186,11 +191,11 @@ public class BasicBot : MonoBehaviour {
 
     public void Hold(bool start = true) {
         if (start && (int)hold < 1) {
-            rb.freezeRotation = true;
+            //rb.freezeRotation = true;
             hold = MoveState.start;
         }
         else {
-            rb.freezeRotation = false;
+            //rb.freezeRotation = false;
             hold = MoveState.end;
         }
     }

@@ -87,7 +87,9 @@ public class RangedWeapon : Weapon {
         foreach (ParticleSystem fx in fxs) {
             fx.Play();
         }
-        gunbox.Shoot();
+		if (gunbox != null) {
+			gunbox.Shoot ();
+		}
     }
 
     void ShowLine(float dist) {

@@ -167,7 +167,7 @@ public class FocusLeaf : Leaf {
 }
 
 public class AimLeaf : Leaf {
-	float timer;
+	float shoottimer;
 	float scaleFactor;
 
 	bool started;
@@ -176,12 +176,11 @@ public class AimLeaf : Leaf {
 
 	BasicBot bot;
 
-	public AimLeaf(BasicBot _bot, float _scaleFactor =  1) : base() {
-
+	public AimLeaf(BasicBot _bot, float _scaleFactor =  0.1f) : base() {
 		scaleFactor = _scaleFactor;
 		bot = _bot;
 		if (bot.attackTarget != null) {
-			timer = Vector2.Distance (bot.transform.position, bot.attackTarget.position) * scaleFactor + Random.value;
+			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.position) * scaleFactor + Random.Range(0.5f,1.2f);
 		}
 		started = false;
 	}
@@ -192,17 +191,24 @@ public class AimLeaf : Leaf {
 				return NodeState.Failure;
 			}
 			started = true;
-			timer = Vector2.Distance (bot.transform.position, bot.attackTarget.position) * scaleFactor + Random.value;
-			aimTarget = (Vector2)bot.attackTarget.position + Random.insideUnitCircle * Mathf.Tan (0.5f);
-			bot.Brace();
+			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.position) * scaleFactor + Random.Range(0.5f,1.2f);
+			aimTarget = (Vector2)bot.attackTarget.position;// + Random.insideUnitCircle * Mathf.Tan (0.5f);
+
+			Debug.Log(bot.GetComponent<Rigidbody2D>());
+			//bot.body.rb.constraints = RigidbodyConstraints2D.FreezePosition;
 			return NodeState.Running;
 		}
 		if (started) {
-			timer -= Time.deltaTime;
-			bot.Move (aimTarget);
-			if (timer <= 0){
+			shoottimer -= Time.deltaTime;
+			//bot.Move (aimTarget);
+			bot.pointer = bot.body.weapon.pointer;
+			bot.pointer.TargetPos = (aimTarget - bot.pointer.ForcePoint);
+			bot.pointer.BalanceForces (bot.body.weapon.transform.position);
+			if (shoottimer <= 0){
 				((RangedWeapon)bot.body.weapon).Trigger ();
+				started = false;
 				bot.Brace (false);
+				bot.Hold (false);
 				return NodeState.Success;
 			}
 			return NodeState.Running;
@@ -210,6 +216,7 @@ public class AimLeaf : Leaf {
 		return NodeState.Success;
 	}
 }
+
 
 public class ShootLeaf : Leaf {
 	
