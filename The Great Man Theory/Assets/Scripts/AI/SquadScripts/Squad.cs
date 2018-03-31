@@ -24,7 +24,7 @@ public class Squad : MonoBehaviour {
     public float SquadRadius { get { return 2 * minions.Count; } } 
 
     public List<BasicBot> minions = new List<BasicBot>();
-    public List<Transform> enemies = new List<Transform>();
+    public List<GameObject> enemies = new List<GameObject>();
 
 
     void Start() {
@@ -57,6 +57,7 @@ public class Squad : MonoBehaviour {
 
     void Update() {
         time -= Time.deltaTime;
+        UpdateEnemies();
         if (time <= 0) {
             if (Command != null) {
                 Command();
@@ -89,7 +90,7 @@ public class Squad : MonoBehaviour {
             b.Command(new Command(
                 new Sequencer("Move", new List<Node>() {
                 new Gate(delegate () {
-                    if (Vector2.Distance(target, b.transform.position) > b.squad.SquadRadius)
+                    if (Vector2.Distance(target, b.transform.position) > Mathf.Min(50, b.squad.SquadRadius))
                         return NodeState.Success;
                     return NodeState.Failure;
                 }, "Move Gate"),
@@ -100,7 +101,7 @@ public class Squad : MonoBehaviour {
         }
     }
 
-    public void TargetCommand(Transform target, BasicBot bot = null, float timeLeft = -1, int priority = 3) {
+    public void TargetCommand(GameObject target, BasicBot bot = null, float timeLeft = -1, int priority = 3) {
         timeLeft = (timeLeft < 0) ? interval : timeLeft;
         foreach (BasicBot b in minions) {
             if (bot)
@@ -109,7 +110,7 @@ public class Squad : MonoBehaviour {
             b.Command(new Command(
                 new Sequencer("MoveTarget", new List<Node>() {
                     new Gate(delegate () {
-                        return (target && Vector2.Distance(target.position, b.transform.position) > b.squad.SquadRadius)
+                        return (target && Vector2.Distance(target.transform.position, b.transform.position) > Mathf.Min(50, b.squad.SquadRadius))
                          ?NodeState.Success
                          :NodeState.Failure;
                     }, "MoveTarget Gate"),
@@ -121,23 +122,20 @@ public class Squad : MonoBehaviour {
     }
 
     public void AttackSquad(Squad targetSquad, BasicBot bot = null, float timeLeft = -1, int priority = 3) {
+        SetDefaultBehavior(SquadType.Hold);
         timeLeft = (timeLeft < 0) ? interval : timeLeft;
-        foreach (BasicBot enemy in targetSquad.minions) {
-            foreach (BasicBot b in minions) {
-                if (bot)
-                    if (b != bot)
-                        continue;
-                if (!b.attackTarget) {
-                    if (enemies.Count > 0) {
-                        b.attackTarget = enemies[Random.Range(0, enemies.Count)];
-                        continue;
-                    }
-                }
+        foreach (BasicBot b in minions) {
+            if (bot) {
+                if (b != bot)
+                    continue;
+            }
+            if (enemies.Count > 0) {
+                b.attackTarget = enemies[Random.Range(0, enemies.Count)];
             }
         }
     }
 
-    public void AttackIntruder(Transform target) {
+    public void AttackIntruder(GameObject target) {
         SetDefaultBehavior(SquadType.Hold);
         foreach (BasicBot b in minions)
             if (!b.attackTarget) {
@@ -169,50 +167,16 @@ public class Squad : MonoBehaviour {
         }
         SetDefaultBehavior(SquadType.Hold);
     }
-    /*
-    private void Update() {
-        maintree.Traverse();
-        Cull();
+
+    public void UpdateEnemies() {
+        foreach (GameObject g in enemies)
+            if (g == null)
+                enemies.Remove(g);
     }
 
-    public void Command(Command comm, int priority) {
-        commandlist.Add(comm);
-        maintree.insertAtPriority(comm.subtree, priority);
+    public GameObject GetEnemy() {
+        if (enemies.Count > 0)
+            return enemies[Random.Range(0, enemies.Count)];
+        return null;
     }
-
-    public void Cull() {
-        for (int i = commandlist.Count - 1; i >= 0; i--) {
-            commandlist[i].timeLeft -= Time.deltaTime;
-            if (commandlist[i].timeLeft <= 0) {
-                commandlist[i].subtree.expired = true;
-                commandlist.RemoveAt(i);
-            }
-        }
-    }
-
-    public Transform FindEnemy() {
-        if (enemies.Count == 0)
-            return null;
-
-        for (int i = 0; i < enemies.Count; i++)
-            if (!enemies[i])
-                enemies.RemoveAt(i);
-
-        return enemies[Random.Range(0, enemies.Count)];
-    }
-
-    public void SetTree(SquadType s) {
-        switch (s) {
-            case SquadType.Hold:
-                maintree = new SquadHoldTree(this);
-                break;
-            case SquadType.Advance:
-                maintree = new SquadAdvanceTree(this);
-                break;
-        }
-    }
-
-    public void Command(BasicBot bot, Command comm, int priority) {
-        bot.Command(comm, priority);
-    }*/
 }

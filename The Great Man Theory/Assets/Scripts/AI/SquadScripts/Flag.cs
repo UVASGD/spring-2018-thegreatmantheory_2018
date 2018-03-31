@@ -10,29 +10,27 @@ public class Flag : MonoBehaviour {
     public void Setup() {
         zone = GetComponent<CircleCollider2D>();
         zone.radius = squad.SquadRadius;
+        zone.radius = Mathf.Clamp(zone.radius, 1, 500);
     }
 
     public void Update() {
         if (carrier)
             transform.position = carrier.transform.position;
-        foreach (Transform t in squad.enemies) {
-            squad.enemies.Remove(t);
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
-        if (collider.CompareTag("Body") || !squad.enemies.Contains(collider.transform)) {
+        if (collider.CompareTag("Body") || !squad.enemies.Contains(collider.gameObject)) {
             Body colliderBody = collider.GetComponent<Body>();
-            Debug.Log("collider body" + colliderBody);
             if (colliderBody != null && colliderBody.team != carrier.body.team) {
-                if (!squad.enemies.Contains(collider.transform)) {
-                    squad.enemies.Add(collider.transform);
+                if (!squad.enemies.Contains(collider.gameObject)) {
+                    squad.enemies.Add(collider.gameObject);
                     if (collider.GetComponent<BasicBot>()) {
-                        if (collider.GetComponent<BasicBot>().squad)
+                        if (collider.GetComponent<BasicBot>().squad) {
                             squad.AttackSquad(collider.GetComponent<BasicBot>().squad);
+                        }
                     }
                     else {
-                        squad.AttackIntruder(collider.transform);
+                        squad.AttackIntruder(collider.gameObject);
                     }
                 }
             }
@@ -40,12 +38,13 @@ public class Flag : MonoBehaviour {
     }
 
     private void OnTriggerExit2D(Collider2D collider) {
-        squad.enemies.Remove(collider.transform);
-        if (collider.CompareTag("Body"))
+        squad.enemies.Remove(collider.gameObject);
+        if (collider.CompareTag("Body")) {
             if (collider.GetComponent<Body>().team == squad.team)
                 if (collider.GetComponent<BasicBot>() != null) {
                     BasicBot bot = collider.GetComponent<BasicBot>();
-                    squad.Command = delegate () { squad.TargetCommand(squad.flag.transform, bot); };
+                    squad.Command = delegate () { squad.TargetCommand(squad.flag.gameObject, bot); };
                 }
+        }
     }
 }

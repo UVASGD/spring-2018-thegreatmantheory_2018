@@ -28,18 +28,21 @@ public class MaintainLeaf : Leaf {
         timer = timerMax;
         bot = _bot;
         pos = bot.transform;
-        target = bot.attackTarget;
+        //target = bot.attackTarget.transform;
         prefDist = _prefDist;
         leeway = _leeway;
     }
 
     public override NodeState GetState() {
+        if (!bot.attackTarget) {
+            return NodeState.Failure;
+        } 
         if (!started) {
             bot.Hold();
             started = true;
         }
         timer -= Time.deltaTime;
-        target = bot.attackTarget;
+        target = bot.attackTarget.transform;
         targetPos = (pos.position - target.position).normalized * prefDist;
         bot.Move(targetPos);
         if (timer <= 0) {
@@ -68,7 +71,7 @@ public class WiggleLeaf : Leaf {
         timerMax = _timerMax;
         timer = timerMax;
         bot = _bot;
-        target = bot.attackTarget;
+        //target = bot.attackTarget.transform;
         randoDist = _randoDist;
         maxWig = _maxWig;
         swingMax = Random.Range(0.2f, _maxWig);
@@ -76,23 +79,25 @@ public class WiggleLeaf : Leaf {
     }
 
     public override NodeState GetState() {
+        if (!bot.attackTarget) {
+            return NodeState.Failure;
+        }
         if (!started) {
             started = true;
-            target = bot.attackTarget;
+            target = bot.attackTarget.transform;
             targetPos = (Vector2)target.position + (Random.insideUnitCircle * randoDist);
 
             swingMax = Random.Range(0.2f, maxWig);
             swingTimer = swingMax;
         }
-        if (target) {
-            swingTimer -= Time.deltaTime;
-            if (swingTimer <= 0) {
-                swingTimer = swingMax;
+        swingTimer -= Time.deltaTime;
+        if (swingTimer <= 0) {
+            swingTimer = swingMax;
+            if (target)
                 targetPos = (Vector2)target.position + (Random.insideUnitCircle * randoDist);
 
-            }
-            bot.Move(targetPos);
         }
+        bot.Move(targetPos);
         timer -= Time.deltaTime;
         if (timer <= 0) {
             timer = timerMax;
@@ -116,13 +121,15 @@ public class ChargeLeaf : Leaf {
     }
 
     public override NodeState GetState() {
+        if (!bot.attackTarget) {
+            return NodeState.Failure;
+        }
         if (!started) {
             started = true;
-
         }
         timer -= Time.deltaTime;
         bot.Dash();
-        bot.Move(bot.attackTarget.position);
+        bot.Move(bot.attackTarget.transform.position);
         if (timer <= 0) {
             timer = timerMax;
             started = false;
@@ -148,9 +155,11 @@ public class FocusLeaf : Leaf {
     }
 
     public override NodeState GetState() {
+        if (!bot.attackTarget)
+            return NodeState.Failure;
         if (!started) {
             started = true;
-            Vector2 target = ((Vector2)bot.attackTarget.position - body.weapon.pointer.ForcePoint).normalized;
+            Vector2 target = ((Vector2)bot.attackTarget.transform.position - body.weapon.pointer.ForcePoint).normalized;
             target = bot.transform.InverseTransformDirection(target);
             target = new Vector2(target.x + UnityEngine.Random.Range(-0.1f, 0.1f), target.y).normalized;
             bot.Move(bot.transform.TransformDirection(target));
@@ -180,21 +189,23 @@ public class AimLeaf : Leaf {
 		scaleFactor = _scaleFactor;
 		bot = _bot;
 		if (bot.attackTarget != null) {
-			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.position) * scaleFactor + Random.Range(0.5f,1.2f);
+			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.transform.position) * scaleFactor + Random.Range(0.5f,1.2f);
 		}
 		started = false;
 	}
 
 	public override NodeState GetState() {
+        if (!bot.attackTarget) {
+            return NodeState.Failure;
+        }
 		if (!started) {
 			if (bot.attackTarget == null) {
 				return NodeState.Failure;
 			}
 			started = true;
-			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.position) * scaleFactor + Random.Range(0.5f,1.2f);
-			aimTarget = (Vector2)bot.attackTarget.position;// + Random.insideUnitCircle * Mathf.Tan (0.5f);
+			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.transform.position) * scaleFactor + Random.Range(0.5f,1.2f);
+			aimTarget = (Vector2)bot.attackTarget.transform.position;// + Random.insideUnitCircle * Mathf.Tan (0.5f);
 
-			Debug.Log(bot.GetComponent<Rigidbody2D>());
 			//bot.body.rb.constraints = RigidbodyConstraints2D.FreezePosition;
 			return NodeState.Running;
 		}
@@ -245,7 +256,6 @@ public class VolleyLeaf : Leaf {
             return NodeState.Running;
         }
         if (started) {
-            //Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + shoottimer);
 
             shoottimer -= Time.deltaTime;
             bot.pointer = bot.body.weapon.pointer;
@@ -317,12 +327,15 @@ public class MoveTargetLeaf : Leaf {
     BasicBot bot;
     Transform target;
 
-    public MoveTargetLeaf(BasicBot _bot, Transform _target) : base() {
+    public MoveTargetLeaf(BasicBot _bot, GameObject _target) : base() {
         bot = _bot;
-        target = _target;
+        target = (_target.transform == null) ? null : _target.transform;
     }
 
     public override NodeState GetState() {
+        if (!target) {
+            return NodeState.Failure;
+        }
         //if (Vector2.Distance(target.position, bot.gameObject.transform.position) > bot.squad.SquadRadius) {
         bot.Move(target.position);
         return NodeState.Success;
@@ -345,40 +358,6 @@ public class MoveLeaf : Leaf {
     }
 }
 
-/*
-//TODO Maybe just replace RegroupLeaf with MoveTarget?
-public class RegroupLeaf : Leaf {
-    bool started = false;
-	BasicBot bot;
-	Transform target;
-    Transform pos;
-
-	public RegroupLeaf(BasicBot _bot) : base() {
-		bot = _bot;
-		target = null;
-        pos = bot.transform;
-	}
-
-	public override NodeState GetState() {
-        if (!started) {
-            started = true;
-            //target = bot.squad.officer();
-        }
-		if (target == null) {
-			return NodeState.Failure;
-		}
-        /*if (Vector2.Distance(target.position, pos.position) > bot.GetCommander().SquadRadius()) {
-			bot.SetTarget (target.position);
-			return NodeState.Running;
-		} else {
-            started = false;
-			return NodeState.Success;
-		}
-		return NodeState.Failure;
-	}
-}
-*/
-
 public class FleeLeaf : Leaf {
     bool started = false;
     BasicBot bot;
@@ -390,7 +369,7 @@ public class FleeLeaf : Leaf {
     public override NodeState GetState() {
         if (!started) {
             started = true;
-            bot.Move(new Vector2(bot.transform.position.x, 100)); //TODO Get flee direction from squad or something
+            bot.Move(new Vector2(bot.transform.position.x, bot.squad.direction*-10000)); //TODO Get flee direction from squad or something
         }
         bot.Dash();
         return NodeState.Running;

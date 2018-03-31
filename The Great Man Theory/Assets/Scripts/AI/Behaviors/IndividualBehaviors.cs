@@ -19,10 +19,7 @@ public class SwordTree : DefaultTree {
             }),
             new Selector("priority 2", new List<Node>() {
                 new Sequencer("fight", new List<Node>() {
-                    new Gate(delegate() {
-                        return (bot.attackTarget && Vector2.Distance(bot.transform.position, bot.attackTarget.position) < 100)
-                        ? NodeState.Success: NodeState.Failure;
-                    }, "Fight Gate"),
+                    new Gate(delegate() {return (bot.attackTarget == null) ? NodeState.Failure : NodeState.Success; }),
                     new RandomSelector("Fight", new List<Node>() {
                         new WiggleLeaf(bot),
                         new Sequencer("Prepare", new List<Node>() {
@@ -30,7 +27,7 @@ public class SwordTree : DefaultTree {
                             new ChargeLeaf(bot)
                         })
                     }, new List<int>() {
-                        0, 1
+                        1, 0
                     })
                 })
             }),
@@ -65,7 +62,7 @@ public class ArquebusTree : DefaultTree {
 				new Sequencer("fight!", new List<Node>() {
 					new Gate(delegate() {
 						// Debug.Log("Acting: " + (bot.attackTarget != null && Vector2.Distance(bot.transform.position, bot.attackTarget.position) < 100));
-						return (bot.attackTarget && Vector2.Distance(bot.transform.position, bot.attackTarget.position) < 100)
+						return (bot.attackTarget && Vector2.Distance(bot.transform.position, bot.attackTarget.transform.position) < 100)
 							? NodeState.Success: NodeState.Failure;
 					}, "Fight Gate"),
 					//new IntervalGate(5),
@@ -79,7 +76,6 @@ public class ArquebusTree : DefaultTree {
 				
 			})
 		};
-		Debug.Log("Arqubussy");
 
 		rootNode = new Selector("root", (priorityBuckets));
 	}

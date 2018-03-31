@@ -14,7 +14,7 @@ public class BasicBot : MonoBehaviour {
 
 	public Squad squad;
 
-    public Transform attackTarget; //Current Attack Target
+    public GameObject attackTarget = null; //Current Attack Target
 
 	protected List<Command> commandlist;
 
@@ -44,6 +44,8 @@ public class BasicBot : MonoBehaviour {
     void Start () {
 		switch (body.unitType) {
 		case UnitType.Pike:
+            maintree = new SwordTree(this);
+            break;
 		case UnitType.Longsword:
 		case UnitType.Sword:
 			maintree = new SwordTree(this);
@@ -90,9 +92,14 @@ public class BasicBot : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (GameManager.state == GameState.Gameplay) {
-            maintree.Traverse();
-            Cull();
-            SetMoveState();
+            if (attackTarget == null) {
+                attackTarget =squad.GetEnemy();
+            }
+            if (maintree != null) {
+                maintree.Traverse();
+                Cull();
+                SetMoveState();
+            }
         }
 	}
 
@@ -107,7 +114,6 @@ public class BasicBot : MonoBehaviour {
 	}
 
 	public void Command(Command comm, int priority) {
-        Debug.Log("aghoiehwgo;ieahsg;lkl;eshgvioebsyafoshflewl");
         commandlist.Add (comm);
 		maintree.insertAtPriority (comm.subtree, priority);
 	}
@@ -203,8 +209,7 @@ public class BasicBot : MonoBehaviour {
 		if (other.collider.CompareTag ("Weapon")) {
 			Team side = other.collider.transform.parent.GetComponentInChildren<Body>().team;
 			if (side != body.team) {
-				attackTarget = other.collider.transform;
-                Debug.Log("SETTEM UP");
+				attackTarget = other.collider.gameObject;
 			}
 		}
 	}

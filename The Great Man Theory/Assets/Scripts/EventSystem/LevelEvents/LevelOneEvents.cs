@@ -25,7 +25,7 @@ public class LevelOneEvents : EventManager {
 
 	public IEnumerator BoundingEnemiesTarget() {
 
-        boundingEnemies.Command = delegate () { boundingEnemies.TargetCommand(playerTransform); };
+        boundingEnemies.Command = delegate () { boundingEnemies.TargetCommand(playerTransform.gameObject); };
 
         yield return null;
     }
