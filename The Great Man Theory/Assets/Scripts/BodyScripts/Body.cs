@@ -52,6 +52,8 @@ public class Body : MonoBehaviour {
 
     BodySoundbox soundbox;
 
+    bool paused = false;
+
     void Start () {
         rb = GetComponent<Rigidbody2D>();
         health = maxHealth;
@@ -72,9 +74,13 @@ public class Body : MonoBehaviour {
     void Update() {
         if (GameManager.state != GameState.Gameplay) {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            paused = true;
         }
-        else
+        else if (paused && GameManager.state == GameState.Gameplay) {
             rb.constraints = RigidbodyConstraints2D.None;
+            paused = false;
+        }
+        
     }
 
     public void Hit(float force, Vector2 hitPoint, bool puncturing = false, bool playerHit = false) {

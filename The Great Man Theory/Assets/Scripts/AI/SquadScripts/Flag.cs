@@ -10,11 +10,14 @@ public class Flag : MonoBehaviour {
     public void Setup() {
         zone = GetComponent<CircleCollider2D>();
         zone.radius = squad.SquadRadius;
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
         if (collider.CompareTag("Body") || !squad.enemies.Contains(collider.transform)) {
-            if (collider.GetComponent<Body>().team != carrier.body.team) {
+            Body colliderBody = collider.GetComponent<Body>();
+            Debug.Log("collider body" + colliderBody);
+            if (colliderBody.team != carrier.body.team) {
                 squad.enemies.Add(collider.transform);
                 squad.Command = delegate () { squad.AttackIntruder(collider.transform); };
             }
