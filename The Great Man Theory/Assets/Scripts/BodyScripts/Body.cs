@@ -21,6 +21,8 @@ public class Body : MonoBehaviour {
     [HideInInspector]
     public SpriteRenderer lLowerArm;
 
+    public bool horse = false;
+
     public Sprite[] bodySprites;
     public Sprite[] headSprites;
 
@@ -66,8 +68,10 @@ public class Body : MonoBehaviour {
 
         soundbox = GetComponentInChildren<BodySoundbox>();
 
-        SetColors();
-        ApplyColors();
+        if (!horse) {
+            SetColors();
+            ApplyColors();
+        }
         CheckHealth();
     }
 

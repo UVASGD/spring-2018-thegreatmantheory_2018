@@ -56,18 +56,19 @@ public class Squad : MonoBehaviour {
     }
 
     void Update() {
+        if (!UpdateMinions()) {
+            Destroy(gameObject);
+            return;
+        }
         time -= Time.deltaTime;
         UpdateEnemies();
         if (time <= 0) {
             Debug.Log("Time Less than or equal to zero");
             if (Command != null) {
-                Debug.Log("Calling Command");
-                Debug.Log("Command:" + Command);
                 Command();
             }
             time = interval;
         }
-        UpdateMinions();
     }
 
     public void SetDefaultBehavior(SquadType s) {
@@ -148,10 +149,9 @@ public class Squad : MonoBehaviour {
             }
     }
 
-    public void UpdateMinions() {
-        if (minions.Count == 0) {
-            Destroy(gameObject);
-            return;
+    public bool UpdateMinions() {
+        if (minions.Count < 1) {
+            return false;
         }
         for (int i = 0; i < minions.Count; i++) {
             BasicBot b = minions[i];
@@ -163,10 +163,10 @@ public class Squad : MonoBehaviour {
 
             flag.carrier = officer;
         }
+        return true;
     }
 
     public void FiringLine() {
-        Debug.Log("Start of FiringLine");
         foreach (BasicBot b in minions) {
             b.Command(new Command(
                 new VolleyLeaf(b, 
@@ -179,10 +179,12 @@ public class Squad : MonoBehaviour {
     }
 
     public void UpdateEnemies() {
-        for (int i = 0; i < enemies.Count; i++) {
-            GameObject g = enemies[i];
-            if (g == null)
-                enemies.Remove(g);
+        if (enemies.Count > 0) {
+            for (int i = 0; i < enemies.Count; i++) {
+                GameObject g = enemies[i];
+                if (g == null)
+                    enemies.Remove(g);
+            }
         }
     }
 
