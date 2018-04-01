@@ -90,7 +90,7 @@ public class RangedWeapon : Weapon {
             fx.Play();
         }
 		if (gunbox != null) {
-            Debug.Log("BOOMBOOMBOOM");
+            // Debug.Log("BOOMBOOMBOOM");
 			gunbox.Shoot();
 		}
     }

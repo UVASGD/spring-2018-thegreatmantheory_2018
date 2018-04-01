@@ -20,7 +20,7 @@ public class MouseControl : MonoBehaviour {
 
     float originalDrag;
     float dashDrag;
-    int dashMax = 1;
+    public float dashMax = 2f;
     float dashTimer;
     //float dashThreshold;
 
