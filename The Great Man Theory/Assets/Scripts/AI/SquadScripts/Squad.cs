@@ -58,6 +58,7 @@ public class Squad : MonoBehaviour {
     void Update() {
         time -= Time.deltaTime;
         UpdateEnemies();
+        UpdateMinions();
         if (time <= 0) {
             Debug.Log("Time Less than or equal to zero");
             if (Command != null) {
