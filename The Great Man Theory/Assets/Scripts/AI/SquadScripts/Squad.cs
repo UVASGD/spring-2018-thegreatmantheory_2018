@@ -148,7 +148,8 @@ public class Squad : MonoBehaviour {
     }
 
     public void UpdateMinions() {
-        foreach (BasicBot b in minions) {
+        for (int i = 0; i < minions.Count; i++) {
+            BasicBot b = minions[i];
             if (!b || b.Ded)
                 minions.Remove(b);
         }
@@ -175,9 +176,11 @@ public class Squad : MonoBehaviour {
     }
 
     public void UpdateEnemies() {
-        foreach (GameObject g in enemies)
+        for (int i = 0; i < enemies.Count; i++) {
+            GameObject g = enemies[i];
             if (g == null)
                 enemies.Remove(g);
+        }
     }
 
     public GameObject GetEnemy() {
