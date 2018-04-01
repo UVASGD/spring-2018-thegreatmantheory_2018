@@ -59,7 +59,10 @@ public class Squad : MonoBehaviour {
         time -= Time.deltaTime;
         UpdateEnemies();
         if (time <= 0) {
+            Debug.Log("Time Less than or equal to zero");
             if (Command != null) {
+                Debug.Log("Calling Command");
+                Debug.Log("Command:" + Command);
                 Command();
             }
             time = interval;
@@ -76,7 +79,8 @@ public class Squad : MonoBehaviour {
                 break;
             case SquadType.FiringLine:
                 // fukkitup
-                Command = delegate () { FiringLine(); };
+                Debug.Log("In FiringLine Case");
+                Command = delegate () { FiringLine(); Debug.Log("Delegate is being done"); };
                 break;
         }
     }
@@ -158,6 +162,7 @@ public class Squad : MonoBehaviour {
     }
 
     public void FiringLine() {
+        Debug.Log("Start of FiringLine");
         foreach (BasicBot b in minions) {
             b.Command(new Command(
                 new VolleyLeaf(b, 
@@ -165,6 +170,7 @@ public class Squad : MonoBehaviour {
                 ), 10000f)
             , 0);
         }
+        Debug.Log("Command Set");
         SetDefaultBehavior(SquadType.Hold);
     }
 

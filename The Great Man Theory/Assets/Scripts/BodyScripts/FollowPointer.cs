@@ -50,7 +50,7 @@ public class FollowPointer : MonoBehaviour {
 
 		if (body.GetRelativePointVelocity(forcePoint).magnitude < maxSpeed) {
 			body.AddForceAtPosition(force, ForcePoint, ForceMode2D.Impulse);
-			body.AddForceAtPosition (force * -1, gunBack, ForceMode2D.Impulse); 
+			body.AddForceAtPosition (force * -0.95f, gunBack, ForceMode2D.Impulse); 
 		}
 	}
 }
