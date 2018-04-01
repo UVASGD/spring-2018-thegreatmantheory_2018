@@ -49,16 +49,19 @@ public class BasicBot : MonoBehaviour {
         }
 
         switch (body.unitType) {
-		case UnitType.Pike:
-            maintree = new SwordTree(this);
-            break;
-		case UnitType.Longsword:
-		case UnitType.Sword:
-			maintree = new SwordTree(this);
-			break;
-		case UnitType.Arquebus:
-			maintree = new ArquebusTree (this);
-			break;
+		    case UnitType.Pike:
+                maintree = new SwordTree(this);
+                break;
+		    case UnitType.Longsword:
+		    case UnitType.Sword:
+			    maintree = new SwordTree(this);
+			    break;
+		    case UnitType.Arquebus:
+			    maintree = new ArquebusTree (this);
+			    break;
+            case UnitType.HorseSword:
+                maintree = new CavalryTree(this);
+                break;
 		}
 		commandlist = new List<Command> ();
 

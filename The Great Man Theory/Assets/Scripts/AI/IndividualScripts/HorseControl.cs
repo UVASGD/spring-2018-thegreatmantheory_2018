@@ -12,6 +12,8 @@ public class HorseControl : MonoBehaviour {
     public bool player = false;
     public BasicBot rider = null;
 
+    public Collider2D collider;
+
     //Rigidbody2D body;
 
     Camera cam;
@@ -27,6 +29,7 @@ public class HorseControl : MonoBehaviour {
         //body = GetComponent<Rigidbody2D>();
         bodyPointer = GetComponent<FollowPointer>();
         cam = Camera.main;
+        Physics2D.IgnoreCollision(collider, rider.GetComponent<Collider2D>());
 	}
 	
 	// Update is called once per frame
@@ -64,10 +67,11 @@ public class HorseControl : MonoBehaviour {
         localHeadForce = new Vector2(localHeadForce.x, 0f);
         head.TargetPos = transform.TransformVector(localHeadForce);
         head.Forces();
-
+        /*
         Vector2 localBodyForce = transform.InverseTransformVector(target - bodyPointer.ForcePoint);
         localBodyForce = new Vector2(0f, localHeadForce.y);
         bodyPointer.TargetPos = transform.TransformVector(localHeadForce);
         bodyPointer.Forces();
+        */
     }
 }
