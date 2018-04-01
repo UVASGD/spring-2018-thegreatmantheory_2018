@@ -65,14 +65,9 @@ public class HorseControl : MonoBehaviour {
         head.TargetPos = transform.TransformVector(localHeadForce);
         head.Forces();
 
-        if (veloc > 0f) {
-            bodyPointer.TargetPos = transform.up * veloc;
-            bodyPointer.Forces();
-            veloc -= velocReduce * Time.deltaTime;
-        }
-        else if (veloc > maxVeloc) {
-            veloc = maxVeloc;
-        }
-
+        Vector2 localBodyForce = transform.InverseTransformVector(target - bodyPointer.ForcePoint);
+        localBodyForce = new Vector2(0f, localHeadForce.y);
+        bodyPointer.TargetPos = transform.TransformVector(localHeadForce);
+        bodyPointer.Forces();
     }
 }

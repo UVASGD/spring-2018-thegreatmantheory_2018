@@ -149,7 +149,7 @@ public class Squad : MonoBehaviour {
 
     public void UpdateMinions() {
         foreach (BasicBot b in minions) {
-            if (b.Ded)
+            if (!b || b.Ded)
                 minions.Remove(b);
         }
         if (minions.Count == 0)

@@ -213,7 +213,6 @@ public class BasicBot : MonoBehaviour {
 		if (other.collider.CompareTag ("Weapon")) {
 			Team side = other.collider.transform.parent.GetComponentInChildren<Body>().team;
 			if (side != body.team) {
-                Debug.Log("EEEEEE");
 				attackTarget = other.collider.gameObject;
 			}
 		}
