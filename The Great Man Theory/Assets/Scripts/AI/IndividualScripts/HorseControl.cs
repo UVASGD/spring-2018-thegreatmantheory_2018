@@ -9,6 +9,9 @@ public class HorseControl : MonoBehaviour {
 
     Vector2 target;
 
+    public bool player = false;
+    public BasicBot rider = null;
+
     //Rigidbody2D body;
 
     Camera cam;
@@ -34,12 +37,17 @@ public class HorseControl : MonoBehaviour {
     }
 
     void GetInput() {
-        target = cam.ScreenToWorldPoint(Input.mousePosition);
-        if (Input.GetMouseButton(1)) {
-            mouseDown = true;
+        if (player) {
+            target = cam.ScreenToWorldPoint(Input.mousePosition);
+            if (Input.GetMouseButton(1)) {
+                mouseDown = true;
+            }
+            else
+                mouseDown = false;
         }
-        else
-            mouseDown = false;
+        else if (rider) {
+            target = rider.target;
+        }
     }
 
     void OldGetInput() {
@@ -57,18 +65,10 @@ public class HorseControl : MonoBehaviour {
         head.TargetPos = transform.TransformVector(localHeadForce);
         head.Forces();
 
-        /*
-        head.TargetPos = (target - head.ForcePoint);
-        Vector2 forwards = body.transform.up;
-        Debug.Log(forwards);
-        head.TargetPos = Vector2.Scale(head.TargetPos, new Vector2(forwards.y, 0f));
-        head.Forces();
-        */
         if (veloc > 0f) {
             bodyPointer.TargetPos = transform.up * veloc;
             bodyPointer.Forces();
             veloc -= velocReduce * Time.deltaTime;
-            Debug.Log("Veloc: " + veloc.ToString());
         }
         else if (veloc > maxVeloc) {
             veloc = maxVeloc;

@@ -12,6 +12,8 @@ public class BasicBot : MonoBehaviour {
     public Body body;
     public FollowPointer pointer;
 
+    public Vector2 target = Vector2.zero;
+
 	public Squad squad;
 
     public GameObject attackTarget = null; //Current Attack Target
@@ -119,7 +121,8 @@ public class BasicBot : MonoBehaviour {
 		maintree.insertAtPriority (comm.subtree, priority);
 	}
 
-    public void Move(Vector2 target) {
+    public void Move(Vector2 _target) {
+        target = _target;
         if (!pointer) pointer = body.weapon.pointer;
         pointer.TargetPos = (target - pointer.ForcePoint);
         pointer.Forces();
@@ -210,6 +213,7 @@ public class BasicBot : MonoBehaviour {
 		if (other.collider.CompareTag ("Weapon")) {
 			Team side = other.collider.transform.parent.GetComponentInChildren<Body>().team;
 			if (side != body.team) {
+                Debug.Log("EEEEEE");
 				attackTarget = other.collider.gameObject;
 			}
 		}
