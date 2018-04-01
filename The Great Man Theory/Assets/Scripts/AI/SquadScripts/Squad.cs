@@ -107,7 +107,7 @@ public class Squad : MonoBehaviour {
         }
     }
 
-    public void TargetCommand(GameObject target, BasicBot bot = null, float timeLeft = -1, int priority = 3) {
+    public void TargetCommand(GameObject target, BasicBot bot = null, float timeLeft = -1, int priority = 2) {
         timeLeft = (timeLeft < 0) ? interval : timeLeft;
         foreach (BasicBot b in minions) {
             if (bot)
@@ -174,7 +174,6 @@ public class Squad : MonoBehaviour {
                 ), 10000f)
             , 0);
         }
-        Debug.Log("Command Set");
         SetDefaultBehavior(SquadType.Hold);
     }
 
