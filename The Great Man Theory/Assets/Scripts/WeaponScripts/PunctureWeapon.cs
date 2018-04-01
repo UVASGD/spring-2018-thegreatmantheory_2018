@@ -11,7 +11,7 @@ public class PunctureWeapon : Weapon {
     float stabTime;
     bool stabFlag;
 
-    float maxStuck = 2;
+    public float maxStuck = 0.5f;
     float stuckTime;
     bool stuckFlag;
 
@@ -21,7 +21,7 @@ public class PunctureWeapon : Weapon {
     public float midPoint;
 
     int aimAssist = 400; //The force with which the weapon yoinks into the body upon stabbing
-    int breakForce = 400; //The force required for the fixedjoint in the body to be broken
+    public int breakForce = 400; //The force required for the fixedjoint in the body to be broken
 
     // Use this for initialization
     protected override void Start () {

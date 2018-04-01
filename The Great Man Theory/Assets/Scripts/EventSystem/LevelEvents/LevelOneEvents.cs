@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelOneEvents : EventManager {
 
@@ -19,8 +20,16 @@ public class LevelOneEvents : EventManager {
 
     Camera cam;
 
+    int deadEnemies = 0;
+
     void Start() {
         cam = Camera.main;
+    }
+
+    void Update() {
+        if (deadEnemies >= 2) {
+            StartCoroutine("WIN");
+        }
     }
 
 	public IEnumerator BoundingEnemiesTarget() {
@@ -70,6 +79,16 @@ public class LevelOneEvents : EventManager {
 
         // if (enemyGuns.squadType != SquadType.FiringLine)
         //    enemyGuns.SetDefaultBehavior(SquadType.FiringLine);
+        yield return null;
+    }
+
+    public IEnumerator DeadEnemy() {
+        deadEnemies++;
+        yield return null;
+    }
+
+    public IEnumerator WIN() {
+        SceneManager.LoadScene("WIN");
         yield return null;
     }
 }
