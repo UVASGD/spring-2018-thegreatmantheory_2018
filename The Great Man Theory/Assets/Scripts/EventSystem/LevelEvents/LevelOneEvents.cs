@@ -62,11 +62,14 @@ public class LevelOneEvents : EventManager {
 
     public IEnumerator StopFriendlyGuns() {
         // friendlyGuns.Command = delegate () { friendlyGuns.Halt(); };
-        if (friendlyGuns.squadType != SquadType.FiringLine)
+        if (friendlyGuns.squadType != SquadType.FiringLine) {
+            Debug.Log("Before Behavior Set");
             friendlyGuns.SetDefaultBehavior(SquadType.FiringLine);
+            Debug.Log("After Behavior Set");
+        }
 
-        if (enemyGuns.squadType != SquadType.FiringLine)
-            enemyGuns.SetDefaultBehavior(SquadType.FiringLine);
+        // if (enemyGuns.squadType != SquadType.FiringLine)
+        //    enemyGuns.SetDefaultBehavior(SquadType.FiringLine);
         yield return null;
     }
 }
