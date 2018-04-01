@@ -82,7 +82,7 @@ public class Squad : MonoBehaviour {
             case SquadType.FiringLine:
                 // fukkitup
                 Debug.Log("In FiringLine Case");
-                Command = delegate () { FiringLine(); Debug.Log("Delegate is being done"); };
+                Command = delegate () { Debug.Log("Delegate is being done"); FiringLine();  };
                 break;
         }
     }
