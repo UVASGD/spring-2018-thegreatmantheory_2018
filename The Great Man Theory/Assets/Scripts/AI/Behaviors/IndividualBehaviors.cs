@@ -104,4 +104,3 @@ public class CavalryTree : DefaultTree {
         rootNode = new Selector("root", (priorityBuckets));
     }
 }
-}
