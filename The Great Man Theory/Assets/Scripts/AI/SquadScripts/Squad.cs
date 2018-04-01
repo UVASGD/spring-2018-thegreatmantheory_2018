@@ -58,7 +58,6 @@ public class Squad : MonoBehaviour {
     void Update() {
         time -= Time.deltaTime;
         UpdateEnemies();
-        UpdateMinions();
         if (time <= 0) {
             Debug.Log("Time Less than or equal to zero");
             if (Command != null) {
@@ -68,6 +67,7 @@ public class Squad : MonoBehaviour {
             }
             time = interval;
         }
+        UpdateMinions();
     }
 
     public void SetDefaultBehavior(SquadType s) {
@@ -149,13 +149,15 @@ public class Squad : MonoBehaviour {
     }
 
     public void UpdateMinions() {
+        if (minions.Count == 0) {
+            Destroy(gameObject);
+            return;
+        }
         for (int i = 0; i < minions.Count; i++) {
             BasicBot b = minions[i];
             if (!b || b.Ded)
                 minions.Remove(b);
         }
-        if (minions.Count == 0)
-            Destroy(gameObject);
         if (!flag.carrier) {
             officer = minions[Random.Range(0, minions.Count)];
 
