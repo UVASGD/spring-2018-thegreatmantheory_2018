@@ -256,13 +256,13 @@ public class VolleyLeaf : Leaf {
             return NodeState.Running;
         }
         if (started) {
-
             shoottimer -= Time.deltaTime;
             bot.pointer = bot.body.weapon.pointer;
             bot.pointer.TargetPos = (aimTarget - bot.pointer.ForcePoint);
             bot.pointer.BalanceForces(bot.body.weapon.transform.position);
+            Debug.Log("SHOOT TIMER: " + shoottimer);
             if (shoottimer <= 0) {
-
+                Debug.Log("SHould Shoot");
                 ((RangedWeapon)bot.body.weapon).Trigger();
                 started = false;
                 bot.Brace(false);
