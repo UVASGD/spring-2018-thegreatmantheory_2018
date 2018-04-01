@@ -177,6 +177,7 @@ public class Squad : MonoBehaviour {
     public GameObject GetEnemy() {
         if (enemies.Count > 0)
             return enemies[Random.Range(0, enemies.Count)];
+        SetDefaultBehavior(squadType);
         return null;
     }
 }

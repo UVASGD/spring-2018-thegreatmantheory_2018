@@ -42,7 +42,11 @@ public class BasicBot : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		switch (body.unitType) {
+        if (!body) {
+            body = GetComponent<Body>();
+        }
+
+        switch (body.unitType) {
 		case UnitType.Pike:
             maintree = new SwordTree(this);
             break;
@@ -57,9 +61,6 @@ public class BasicBot : MonoBehaviour {
 		commandlist = new List<Command> ();
 
         rb = gameObject.GetComponent<Rigidbody2D>();
-        if (!body) {
-            body = GetComponent<Body>();
-        }
 
         originalDrag = rb.drag;
         dashDrag = originalDrag * 0.1f;
@@ -92,9 +93,9 @@ public class BasicBot : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (GameManager.state == GameState.Gameplay) {
-            if (attackTarget == null) {
-                attackTarget =squad.GetEnemy();
-            }
+            if (attackTarget == null)
+                if (squad)
+                    attackTarget =squad.GetEnemy();
             if (maintree != null) {
                 maintree.Traverse();
                 Cull();
@@ -215,6 +216,7 @@ public class BasicBot : MonoBehaviour {
 	}
 
     void OnDestroy() {
-        squad.UpdateMinions();    
+        if (squad)
+            squad.UpdateMinions();    
     }
 }

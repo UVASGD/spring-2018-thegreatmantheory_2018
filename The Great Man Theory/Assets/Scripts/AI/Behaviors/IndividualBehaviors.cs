@@ -80,3 +80,28 @@ public class ArquebusTree : DefaultTree {
 		rootNode = new Selector("root", (priorityBuckets));
 	}
 }
+
+public class CavalryTree : DefaultTree {
+    public CavalryTree(BasicBot bot) {
+        priorityBuckets = new List<Node>() {
+            new Selector("priority 0", new List<Node>() {}),
+            new Selector("priority 1", new List<Node>() {
+				//Wounded node here
+			}),
+            new Selector("priority 2", new List<Node>() {
+			}),
+            new Selector("priority 3", new List<Node>() {
+                new Sequencer("Cavalry Charge", new List<Node>() {
+                    new CavalryChargeLeaf(bot),
+                    new CavalryRecenterLeaf(bot)
+                })
+            }),
+            new Selector("priority 4", new List<Node>() {
+				//Idle node here
+			})
+        };
+
+        rootNode = new Selector("root", (priorityBuckets));
+    }
+}
+}

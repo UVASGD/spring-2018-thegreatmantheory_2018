@@ -359,7 +359,6 @@ public class MoveLeaf : Leaf {
 }
 
 public class FleeLeaf : Leaf {
-    bool started = false;
     BasicBot bot;
 
     public FleeLeaf(BasicBot _bot) : base() {
@@ -367,11 +366,78 @@ public class FleeLeaf : Leaf {
     }
 
     public override NodeState GetState() {
-        if (!started) {
-            started = true;
-            bot.Move(new Vector2(bot.transform.position.x, bot.squad.direction*-10000)); //TODO Get flee direction from squad or something
-        }
+        bot.Move(new Vector2(bot.transform.position.x, bot.squad.direction * -10000));
         bot.Dash();
+        return NodeState.Running;
+    }
+}
+
+public class CavalryChargeLeaf : Leaf {
+    bool started = false;
+    BasicBot bot;
+    Transform target;
+    Vector2 chargeTarget;
+    float timerMax;
+    float timer;
+
+    public CavalryChargeLeaf(BasicBot _bot) : base() {
+        bot = _bot;
+        timerMax = 3;
+        timer = timerMax;
+    }
+
+    public override NodeState GetState() {
+        if (!bot.attackTarget)
+            return NodeState.Failure;
+        if (!started) {
+            target = bot.attackTarget.transform;
+            chargeTarget = (target.position - bot.transform.position).normalized * 25;
+            started = true;
+        }
+        timer -= Time.deltaTime;
+        bot.Dash();
+        bot.Move(target.position);
+        if (timer <= 0) {
+            timer = timerMax + Random.Range(-1f, 1f);
+            started = false;
+            return NodeState.Success;
+        }
+        return NodeState.Running;
+    }
+}
+
+public class CavalryRecenterLeaf : Leaf {
+    bool started = false;
+    BasicBot bot;
+    Transform target;
+    Vector2 recenterTarget;
+    float timerMax;
+    float timer;
+
+    int recenterDist = 25; //TODO Determine whether this is good
+
+    public CavalryRecenterLeaf(BasicBot _bot) {
+        bot = _bot;
+        timerMax = 3;
+        timer = timerMax;
+    }
+
+    public override NodeState GetState() {
+        if (!bot.attackTarget)
+            return NodeState.Failure;
+        if (!started) {
+            target = bot.attackTarget.transform;
+            recenterTarget = (Vector2)target.position + (Random.insideUnitCircle * recenterDist);
+            started = true;
+        }
+        timer -= Time.deltaTime;
+        bot.Dash();
+        bot.Move(target.position);
+        if (timer <= 0) {
+            timer = timerMax + Random.Range(-1f, 1f);
+            started = false;
+            return NodeState.Success;
+        }
         return NodeState.Running;
     }
 }
