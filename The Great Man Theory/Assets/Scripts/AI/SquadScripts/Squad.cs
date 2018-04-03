@@ -153,15 +153,14 @@ public class Squad : MonoBehaviour {
         if (minions.Count < 1) {
             return false;
         }
+        if (!flag.carrier) {
+            officer = minions[Random.Range(0, minions.Count)];
+            flag.carrier = officer;
+        }
         for (int i = 0; i < minions.Count; i++) {
             BasicBot b = minions[i];
             if (!b || b.Ded)
                 minions.Remove(b);
-        }
-        if (!flag.carrier) {
-            officer = minions[Random.Range(0, minions.Count)];
-
-            flag.carrier = officer;
         }
         return true;
     }
