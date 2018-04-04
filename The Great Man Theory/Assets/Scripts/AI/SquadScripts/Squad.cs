@@ -56,18 +56,19 @@ public class Squad : MonoBehaviour {
     }
 
     void Update() {
-        if (!UpdateMinions()) {
-            Destroy(gameObject);
-            return;
-        }
         time -= Time.deltaTime;
         UpdateEnemies();
         if (time <= 0) {
-            Debug.Log("Time Less than or equal to zero");
             if (Command != null) {
                 Command();
             }
             time = interval;
+        }
+    }
+
+    public void Unfreeze() {
+        foreach (BasicBot b in minions) {
+            b.body.paused = false;
         }
     }
 
@@ -81,8 +82,7 @@ public class Squad : MonoBehaviour {
                 break;
             case SquadType.FiringLine:
                 // fukkitup
-                Debug.Log("In FiringLine Case");
-                Command = delegate () { Debug.Log("Delegate is being done"); FiringLine();  };
+                Command = delegate () { FiringLine(); };
                 break;
         }
     }
@@ -149,6 +149,21 @@ public class Squad : MonoBehaviour {
             }
     }
 
+    /*
+    public void UpdateMinions() {
+        foreach (BasicBot b in minions) {
+            if (b.Ded)
+                minions.Remove(b);
+        }
+        if (minions.Count == 0)
+            Destroy(gameObject);
+        if (!flag.carrier) {
+            officer = minions[Random.Range(0, minions.Count)];
+
+            flag.carrier = officer;
+        }
+   }
+   */
     public bool UpdateMinions() {
         if (minions.Count < 1) {
             return false;
@@ -177,13 +192,9 @@ public class Squad : MonoBehaviour {
     }
 
     public void UpdateEnemies() {
-        if (enemies.Count > 0) {
-            for (int i = 0; i < enemies.Count; i++) {
-                GameObject g = enemies[i];
-                if (g == null)
-                    enemies.Remove(g);
-            }
-        }
+        foreach (GameObject g in enemies)
+            if (g == null)
+                enemies.Remove(g);
     }
 
     public GameObject GetEnemy() {
