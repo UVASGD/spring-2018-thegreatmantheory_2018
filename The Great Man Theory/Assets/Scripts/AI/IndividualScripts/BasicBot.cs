@@ -97,7 +97,7 @@ public class BasicBot : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (GameManager.state == GameState.Gameplay) {
+        if (GameManager.state == GameState.Gameplay || body.cutsceneOverride) {
             if (attackTarget == null)
                 if (squad)
                     attackTarget =squad.GetEnemy();

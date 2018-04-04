@@ -122,10 +122,10 @@ public class DialogueManager : MonoBehaviour {
     }
 
     public void SkipDialogue() {
-        bool hasEvent = false;
+        bool shouldSkip = true;
 
         StopAllCoroutines();
-        while (sentences.Count > 0 && !hasEvent) {
+        while (sentences.Count > 0 && shouldSkip) {
 
             Sentence sentence = sentences.Dequeue();
 
@@ -138,11 +138,12 @@ public class DialogueManager : MonoBehaviour {
 
                 StopAllCoroutines();
                 StartCoroutine(TypeSentence(sentence));
-                hasEvent = true;
+                if (sentence.speaker.name != "Skip")
+                    shouldSkip = false;
             }
         }
 
-        if (sentences.Count == 0 && !hasEvent) {
+        if (sentences.Count == 0 && shouldSkip) {
             EndDialogue();
             return;
         }

@@ -66,9 +66,17 @@ public class Squad : MonoBehaviour {
         }
     }
 
-    public void Unfreeze() {
+    public void Cutscene() {
         foreach (BasicBot b in minions) {
-            b.body.paused = false;
+            // b.body.Unfreeze();
+            b.body.cutsceneOverride = true;
+        }
+    }
+
+    public void EndCutscene() {
+        foreach (BasicBot b in minions) {
+            // b.body.Unfreeze();
+            b.body.cutsceneOverride = false;
         }
     }
 
@@ -149,21 +157,6 @@ public class Squad : MonoBehaviour {
             }
     }
 
-    /*
-    public void UpdateMinions() {
-        foreach (BasicBot b in minions) {
-            if (b.Ded)
-                minions.Remove(b);
-        }
-        if (minions.Count == 0)
-            Destroy(gameObject);
-        if (!flag.carrier) {
-            officer = minions[Random.Range(0, minions.Count)];
-
-            flag.carrier = officer;
-        }
-   }
-   */
     public bool UpdateMinions() {
         if (minions.Count < 1) {
             return false;

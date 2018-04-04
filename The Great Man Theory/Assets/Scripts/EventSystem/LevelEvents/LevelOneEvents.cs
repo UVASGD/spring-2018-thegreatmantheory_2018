@@ -84,6 +84,8 @@ public class LevelOneEvents : EventManager {
     }
 
     public IEnumerator FriendlyGunsFire() {
+        // Debug.Log("SHOOTEM");
+        friendlyGuns.Cutscene();
         if (friendlyGuns.squadType != SquadType.FiringLine) {
             friendlyGuns.squadType = SquadType.FiringLine;
             friendlyGuns.SetDefaultBehavior(SquadType.FiringLine);
@@ -97,9 +99,9 @@ public class LevelOneEvents : EventManager {
 
     public IEnumerator StopFriendlyGuns() {
 
-        friendlyGuns.direction = -1;
         friendlyGuns.squadType = SquadType.Advance;
         friendlyGuns.SetDefaultBehavior(SquadType.Advance);
+        friendlyGuns.direction = -1;
 
         yield return null;
     }
