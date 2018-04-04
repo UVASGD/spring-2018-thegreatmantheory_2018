@@ -13,12 +13,12 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         ManagerGetter.gm = this;
-        state = GameState.Gameplay;
+        // state = GameState.Gameplay;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        Debug.Log(state);
 	}
 }
 

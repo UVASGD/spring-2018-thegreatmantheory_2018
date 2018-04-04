@@ -66,6 +66,12 @@ public class Squad : MonoBehaviour {
         }
     }
 
+    public void Unfreeze() {
+        foreach (BasicBot b in minions) {
+            b.body.paused = false;
+        }
+    }
+
     public void SetDefaultBehavior(SquadType s) {
         switch (s) {
             case SquadType.Hold:

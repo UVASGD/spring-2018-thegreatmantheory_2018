@@ -60,11 +60,13 @@ public class LevelOneEvents : EventManager {
     }
 
     public IEnumerator Pause() {
+        Debug.Log("PAUSED");
         GameManager.state = GameState.Paused;
         yield return null;
     }
 
     public IEnumerator Gameplay() {
+        Debug.Log("GAMEPLAY");
         GameManager.state = GameState.Gameplay;
         yield return null;
     }
@@ -72,9 +74,8 @@ public class LevelOneEvents : EventManager {
     public IEnumerator HaltFriendlyGuns() {
         // friendlyGuns.Command = delegate () { friendlyGuns.Halt(); };
         if (friendlyGuns.squadType != SquadType.Hold) {
-            Debug.Log("Before Behavior Set");
+            friendlyGuns.squadType = SquadType.Hold;
             friendlyGuns.SetDefaultBehavior(SquadType.Hold);
-            Debug.Log("After Behavior Set");
         }
 
         // if (enemyGuns.squadType != SquadType.FiringLine)
@@ -84,9 +85,8 @@ public class LevelOneEvents : EventManager {
 
     public IEnumerator FriendlyGunsFire() {
         if (friendlyGuns.squadType != SquadType.FiringLine) {
-            Debug.Log("Before Behavior Set");
+            friendlyGuns.squadType = SquadType.FiringLine;
             friendlyGuns.SetDefaultBehavior(SquadType.FiringLine);
-            Debug.Log("After Behavior Set");
         }
 
         TimeTrigger trigger = friendlyGuns.GetComponent<TimeTrigger>();
@@ -98,6 +98,7 @@ public class LevelOneEvents : EventManager {
     public IEnumerator StopFriendlyGuns() {
 
         friendlyGuns.direction = -1;
+        friendlyGuns.squadType = SquadType.Advance;
         friendlyGuns.SetDefaultBehavior(SquadType.Advance);
 
         yield return null;

@@ -54,7 +54,7 @@ public class Body : MonoBehaviour {
 
     BodySoundbox soundbox;
 
-    bool paused = false;
+    public bool paused = false;
 
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -76,7 +76,8 @@ public class Body : MonoBehaviour {
     }
 
     void Update() {
-        if (GameManager.state != GameState.Gameplay) {
+        if (!paused && GameManager.state != GameState.Gameplay) {
+            Debug.Log("FROZEN!");
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             paused = true;
         }
