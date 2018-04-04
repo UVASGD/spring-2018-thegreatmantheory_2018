@@ -149,6 +149,7 @@ public class Squad : MonoBehaviour {
             }
     }
 
+    /*
     public void UpdateMinions() {
         foreach (BasicBot b in minions) {
             if (b.Ded)
@@ -161,6 +162,22 @@ public class Squad : MonoBehaviour {
 
             flag.carrier = officer;
         }
+   }
+   */
+    public bool UpdateMinions() {
+        if (minions.Count < 1) {
+            return false;
+        }
+        if (!flag.carrier) {
+            officer = minions[Random.Range(0, minions.Count)];
+            flag.carrier = officer;
+        }
+        for (int i = 0; i < minions.Count; i++) {
+            BasicBot b = minions[i];
+            if (!b || b.Ded)
+                minions.Remove(b);
+        }
+        return true;
     }
 
     public void FiringLine() {
