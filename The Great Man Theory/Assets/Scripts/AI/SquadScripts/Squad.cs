@@ -64,6 +64,8 @@ public class Squad : MonoBehaviour {
             }
             time = interval;
         }
+        if (!UpdateMinions())
+            Destroy(gameObject);
     }
 
     public void Cutscene() {
