@@ -52,7 +52,7 @@ public class Body : MonoBehaviour {
 
     bool alreadyDead = false;
 
-    BodySoundbox soundbox;
+    public BodySoundbox soundbox;
 
     bool paused = false;
     public bool cutsceneOverride = false;

@@ -382,7 +382,7 @@ public class CavalryChargeLeaf : Leaf {
 
     public CavalryChargeLeaf(BasicBot _bot) : base() {
         bot = _bot;
-        timerMax = 3;
+        timerMax = 2;
         timer = timerMax;
     }
 
@@ -396,7 +396,7 @@ public class CavalryChargeLeaf : Leaf {
         }
         timer -= Time.deltaTime;
         bot.Dash();
-        bot.Move(target.position);
+        bot.Move(chargeTarget);
         if (timer <= 0) {
             timer = timerMax + Random.Range(-1f, 1f);
             started = false;
@@ -426,13 +426,14 @@ public class CavalryRecenterLeaf : Leaf {
         if (!bot.attackTarget)
             return NodeState.Failure;
         if (!started) {
+            Debug.Log("DAB");
             target = bot.attackTarget.transform;
             recenterTarget = (Vector2)target.position + (Random.insideUnitCircle * recenterDist);
             started = true;
         }
         timer -= Time.deltaTime;
         bot.Dash();
-        bot.Move(target.position);
+        bot.Move(recenterTarget);
         if (timer <= 0) {
             timer = timerMax + Random.Range(-1f, 1f);
             started = false;

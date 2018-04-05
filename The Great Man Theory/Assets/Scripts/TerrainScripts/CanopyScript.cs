@@ -31,14 +31,12 @@ public class CanopyScript : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collider) {
         if (collider.CompareTag("Body")) {
-            Debug.Log("ENTER");
             collisions++;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collider) {
         if (collider.CompareTag("Body")) {
-            Debug.Log("eXIT");
             collisions--;
         }
     }
