@@ -99,6 +99,8 @@ public class LevelOneEvents : EventManager {
 
     public IEnumerator StopFriendlyGuns() {
 
+        Debug.Log("AAAAAAAAA");
+
         friendlyGuns.squadType = SquadType.Advance;
         friendlyGuns.SetDefaultBehavior(SquadType.Advance);
         friendlyGuns.direction = -1;
