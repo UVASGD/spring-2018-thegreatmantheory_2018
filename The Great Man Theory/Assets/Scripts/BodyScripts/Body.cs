@@ -54,7 +54,8 @@ public class Body : MonoBehaviour {
 
     BodySoundbox soundbox;
 
-    public bool paused = false;
+    bool paused = false;
+    public bool cutsceneOverride = false;
 
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -63,10 +64,12 @@ public class Body : MonoBehaviour {
         if (!weapon)
             weapon = transform.parent.GetComponentInChildren<Weapon>();
 
-		fx = effectGen.GetComponent<ParticleSystem> ();
+        if (!fx)
+		    fx = effectGen.GetComponent<ParticleSystem> ();
 		fxMain = fx.main;
 
-        soundbox = GetComponentInChildren<BodySoundbox>();
+        if (!soundbox)
+            soundbox = GetComponentInChildren<BodySoundbox>();
 
         if (!horse) {
             SetColors();
@@ -76,12 +79,11 @@ public class Body : MonoBehaviour {
     }
 
     void Update() {
-        if (!paused && GameManager.state != GameState.Gameplay) {
-            Debug.Log("FROZEN!");
+        if (!paused && GameManager.state != GameState.Gameplay && !cutsceneOverride) {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             paused = true;
         }
-        else if (paused && GameManager.state == GameState.Gameplay) {
+        else if (paused && GameManager.state == GameState.Gameplay || cutsceneOverride) {
             rb.constraints = RigidbodyConstraints2D.None;
             paused = false;
         }
