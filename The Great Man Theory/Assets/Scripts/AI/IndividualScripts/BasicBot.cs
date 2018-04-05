@@ -48,22 +48,7 @@ public class BasicBot : MonoBehaviour {
             body = GetComponent<Body>();
         }
 
-        switch (body.unitType) {
-		    case UnitType.Pike:
-                maintree = new SwordTree(this);
-                break;
-		    case UnitType.Longsword:
-		    case UnitType.Sword:
-			    maintree = new SwordTree(this);
-			    break;
-		    case UnitType.Arquebus:
-			    maintree = new ArquebusTree (this);
-			    break;
-            case UnitType.HorseSword:
-                maintree = new CavalryTree(this);
-                break;
-		}
-		commandlist = new List<Command> ();
+        ResetCommand();
 
         rb = gameObject.GetComponent<Rigidbody2D>();
 
@@ -123,6 +108,25 @@ public class BasicBot : MonoBehaviour {
         commandlist.Add (comm);
 		maintree.insertAtPriority (comm.subtree, priority);
 	}
+
+    public void ResetCommand() {
+        switch (body.unitType) {
+            case UnitType.Pike:
+                maintree = new SwordTree(this);
+                break;
+            case UnitType.Longsword:
+            case UnitType.Sword:
+                maintree = new SwordTree(this);
+                break;
+            case UnitType.Arquebus:
+                maintree = new ArquebusTree(this);
+                break;
+            case UnitType.HorseSword:
+                maintree = new CavalryTree(this);
+                break;
+        }
+        commandlist = new List<Command>();
+    }
 
     public void Move(Vector2 _target) {
         target = _target;

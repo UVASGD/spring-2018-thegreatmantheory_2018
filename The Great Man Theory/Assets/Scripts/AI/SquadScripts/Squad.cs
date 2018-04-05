@@ -184,6 +184,12 @@ public class Squad : MonoBehaviour {
         SetDefaultBehavior(SquadType.Hold);
     }
 
+    public void ResetCommand() {
+        foreach (BasicBot b in minions) {
+            b.ResetCommand();
+        }
+    }
+
     public void UpdateEnemies() {
         foreach (GameObject g in enemies)
             if (g == null)
