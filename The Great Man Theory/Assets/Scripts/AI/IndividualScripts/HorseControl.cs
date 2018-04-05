@@ -12,8 +12,6 @@ public class HorseControl : MonoBehaviour {
     public bool player = false;
     public BasicBot rider = null;
 
-    public Collider2D collider;
-
     //Rigidbody2D body;
 
     Camera cam;
@@ -29,7 +27,7 @@ public class HorseControl : MonoBehaviour {
         //body = GetComponent<Rigidbody2D>();
         bodyPointer = GetComponent<FollowPointer>();
         cam = Camera.main;
-        Physics2D.IgnoreCollision(collider, rider.GetComponent<Collider2D>());
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), rider.GetComponent<Collider2D>());
 	}
 	
 	// Update is called once per frame
