@@ -6,24 +6,35 @@ using UnityEngine.SceneManagement;
 public class LevelOneEvents : EventManager {
 
     public Squad friendlyGuns;
-    public Squad enemyGuns;
+    public Squad friendlyPike;
 
-    public Transform enemyWaypoint;
-    public Transform frinedlyWaypoint;
+    public Squad enemyGuns;
+    public Squad enemyPike;
+
+    // public Transform enemyWaypoint;
+    // public Transform frinedlyWaypoint;
 
     public DialogueTrigger focusText;
+    public DialogueTrigger chargeDialogue;
 
     public Squad boundingEnemies;
-    public Transform playerTransform;
+    Transform playerTransform;
 
     public Transform focusPoint;
+
+    CameraPoints camPoints;
 
     Camera cam;
 
     int deadEnemies = 0;
 
-    void Start() {
+    void Awake() {
         cam = Camera.main;
+    }
+
+    void Start() {
+        camPoints = CameraPoints.Instance;
+        playerTransform = ManagerGetter.gm.player.transform;
     }
 
     void Update() {
@@ -77,6 +88,7 @@ public class LevelOneEvents : EventManager {
             friendlyGuns.squadType = SquadType.Hold;
             friendlyGuns.SetDefaultBehavior(SquadType.Hold);
         }
+        friendlyGuns.ResetCommand();
 
         // if (enemyGuns.squadType != SquadType.FiringLine)
         //    enemyGuns.SetDefaultBehavior(SquadType.FiringLine);
@@ -97,12 +109,32 @@ public class LevelOneEvents : EventManager {
         yield return null;
     }
 
-    public IEnumerator StopFriendlyGuns() {
-
+    public IEnumerator RetreatFriendlyGuns() {
         friendlyGuns.squadType = SquadType.Advance;
         friendlyGuns.SetDefaultBehavior(SquadType.Advance);
         friendlyGuns.direction = -1;
         friendlyGuns.ResetCommand();
+        friendlyGuns.EndCutscene();
+
+        yield return null;
+    }
+
+    public IEnumerator ChargePike() {
+        friendlyPike.squadType = SquadType.Advance;
+        friendlyPike.SetDefaultBehavior(SquadType.Advance);
+
+        enemyPike.squadType = SquadType.Advance;
+        enemyPike.SetDefaultBehavior(SquadType.Advance);
+
+        yield return null;
+    }
+
+    public IEnumerator ChargeDialogue() {
+        chargeDialogue.TriggerDialogue();
+        yield return null;
+    }
+
+    public IEnumerator EnemyPikeDefeated() {
 
         yield return null;
     }
@@ -114,6 +146,13 @@ public class LevelOneEvents : EventManager {
 
     public IEnumerator WIN() {
         SceneManager.LoadScene("WIN");
+        yield return null;
+    }
+
+    public IEnumerator FocusPoint1() {
+        CameraFollow follow = cam.GetComponent<CameraFollow>();
+
+        follow.followPoint = camPoints.CameraPoint(0);
         yield return null;
     }
 }

@@ -10,9 +10,15 @@ public class GameManager : MonoBehaviour {
 
     public static GameState state = GameState.Gameplay;
 
+    public GameObject player;
+
+    void Awake() {
+        ManagerGetter.gm = this;
+    }
+
 	// Use this for initialization
 	void Start () {
-        ManagerGetter.gm = this;
+        // ManagerGetter.gm = this;
         // state = GameState.Gameplay;
 	}
 	
