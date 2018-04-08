@@ -7,13 +7,19 @@ public class AudioManager : MonoBehaviour {
 
     private static bool created = false;
 
+    public AudioClip Dvorak;
+    public AudioClip TeDeum;
+    public AudioClip Triomphe;
+
     public AudioClip roblox_oof;
     public AudioClip ded_egh;
     public AudioClip blade_hit;
     public AudioClip wood_thunk;
     public AudioClip gun_shot;
 
-    Dictionary<string, AudioClip> dict;
+    Dictionary<string, AudioClip> audioDict;
+    Dictionary<string, AudioClip> musicDict;
+
 
     #region Singleton
 
@@ -31,7 +37,7 @@ public class AudioManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        dict = new Dictionary<string, AudioClip> {
+        audioDict = new Dictionary<string, AudioClip> {
             { "body_death", ded_egh },
             { "body_hit", roblox_oof },
             { "blade_hit", blade_hit },
@@ -48,8 +54,14 @@ public class AudioManager : MonoBehaviour {
             string path = "Assets/Audio/LetterSounds/English_" + letter + ".mp3";
 
             AudioClip clip = (AudioClip) AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
-            dict[name] = clip;
+            audioDict[name] = clip;
         }
+
+        musicDict = new Dictionary<string, AudioClip> {
+            { "Dvorak", Dvorak },
+            { "TeDeum", TeDeum },
+            { "Triomphe", Triomphe },
+        };
     }
 	
 	// Update is called once per frame
@@ -58,8 +70,15 @@ public class AudioManager : MonoBehaviour {
 	}
 
     public AudioClip GetSound(string soundName) {
-        if (dict.ContainsKey(soundName))
-            return dict[soundName];
+        if (audioDict.ContainsKey(soundName))
+            return audioDict[soundName];
+        else
+            return null;
+    }
+
+    public AudioClip GetSong(string songName) {
+        if (musicDict.ContainsKey(songName))
+            return musicDict[songName];
         else
             return null;
     }
