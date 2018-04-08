@@ -76,12 +76,15 @@ public class HorseControl : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.collider.CompareTag("Body")) {
-            ContactPoint2D[] contactPoints = new ContactPoint2D[1];
-            collision.GetContacts(contactPoints);
-            ContactPoint2D contact = contactPoints[0];
-            Vector2 contactPoint = contact.point;
+            Body body = collision.collider.GetComponent<Body>();
+            if (body.team != GetComponent<Body>().team) {
+                ContactPoint2D[] contactPoints = new ContactPoint2D[1];
+                collision.GetContacts(contactPoints);
+                ContactPoint2D contact = contactPoints[0];
+                Vector2 contactPoint = contact.point;
 
-            collision.collider.GetComponent<Body>().Hit(collision.relativeVelocity.magnitude, contactPoint);
+                collision.collider.GetComponent<Body>().Hit(collision.relativeVelocity.magnitude, contactPoint);
+            }
         }
     }
 }
