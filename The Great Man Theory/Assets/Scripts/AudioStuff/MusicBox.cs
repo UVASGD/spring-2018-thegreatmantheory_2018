@@ -14,12 +14,13 @@ public class MusicBox : EventManager {
 	}
 	
 	public IEnumerator TeDeum() {
-        source.PlayOneShot(am.GetSound(""));
+        source.PlayOneShot(am.GetSong("TeDeum"));
         yield return null;
     }
     
     public IEnumerator Dvorak() {
-        source.PlayOneShot(am.GetSound(""));
+        Debug.Log("SOIEHGOPHEISOPHAOIPHGOIPEHOSIHGIPESHESOIPH");
+        source.PlayOneShot(am.GetSong("Dvorak"));
         yield return null;
     }
 }

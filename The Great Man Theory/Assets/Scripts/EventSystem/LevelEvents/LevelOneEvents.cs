@@ -126,6 +126,9 @@ public class LevelOneEvents : EventManager {
         enemyPike.squadType = SquadType.Advance;
         enemyPike.SetDefaultBehavior(SquadType.Advance);
 
+        enemyGuns.squadType = SquadType.Advance;
+        enemyGuns.SetDefaultBehavior(SquadType.Advance);
+
         yield return null;
     }
 
