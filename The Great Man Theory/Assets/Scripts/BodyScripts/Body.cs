@@ -83,7 +83,7 @@ public class Body : MonoBehaviour {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             paused = true;
         }
-        else if (paused && GameManager.state == GameState.Gameplay || cutsceneOverride) {
+        else if ((paused && GameManager.state == GameState.Gameplay) || cutsceneOverride) {
             rb.constraints = RigidbodyConstraints2D.None;
             paused = false;
         }

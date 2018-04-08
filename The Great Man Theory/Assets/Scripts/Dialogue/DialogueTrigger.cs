@@ -8,8 +8,15 @@ public class DialogueTrigger : MonoBehaviour {
     public bool triggerOnStart = false;
 
     void Start() {
+        //if (triggerOnStart) {
+        //    TriggerDialogue();
+        //}
+    }
+
+    void LateUpdate() {
         if (triggerOnStart) {
             TriggerDialogue();
+            triggerOnStart = false;
         }
     }
 

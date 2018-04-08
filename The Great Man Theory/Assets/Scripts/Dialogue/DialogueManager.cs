@@ -11,6 +11,9 @@ public class DialogueManager : MonoBehaviour {
     public Text dialogueText;
     public Image portrait;
 
+    public Button continueDialogue;
+    public Button skipDialogue;
+
     public Animator animator;
 
     public Queue<Sentence> sentences;
@@ -79,6 +82,15 @@ public class DialogueManager : MonoBehaviour {
         if (sentence.strEvent != null)
             sentence.strEvent.Invoke("");
 
+        if (sentence.runOn) {
+            continueDialogue.enabled = false;
+            skipDialogue.enabled = false;
+        }
+        else {
+            continueDialogue.enabled = true;
+            skipDialogue.enabled = true;
+        }
+
         StopAllCoroutines();
         StartCoroutine(TypeSentence(sentence));
 
@@ -119,6 +131,18 @@ public class DialogueManager : MonoBehaviour {
             }
             yield return null;
         }
+        if (sentence.runOn) {
+            StartCoroutine(RunWait(sentence.runWait));
+        }
+    }
+
+    IEnumerator RunWait (float wait) {
+
+        while (wait > 0f) {
+            wait -= Time.deltaTime;
+            yield return null;
+        }
+        DisplayNextSentence();
     }
 
     public void SkipDialogue() {
