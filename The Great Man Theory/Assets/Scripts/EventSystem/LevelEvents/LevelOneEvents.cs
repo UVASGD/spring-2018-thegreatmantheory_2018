@@ -134,6 +134,11 @@ public class LevelOneEvents : EventManager {
         yield return null;
     }
 
+    public IEnumerator EnemyPikeDefeated() {
+
+        yield return null;
+    }
+
     public IEnumerator DeadEnemy() {
         deadEnemies++;
         yield return null;
