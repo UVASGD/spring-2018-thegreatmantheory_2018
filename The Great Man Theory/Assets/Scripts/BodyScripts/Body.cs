@@ -144,6 +144,9 @@ public class Body : MonoBehaviour {
 
     void CheckHealth() {
         if (health <= 0) {
+            if (horse && GetComponent<HorseControl>().rider) {
+                Destroy(GetComponent<HorseControl>().rider.gameObject);
+            }
             if (deadBody && !alreadyDead) {
                 alreadyDead = true;
                 Transform dead = Instantiate(deadBody, transform.position, Quaternion.Euler(0, 0, (Vector2.SignedAngle(Vector2.up, rb.velocity))));
