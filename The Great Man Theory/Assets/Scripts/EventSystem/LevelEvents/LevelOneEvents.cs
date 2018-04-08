@@ -119,7 +119,7 @@ public class LevelOneEvents : EventManager {
         yield return null;
     }
 
-    public IEnumerator ChargePike() {
+    public IEnumerator Charge() {
         friendlyPike.squadType = SquadType.Advance;
         friendlyPike.SetDefaultBehavior(SquadType.Advance);
 
