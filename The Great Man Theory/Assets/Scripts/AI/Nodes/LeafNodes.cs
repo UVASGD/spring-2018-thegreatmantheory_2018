@@ -426,7 +426,6 @@ public class CavalryRecenterLeaf : Leaf {
         if (!bot.attackTarget)
             return NodeState.Failure;
         if (!started) {
-            Debug.Log("DAB");
             target = bot.attackTarget.transform;
             recenterTarget = (Vector2)target.position + (Random.insideUnitCircle * recenterDist);
             started = true;

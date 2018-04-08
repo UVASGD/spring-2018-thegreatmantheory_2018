@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -71,5 +72,16 @@ public class HorseControl : MonoBehaviour {
         bodyPointer.TargetPos = transform.TransformVector(localHeadForce);
         bodyPointer.Forces();
         */
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.collider.CompareTag("Body")) {
+            ContactPoint2D[] contactPoints = new ContactPoint2D[1];
+            collision.GetContacts(contactPoints);
+            ContactPoint2D contact = contactPoints[0];
+            Vector2 contactPoint = contact.point;
+
+            collision.collider.GetComponent<Body>().Hit(collision.relativeVelocity.magnitude, contactPoint);
+        }
     }
 }
