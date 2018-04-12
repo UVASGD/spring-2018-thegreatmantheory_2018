@@ -391,7 +391,7 @@ public class CavalryChargeLeaf : Leaf {
             return NodeState.Failure;
         if (!started) {
             target = bot.attackTarget.transform;
-            chargeTarget = (target.position - bot.transform.position).normalized * 25;
+            chargeTarget = (target.position - bot.transform.position).normalized * 50;
             started = true;
         }
         timer -= Time.deltaTime;
@@ -414,7 +414,7 @@ public class CavalryRecenterLeaf : Leaf {
     float timerMax;
     float timer;
 
-    int recenterDist = 25; //TODO Determine whether this is good
+    int recenterDist = 50; //TODO Determine whether this is good
 
     public CavalryRecenterLeaf(BasicBot _bot) {
         bot = _bot;

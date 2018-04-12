@@ -23,8 +23,8 @@ public class HorseControl : MonoBehaviour {
     float velocReduce = 120f;
 
     bool mouseDown = false;
-	// Use this for initialization
-	void Start () {
+
+    void Start () {
         //body = GetComponent<Rigidbody2D>();
         bodyPointer = GetComponent<FollowPointer>();
         cam = Camera.main;
