@@ -140,7 +140,7 @@ public class BasicBot : MonoBehaviour {
         if ((int)dash > 0) { //Reduce drag and turn on drag state
             if ((int)dash > 1) {
                 originalDrag = rb.drag;
-                dashDrag = rb.drag * 0.01f;
+                dashDrag = rb.drag * 0.1f;
                 rb.drag = dashDrag;
                 dash = MoveState.on;
             }

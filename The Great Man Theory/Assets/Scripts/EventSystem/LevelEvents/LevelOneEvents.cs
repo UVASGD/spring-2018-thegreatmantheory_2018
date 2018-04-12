@@ -16,6 +16,7 @@ public class LevelOneEvents : EventManager {
 
     public DialogueTrigger focusText;
     public DialogueTrigger chargeDialogue;
+    public DialogueTrigger firstFightDone;
 
     public Squad boundingEnemies;
     Transform playerTransform;
@@ -27,6 +28,9 @@ public class LevelOneEvents : EventManager {
     Camera cam;
 
     int deadEnemies = 0;
+    int firstEnemiesDead = 0;
+
+    bool hasDoneEnemyPikeDefeat = false;
 
     void Awake() {
         cam = Camera.main;
@@ -41,6 +45,8 @@ public class LevelOneEvents : EventManager {
         if (deadEnemies >= 2) {
             StartCoroutine("WIN");
         }
+        if (firstEnemiesDead == 2 && !hasDoneEnemyPikeDefeat)
+            StartCoroutine("EnemyPikeDefeated");
     }
 
 	public IEnumerator BoundingEnemiesTarget() {
@@ -71,13 +77,11 @@ public class LevelOneEvents : EventManager {
     }
 
     public IEnumerator Pause() {
-        Debug.Log("PAUSED");
         GameManager.state = GameState.Paused;
         yield return null;
     }
 
     public IEnumerator Gameplay() {
-        Debug.Log("GAMEPLAY");
         GameManager.state = GameState.Gameplay;
         yield return null;
     }
@@ -137,8 +141,14 @@ public class LevelOneEvents : EventManager {
         yield return null;
     }
 
-    public IEnumerator EnemyPikeDefeated() {
+    public IEnumerator FirstEnemyDead() {
+        firstEnemiesDead++;
+        yield return null;
+    }
 
+    public IEnumerator EnemyPikeDefeated() {
+        firstFightDone.TriggerDialogue();
+        hasDoneEnemyPikeDefeat = true;
         yield return null;
     }
 

@@ -61,8 +61,6 @@ public class DialogueManager : MonoBehaviour {
 
     public void EndDialogue() {
         animator.SetBool("IsOpen", false);
-
-        Debug.Log("Ended conversation.");
     }
 
     public void DisplayNextSentence() {
@@ -157,7 +155,6 @@ public class DialogueManager : MonoBehaviour {
             portrait.sprite = sentence.speaker.portrait;
 
             if (sentence.strEvent.GetPersistentEventCount() != 0) {
-                Debug.Log(sentence.strEvent.GetPersistentTarget(0));
                 sentence.strEvent.Invoke("");
 
                 StopAllCoroutines();

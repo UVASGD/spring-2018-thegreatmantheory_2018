@@ -19,7 +19,6 @@ public class MusicBox : EventManager {
     }
     
     public IEnumerator Dvorak() {
-        Debug.Log("SOIEHGOPHEISOPHAOIPHGOIPEHOSIHGIPESHESOIPH");
         source.PlayOneShot(am.GetSong("Dvorak"));
         yield return null;
     }

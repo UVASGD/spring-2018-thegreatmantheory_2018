@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CanopyScript : MonoBehaviour {
 
-    SpriteRenderer canopySprite;
+    public SpriteRenderer[] canopySprites;
 
     int collisions = 0;
     bool isEntered = false;
@@ -12,19 +12,24 @@ public class CanopyScript : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        canopySprite = GetComponent<SpriteRenderer>();
-        a = canopySprite.color;
+        // canopySprite = GetComponent<SpriteRenderer>();
+        if (canopySprites.Length > 0)
+            a = canopySprites[0].color;
     }
 
     private void Update() {
         if (collisions == 0) {
-            if (canopySprite.color.a < a.a) {
-                canopySprite.color = Color.Lerp(canopySprite.color, a, 0.1f);
+            foreach (SpriteRenderer canopySprite in canopySprites) {
+                if (canopySprite.color.a < a.a) {
+                    canopySprite.color = Color.Lerp(canopySprite.color, a, 0.1f);
+                }
             }
         }
         else {
-            if (canopySprite.color.a > 0.01f) {
-                canopySprite.color = Color.Lerp(canopySprite.color, Color.clear, 0.1f);
+            foreach (SpriteRenderer canopySprite in canopySprites) {
+                if (canopySprite.color.a > 0.01f) {
+                    canopySprite.color = Color.Lerp(canopySprite.color, Color.clear, 0.1f);
+                }
             }
         }
     }
