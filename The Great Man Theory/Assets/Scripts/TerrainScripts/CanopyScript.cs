@@ -35,13 +35,15 @@ public class CanopyScript : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
-        if (collider.CompareTag("Body")) {
+        GameObject parent = collider.transform.parent.gameObject;
+        if (parent && parent.CompareTag("Player")) {
             collisions++;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collider) {
-        if (collider.CompareTag("Body")) {
+        GameObject parent = collider.transform.parent.gameObject;
+        if (parent && parent.CompareTag("Player")) {
             collisions--;
         }
     }

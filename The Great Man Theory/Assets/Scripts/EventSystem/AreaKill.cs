@@ -13,7 +13,7 @@ public class AreaKill : EventTrigger {
         Body otherBody = otherObj.GetComponent<Body>();
 
         if (otherBody) {
-            Destroy(otherObj);
+            Destroy(otherObj.transform.parent.gameObject);
             strEvent.Invoke("");
             hasHappened = true;
         }
