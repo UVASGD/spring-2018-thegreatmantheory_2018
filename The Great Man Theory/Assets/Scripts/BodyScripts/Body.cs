@@ -190,6 +190,12 @@ public class Body : MonoBehaviour {
                 lowerArmColor = Color.black;
                 break;
         }
+
+        if (transform.parent.CompareTag("Player")) {
+            bodyColor = new Color(0f, 0.5f, 1f);
+            upperArmColor = new Color(1f, 0.1f, 0.1f);
+            lowerArmColor = new Color(0f, 0.5f, 1f);
+        }
     }
 
     public void ApplyColors() {
