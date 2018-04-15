@@ -9,7 +9,6 @@ public class Weapon : MonoBehaviour {
     protected Rigidbody2D targetRB;
 
     public bool player = false;
-    public float height; //TODO make this actually matter, should just match body's height
 
     public GameObject bodyObj;
     public GameObject dangerObj;
@@ -29,6 +28,7 @@ public class Weapon : MonoBehaviour {
     bool limpFlag;
     bool disableFlag;
 
+    public float DAMAGE_MULTIPLIER = 1;
 
     protected virtual void Start() {
         thisBodyCollider = bodyObj.GetComponent<Collider2D>();
@@ -80,7 +80,7 @@ public class Weapon : MonoBehaviour {
     protected virtual void HitCalc(Vector2 contactPoint, Body targetBodyScript, Collision2D collision) {
         //Calculate power of attack
         float power = collision.relativeVelocity.magnitude;
-        Hit(targetBodyScript, power, contactPoint, false, player);
+        Hit(targetBodyScript, power*DAMAGE_MULTIPLIER, contactPoint, false, player);
     }
 
     //Anomymous methods are fun, yo

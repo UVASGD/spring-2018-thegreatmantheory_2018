@@ -59,10 +59,10 @@ public class Squad : MonoBehaviour {
         time -= Time.deltaTime;
         UpdateEnemies();
         if (time <= 0) {
+            time = interval;
             if (Command != null) {
                 Command();
             }
-            time = interval;
         }
         if (!UpdateMinions())
             Destroy(gameObject);
@@ -134,6 +134,27 @@ public class Squad : MonoBehaviour {
                     }),
                 interval),
             priority);
+        }
+    }
+
+    public void PatrolCommand(Collider2D area) {
+        time = 10;
+        foreach (BasicBot b in minions) {
+            Vector2 target = new Vector2(Random.Range(area.bounds.min.x, area.bounds.max.x), Random.Range(area.bounds.min.y, area.bounds.max.y));
+            if (!area.OverlapPoint(target)) {
+                time = 0.1f;
+                return;
+            }
+            b.Command(new Command(
+                new Sequencer("Patrol", new List<Node>() {
+                    new Gate(delegate () {
+                        return (Vector2.Distance(target, b.transform.position) > Mathf.Min(10, b.squad.SquadRadius))
+                         ?NodeState.Success
+                         :NodeState.Failure;}),
+                    new MoveLeaf(b, target)
+                    }),
+                time),
+            3);
         }
     }
 
