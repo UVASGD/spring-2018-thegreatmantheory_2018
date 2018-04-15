@@ -16,7 +16,6 @@ public class DangerWeapon : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        //Check height as well, bucko
         if (collision.transform.parent) {
             if (collision.transform.parent.gameObject != holder.gameObject) {
                 if (collision.CompareTag("Body")) {

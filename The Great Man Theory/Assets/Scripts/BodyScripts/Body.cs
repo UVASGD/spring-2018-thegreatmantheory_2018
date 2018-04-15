@@ -47,9 +47,6 @@ public class Body : MonoBehaviour {
 
     public Weapon weapon;
 
-    public float height; //TODO make this a thing for elevation, and maybe use it in collisions? 
-                         //make sure to set weapon's height equal to body height
-
     bool alreadyDead = false;
 
     public BodySoundbox soundbox;

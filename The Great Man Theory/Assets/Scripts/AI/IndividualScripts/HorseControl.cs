@@ -29,6 +29,10 @@ public class HorseControl : MonoBehaviour {
         bodyPointer = GetComponent<FollowPointer>();
         cam = Camera.main;
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), rider.GetComponent<Collider2D>());
+
+        if (rider) {
+            GetComponent<Body>().team = rider.body.team;
+        }
 	}
 	
 	// Update is called once per frame
