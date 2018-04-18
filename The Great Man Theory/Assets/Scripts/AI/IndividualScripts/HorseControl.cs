@@ -30,10 +30,14 @@ public class HorseControl : MonoBehaviour {
         cam = Camera.main;
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), rider.GetComponent<Collider2D>());
 
+        Invoke("SetTeam", 0.2f);
+	}
+
+    void SetTeam() {
         if (rider) {
             GetComponent<Body>().team = rider.body.team;
         }
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {

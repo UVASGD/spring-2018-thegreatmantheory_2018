@@ -214,9 +214,9 @@ public class Squad : MonoBehaviour {
     }
 
     public void UpdateEnemies() {
-        foreach (GameObject g in enemies)
-            if (g == null)
-                enemies.Remove(g);
+        for (int i = 0; i < enemies.Count; i++)
+            if (!enemies[i])
+                enemies.RemoveAt(i);
     }
 
     public GameObject GetEnemy() {
