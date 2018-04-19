@@ -7,7 +7,13 @@ public class SquadSpawner : MonoBehaviour {
     public Squad prefab;
 
     public int maxSquads = 1;
-    int activeSquads = 0;
+    List<Squad> activeSquads = new List<Squad>();
+    public List<Squad> ActiveSquads { get { return activeSquads; } }
+    // int activeSquads = 0;
+
+    bool wasNew = false;
+    Squad newestSquad = null;
+    public Squad NewestSquad { get { return newestSquad; } }
 
     public float waitTime = 0f;
     float waiting = 0f;
@@ -24,14 +30,21 @@ public class SquadSpawner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (activeSquads < maxSquads && GameManager.state == GameState.Gameplay)
+        if (activeSquads.Count < maxSquads && GameManager.state == GameState.Gameplay)
             waiting -= Time.deltaTime;
         if (waiting <= 0f)
             MakeSquad();
-	}
+        if (newestSquad && wasNew) {
+            newestSquad = null;
+            wasNew = false;
+        }
+        else if (newestSquad && !wasNew)
+            wasNew = true;
+    }
 
-    public void SquadDeath() {
-        activeSquads--;
+    public void SquadDeath(Squad ded) {
+        // activeSquads--;
+        activeSquads.Remove(ded);
     }
 
     void MakeSquad() {
@@ -57,7 +70,9 @@ public class SquadSpawner : MonoBehaviour {
         if (spawned)
             spawned.spawner = this;
 
-        activeSquads++;
+        // activeSquads++;
+        activeSquads.Add(newSquad);
+        newestSquad = newSquad;
         waiting = waitTime;
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SquadType { Hold, Advance, FiringLine }
+public enum SquadType { Hold, Advance, FiringLine, Patrol }
 public delegate void SquadDel();
 
 public class Squad : MonoBehaviour {
@@ -25,6 +25,8 @@ public class Squad : MonoBehaviour {
 
     public List<BasicBot> minions = new List<BasicBot>();
     public List<GameObject> enemies = new List<GameObject>();
+
+    public Collider2D patrolArea;
 
 
     void Start() {
@@ -94,6 +96,9 @@ public class Squad : MonoBehaviour {
                 // fukkitup
                 Command = delegate () { FiringLine(); };
                 break;
+            case SquadType.Patrol:
+                Command = delegate () { PatrolCommand(); };
+                break;
         }
     }
 
@@ -137,11 +142,20 @@ public class Squad : MonoBehaviour {
         }
     }
 
-    public void PatrolCommand(Collider2D area) {
+    public void PatrolCommand() {
+        if (!patrolArea) {
+            SetDefaultBehavior(SquadType.Hold);
+            squadType = SquadType.Hold;
+        }
+            
+
         time = 10;
         foreach (BasicBot b in minions) {
-            Vector2 target = new Vector2(Random.Range(area.bounds.min.x, area.bounds.max.x), Random.Range(area.bounds.min.y, area.bounds.max.y));
-            if (!area.OverlapPoint(target)) {
+            Vector2 target = new Vector2(
+                Random.Range(patrolArea.bounds.min.x, patrolArea.bounds.max.x), 
+                Random.Range(patrolArea.bounds.min.y, patrolArea.bounds.max.y)
+                );
+            if (!patrolArea.OverlapPoint(target)) {
                 time = 0.1f;
                 return;
             }
