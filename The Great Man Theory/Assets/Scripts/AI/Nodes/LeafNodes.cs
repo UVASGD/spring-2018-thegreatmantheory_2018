@@ -190,6 +190,7 @@ public class AimLeaf : Leaf {
 		bot = _bot;
 		if (bot.attackTarget != null) {
 			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.transform.position) * scaleFactor + Random.Range(0.5f,1.2f);
+            shoottimer = Mathf.Clamp(shoottimer, 1, shoottimer);
 		}
 		started = false;
 	}
