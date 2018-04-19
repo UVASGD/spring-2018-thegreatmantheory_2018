@@ -190,7 +190,6 @@ public class AimLeaf : Leaf {
 		bot = _bot;
 		if (bot.attackTarget != null) {
 			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.transform.position) * scaleFactor + Random.Range(0.5f,1.2f);
-            shoottimer = Mathf.Clamp(shoottimer, 1, shoottimer);
 		}
 		started = false;
 	}
@@ -205,7 +204,8 @@ public class AimLeaf : Leaf {
 			}
 			started = true;
 			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.transform.position) * scaleFactor + Random.Range(0.5f,1.2f);
-			aimTarget = (Vector2)bot.attackTarget.transform.position;// + Random.insideUnitCircle * Mathf.Tan (0.5f);
+            shoottimer = Mathf.Clamp(shoottimer, 1, shoottimer);
+            aimTarget = (Vector2)bot.attackTarget.transform.position;// + Random.insideUnitCircle * Mathf.Tan (0.5f);
 
 			//bot.body.rb.constraints = RigidbodyConstraints2D.FreezePosition;
 			return NodeState.Running;
