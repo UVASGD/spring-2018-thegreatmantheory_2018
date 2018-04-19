@@ -12,7 +12,14 @@ public class ChasmScript : MonoBehaviour {
         }
 
         if (collider.CompareTag("DeadBody")) {
-            collider.transform.localScale = Vector3.Lerp(collider.transform.localScale, targetScale, 0.01f);
+            StartCoroutine(Fall(collider));
+        }
+    }
+
+    private IEnumerator Fall(Collider2D collider) {
+        while (collider) {
+            collider.transform.localScale = Vector3.Lerp(collider.transform.localScale, targetScale, 0.05f);
+            yield return null;
         }
     }
 }

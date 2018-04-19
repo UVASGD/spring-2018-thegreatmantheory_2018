@@ -142,7 +142,7 @@ public class Body : MonoBehaviour {
     void CheckHealth() {
         if (health <= 0) {
             if (horse && GetComponent<HorseControl>().rider) {
-                Destroy(GetComponent<HorseControl>().rider.gameObject);
+                Destroy(GetComponent<HorseControl>().rider.transform.parent.gameObject);
             }
             if (deadBody && !alreadyDead) {
                 alreadyDead = true;
