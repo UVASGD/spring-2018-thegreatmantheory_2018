@@ -44,10 +44,10 @@ public class CanopyScript : MonoBehaviour {
     }
 
     private void OnTriggerExit2D(Collider2D collider) {
-        GameObject parent = collider.transform.parent.gameObject;
+        Transform parentTransform = collider.transform.parent;
         // if (parent && parent.CompareTag("Player")) {
         Body bod = collider.gameObject.GetComponent<Body>();
-        if (bod && bod.team == Team.GoodGuys || parent && parent.CompareTag("Player")) {
+        if (bod && bod.team == Team.GoodGuys && parentTransform || parentTransform && parentTransform.gameObject.CompareTag("Player")) {
             collisions--;
         }
     }
