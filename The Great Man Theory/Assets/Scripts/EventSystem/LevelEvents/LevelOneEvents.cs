@@ -32,6 +32,9 @@ public class LevelOneEvents : EventManager {
 
     bool hasDoneEnemyPikeDefeat = false;
 
+    public Collider2D patrolArea;
+    public SquadSpawner mainSpawner;
+
     void Awake() {
         cam = Camera.main;
     }
@@ -149,6 +152,49 @@ public class LevelOneEvents : EventManager {
     public IEnumerator EnemyPikeDefeated() {
         firstFightDone.TriggerDialogue();
         hasDoneEnemyPikeDefeat = true;
+        yield return null;
+    }
+
+
+    int treeDead = 0;
+    public IEnumerator TreeDeath() {
+        treeDead++;
+        if (treeDead > 25)
+            StartCoroutine("SquadsPatrol");
+        yield return null;
+    }
+
+    bool hasPatroled = false;
+    bool donePatrol = false;
+    public IEnumerator SquadsPatrol() {
+
+        if (!hasPatroled && friendlyPike) {
+            friendlyPike.patrolArea = patrolArea;
+            friendlyPike.SetDefaultBehavior(SquadType.Patrol);
+            friendlyPike.squadType = SquadType.Patrol;
+        }
+
+        if (!hasPatroled) {
+            foreach (Squad squad in mainSpawner.ActiveSquads) {
+                squad.patrolArea = patrolArea;
+                squad.SetDefaultBehavior(SquadType.Patrol);
+                squad.squadType = SquadType.Patrol;
+            }
+        }
+
+
+        while (!donePatrol) {
+            if (!hasPatroled && mainSpawner.NewestSquad) {
+                mainSpawner.NewestSquad.patrolArea = patrolArea;
+                mainSpawner.NewestSquad.SetDefaultBehavior(SquadType.Patrol);
+                mainSpawner.NewestSquad.squadType = SquadType.Patrol;
+            }
+            yield return null;
+        }
+    }
+
+    public IEnumerator EndPatrol() {
+        donePatrol = true;
         yield return null;
     }
 
