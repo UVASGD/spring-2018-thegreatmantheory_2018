@@ -159,8 +159,8 @@ public class LevelOneEvents : EventManager {
     int treeDead = 0;
     public IEnumerator TreeDeath() {
         treeDead++;
-        if (treeDead > 25)
-            StartCoroutine("SquadsPatrol");
+        if (treeDead > 20)
+            StartCoroutine("EndPatrol");
         yield return null;
     }
 
@@ -195,6 +195,17 @@ public class LevelOneEvents : EventManager {
 
     public IEnumerator EndPatrol() {
         donePatrol = true;
+        Debug.Log("END PATORL AGOPIAEHGIEOPAIHGEIOP");
+        foreach (Squad squad in mainSpawner.ActiveSquads) {
+            squad.SetDefaultBehavior(SquadType.Advance);
+            squad.squadType = SquadType.Advance;
+        }
+        /*
+        for (int i=0; i<mainSpawner.ActiveSquads.Count / 2; i++) {
+            mainSpawner.ActiveSquads[i].SetDefaultBehavior(SquadType.Advance);
+            mainSpawner.ActiveSquads[i].squadType = SquadType.Advance;
+        }
+        */
         yield return null;
     }
 

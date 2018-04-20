@@ -12,7 +12,7 @@ public class RangedWeapon : Weapon {
 
     int shotNum = 0;
 
-    public float maxrange = 100f;
+    public float maxrange = 500f;
 
     Vector2 barrelEnd;
 
