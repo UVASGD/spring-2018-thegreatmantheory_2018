@@ -157,7 +157,7 @@ public class Squad : MonoBehaviour {
                 );
             if (!patrolArea.OverlapPoint(target)) {
                 time = 0.1f;
-                return;
+                continue;
             }
             b.Command(new Command(
                 new Sequencer("Patrol", new List<Node>() {

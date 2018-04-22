@@ -179,8 +179,6 @@ public class AimLeaf : Leaf {
 	float shoottimer;
 	float scaleFactor;
 
-	bool started;
-
 	Vector2 aimTarget;
 
 	BasicBot bot;
@@ -189,43 +187,33 @@ public class AimLeaf : Leaf {
 		scaleFactor = _scaleFactor;
 		bot = _bot;
 		if (bot.attackTarget != null) {
-			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.transform.position) * scaleFactor + Random.Range(0.5f,1.2f);
-		}
-		started = false;
+            shoottimer = Vector2.Distance(bot.transform.position, bot.attackTarget.transform.position) * scaleFactor;
+            shoottimer = Mathf.Clamp(shoottimer, 2, 7) + Random.Range(0.5f, 1.2f);
+            aimTarget = (Vector2)bot.attackTarget.transform.position;// + Random.insideUnitCircle * Mathf.Tan (0.5f);
+        }
 	}
 
 	public override NodeState GetState() {
         if (!bot.attackTarget) {
             return NodeState.Failure;
         }
-		if (!started) {
-			if (bot.attackTarget == null) {
-				return NodeState.Failure;
-			}
-			started = true;
-			shoottimer = Vector2.Distance (bot.transform.position, bot.attackTarget.transform.position) * scaleFactor + Random.Range(0.5f,1.2f);
-            shoottimer = Mathf.Clamp(shoottimer, 1, 7);
-            aimTarget = (Vector2)bot.attackTarget.transform.position;// + Random.insideUnitCircle * Mathf.Tan (0.5f);
 
-			//bot.body.rb.constraints = RigidbodyConstraints2D.FreezePosition;
-			return NodeState.Running;
+		shoottimer -= Time.deltaTime;
+		//bot.Move (aimTarget);
+		bot.pointer = bot.body.weapon.pointer;
+		bot.pointer.TargetPos = (aimTarget - bot.pointer.ForcePoint);
+		bot.pointer.BalanceForces (bot.body.weapon.transform.position);
+		if (shoottimer <= 0){
+            shoottimer = Vector2.Distance(bot.transform.position, bot.attackTarget.transform.position) * scaleFactor;
+            shoottimer = Mathf.Clamp(shoottimer, 2, 7) + Random.Range(0.5f, 1.2f) ;
+            aimTarget = (Vector2)bot.attackTarget.transform.position;// + Random.insideUnitCircle * Mathf.Tan (0.5f);
+            ((RangedWeapon)bot.body.weapon).Trigger ();
+			bot.Brace (false);
+			bot.Hold (false);
+			return NodeState.Success;
 		}
-		if (started) {
-			shoottimer -= Time.deltaTime;
-			//bot.Move (aimTarget);
-			bot.pointer = bot.body.weapon.pointer;
-			bot.pointer.TargetPos = (aimTarget - bot.pointer.ForcePoint);
-			bot.pointer.BalanceForces (bot.body.weapon.transform.position);
-			if (shoottimer <= 0){
-				((RangedWeapon)bot.body.weapon).Trigger ();
-				started = false;
-				bot.Brace (false);
-				bot.Hold (false);
-				return NodeState.Success;
-			}
-			return NodeState.Running;
-		}
-		return NodeState.Success;
+
+		return NodeState.Running;
 	}
 }
 
