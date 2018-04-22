@@ -36,6 +36,8 @@ public class LevelOneEvents : EventManager {
     public Collider2D patrolArea;
     public SquadSpawner mainSpawner;
 
+    public GameObject door;
+
     void Awake() {
         cam = Camera.main;
     }
@@ -196,25 +198,37 @@ public class LevelOneEvents : EventManager {
 
     bool endedPatrol = false;
     public IEnumerator EndPatrol() {
-        if (endedPatrol)
-            yield return null;
+        if (!endedPatrol) {
+            endedPatrol = true;
 
-        endedPatrol = true;
+            treesClearedDialogue.TriggerDialogue();
 
-        treesClearedDialogue.TriggerDialogue();
+            donePatrol = true;
+            Debug.Log("END PATORL AGOPIAEHGIEOPAIHGEIOP");
+            foreach (Squad squad in mainSpawner.ActiveSquads) {
+                squad.SetDefaultBehavior(SquadType.Advance);
+                squad.squadType = SquadType.Advance;
+            }
+            /*
+            for (int i=0; i<mainSpawner.ActiveSquads.Count / 2; i++) {
+                mainSpawner.ActiveSquads[i].SetDefaultBehavior(SquadType.Advance);
+                mainSpawner.ActiveSquads[i].squadType = SquadType.Advance;
+            }
+            */
+            StartCoroutine("AttackDoor");
+        }
+        yield return null;
+    }
 
-        donePatrol = true;
-        Debug.Log("END PATORL AGOPIAEHGIEOPAIHGEIOP");
+    public IEnumerator AttackDoor() {
+        if (friendlyPike) {
+            friendlyPike.Attack(door);
+        }
+
         foreach (Squad squad in mainSpawner.ActiveSquads) {
-            squad.SetDefaultBehavior(SquadType.Advance);
-            squad.squadType = SquadType.Advance;
+            squad.Attack(door);
         }
-        /*
-        for (int i=0; i<mainSpawner.ActiveSquads.Count / 2; i++) {
-            mainSpawner.ActiveSquads[i].SetDefaultBehavior(SquadType.Advance);
-            mainSpawner.ActiveSquads[i].squadType = SquadType.Advance;
-        }
-        */
+
         yield return null;
     }
 
