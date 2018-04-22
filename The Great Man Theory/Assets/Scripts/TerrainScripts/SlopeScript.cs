@@ -31,6 +31,6 @@ public class SlopeScript : MonoBehaviour {
 
             collider.attachedRigidbody.AddForce(slopeForce);
             //TODO SET COLLIDER ELEVATION
-        }
+                   }
     }
 }
