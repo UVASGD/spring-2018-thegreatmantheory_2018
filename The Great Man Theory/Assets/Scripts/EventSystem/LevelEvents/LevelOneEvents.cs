@@ -17,6 +17,7 @@ public class LevelOneEvents : EventManager {
     public DialogueTrigger focusText;
     public DialogueTrigger chargeDialogue;
     public DialogueTrigger firstFightDone;
+    public DialogueTrigger treesClearedDialogue;
 
     public Squad boundingEnemies;
     Transform playerTransform;
@@ -193,7 +194,15 @@ public class LevelOneEvents : EventManager {
         }
     }
 
+    bool endedPatrol = false;
     public IEnumerator EndPatrol() {
+        if (endedPatrol)
+            yield return null;
+
+        endedPatrol = true;
+
+        treesClearedDialogue.TriggerDialogue();
+
         donePatrol = true;
         Debug.Log("END PATORL AGOPIAEHGIEOPAIHGEIOP");
         foreach (Squad squad in mainSpawner.ActiveSquads) {
