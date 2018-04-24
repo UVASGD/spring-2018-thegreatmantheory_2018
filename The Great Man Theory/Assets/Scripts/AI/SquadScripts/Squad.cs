@@ -155,10 +155,10 @@ public class Squad : MonoBehaviour {
                 Random.Range(patrolArea.bounds.min.x, patrolArea.bounds.max.x), 
                 Random.Range(patrolArea.bounds.min.y, patrolArea.bounds.max.y)
                 );
-            if (!patrolArea.OverlapPoint(target)) {
-                time = 0.1f;
+            /* if (!patrolArea.OverlapPoint(target)) {
+                time = 0.01f;
                 continue;
-            }
+            } */
             b.Command(new Command(
                 new Sequencer("Patrol", new List<Node>() {
                     new Gate(delegate () {
@@ -219,6 +219,12 @@ public class Squad : MonoBehaviour {
             , 0);
         }
         SetDefaultBehavior(SquadType.Hold);
+    }
+
+    public void Attack(GameObject target) {
+        foreach (BasicBot b in minions) {
+            b.attackTarget = target;
+        }
     }
 
     public void ResetCommand() {
