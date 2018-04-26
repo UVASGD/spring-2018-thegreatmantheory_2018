@@ -37,6 +37,7 @@ public class LevelOneEvents : EventManager {
     public SquadSpawner mainSpawner;
 
     public GameObject door;
+    public GameObject[] attackPoints = new GameObject[3];
 
     void Awake() {
         cam = Camera.main;
@@ -225,8 +226,11 @@ public class LevelOneEvents : EventManager {
             friendlyPike.Attack(door);
         }
 
-        foreach (Squad squad in mainSpawner.ActiveSquads) {
-            squad.Attack(door);
+        Debug.Log("Squads on attack: " + mainSpawner.ActiveSquads.Count);
+
+        for (int i = 0; i < mainSpawner.ActiveSquads.Count; i++) {
+            Squad squad = mainSpawner.ActiveSquads[i];
+            squad.Attack(attackPoints[i]);
         }
 
         yield return null;
