@@ -31,7 +31,7 @@ public class Elevation : MonoBehaviour {
 		}
 
 		//if (Mathf.Abs(elevation - targetElevation) > (maxHeight / 100f)) {
-			elevation = Mathf.Lerp (elevation, targetElevation, 0.01f);
+			elevation = Mathf.Lerp (elevation, targetElevation, 0.5f);
 			Rescale ();
 		//}
 	}
