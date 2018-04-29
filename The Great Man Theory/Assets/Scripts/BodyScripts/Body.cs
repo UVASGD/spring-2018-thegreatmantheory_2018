@@ -40,6 +40,7 @@ public class Body : MonoBehaviour {
     public Rigidbody2D rb;
     public float maxHealth = 100f;
     float health;
+    public float Health { get { return health; } }
     public float punctureResist = 8;
     public float threshold = 2;
     //public float thresholdMultiplier = 2;
