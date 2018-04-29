@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StartTrigger : EventTrigger {
-    
+
+    protected override void Update() {
+        base.Update();
+    }
+
     void Start() {
-        strEvent.Invoke("");
+        triggered = true;
+        // strEvent.Invoke("");
     }
 }

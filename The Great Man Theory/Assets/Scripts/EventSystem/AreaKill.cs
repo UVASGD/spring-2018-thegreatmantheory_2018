@@ -6,16 +6,20 @@ public class AreaKill : EventTrigger {
 
     // public Collider2D[] triggers;
 
+    protected override void Update() {
+        base.Update();
+    }
+
     void OnTriggerEnter2D(Collider2D other) {
         Debug.Log("Is Happening");
 
         GameObject otherObj = other.gameObject;
         Body otherBody = otherObj.GetComponent<Body>();
 
-        if (otherBody) {
+        if (otherBody && !(onceOnly && triggered)) {
             Destroy(otherObj.transform.parent.gameObject);
-            strEvent.Invoke("");
-            hasHappened = true;
+            // strEvent.Invoke("");
+            triggered = true;
         }
 
     }

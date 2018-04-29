@@ -8,12 +8,13 @@ public class TimeTrigger : EventTrigger {
     public bool active = true;
 	
 	// Update is called once per frame
-	void Update () {
+	protected override void Update () {
+        // base.Update();
         if (active && time > 0f)
             time -= Time.deltaTime;
-        else if (active && !(hasHappened && onceOnly)) {
+        else if (active && !(triggered && onceOnly)) {
             strEvent.Invoke("");
-            hasHappened = true;
+            triggered = true;
         }
 	}
 }

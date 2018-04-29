@@ -22,4 +22,9 @@ public class MusicBox : EventManager {
         source.PlayOneShot(am.GetSong("Dvorak"));
         yield return null;
     }
+
+    public IEnumerator Silence() {
+        source.Stop();
+        yield return null;
+    }
 }

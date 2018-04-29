@@ -18,6 +18,7 @@ public class LevelOneEvents : EventManager {
     public DialogueTrigger chargeDialogue;
     public DialogueTrigger firstFightDone;
     public DialogueTrigger treesClearedDialogue;
+    public DialogueTrigger doorStuck;
 
     public Squad boundingEnemies;
     Transform playerTransform;
@@ -236,12 +237,41 @@ public class LevelOneEvents : EventManager {
         yield return null;
     }
 
+    public IEnumerator DoorStuck() {
+        doorStuck.TriggerDialogue();
+        yield return null;
+    }
+
+    public IEnumerator KeepFiringAssholes() {
+
+        foreach (Squad squad in mainSpawner.ActiveSquads) {
+            squad.Cutscene();
+        }
+
+        yield return null;
+    }
+
+    public IEnumerator AllIsDone() {
+
+        foreach (Squad squad in mainSpawner.ActiveSquads) {
+            squad.EndCutscene();
+        }
+
+        yield return null;
+    }
+
     public IEnumerator DeadEnemy() {
         deadEnemies++;
         yield return null;
     }
 
+    public IEnumerator PlayerDead() {
+        SceneManager.LoadScene("LevelOne");
+        yield return null;
+    }
+
     public IEnumerator WIN() {
+        GameManager.state = GameState.SceneTransition;
         SceneManager.LoadScene("WIN");
         yield return null;
     }
