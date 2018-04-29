@@ -5,6 +5,7 @@ using UnityEngine;
 public class DeathTrigger : EventTrigger {
 
 	void OnDestroy() {
+        if  (GameManager.state != GameState.SceneTransition)
         strEvent.Invoke("");
     }
 }

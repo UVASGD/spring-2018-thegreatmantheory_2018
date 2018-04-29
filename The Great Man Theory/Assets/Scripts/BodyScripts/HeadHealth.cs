@@ -31,7 +31,7 @@ public class HeadHealth : MonoBehaviour {
     void Update() {
         if (body) {
             if (Mathf.Abs(body.Health - lastHealth) > 5) {
-                Debug.Log((maxHealth - body.Health) / maxHealth);
+                // Debug.Log((maxHealth - body.Health) / maxHealth);
                 sp.color = Color.Lerp(baseColor, Color.red, (maxHealth - body.Health) / maxHealth);
                 lastHealth = body.Health;
             }

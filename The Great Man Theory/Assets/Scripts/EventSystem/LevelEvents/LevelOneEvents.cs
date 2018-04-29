@@ -266,7 +266,7 @@ public class LevelOneEvents : EventManager {
     }
 
     public IEnumerator PlayerDead() {
-        SceneManager.LoadScene("LevelOne");
+        SceneManager.LoadSceneAsync("LevelOne");
         yield return null;
     }
 
