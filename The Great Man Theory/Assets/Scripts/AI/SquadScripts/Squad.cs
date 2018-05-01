@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SquadType { Hold, Advance, FiringLine, Patrol }
+public enum SquadType { Hold, Advance, FiringLine, Patrol, TargetFollow }
 public delegate void SquadDel();
 
 public class Squad : MonoBehaviour {
@@ -27,7 +27,7 @@ public class Squad : MonoBehaviour {
     public List<GameObject> enemies = new List<GameObject>();
 
     public Collider2D patrolArea;
-
+    public GameObject target;
 
     void Start() {
         interval = 0.5f;
@@ -98,6 +98,14 @@ public class Squad : MonoBehaviour {
                 break;
             case SquadType.Patrol:
                 Command = delegate () { PatrolCommand(); };
+                break;
+            case SquadType.TargetFollow:
+                if (target) {
+                    Command = delegate () { TargetCommand(target); };
+                }
+                else {
+                    Command = null;
+                }
                 break;
         }
     }
