@@ -21,7 +21,7 @@ public class Flag : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collider) {
         if (collider.CompareTag("Body") || !squad.enemies.Contains(collider.gameObject)) {
             Body colliderBody = collider.GetComponent<Body>();
-            if (colliderBody != null && colliderBody.team != carrier.body.team) {
+            if (colliderBody != null && colliderBody.team != carrier.body.team && colliderBody.untargetable == false) {
                 if (!squad.enemies.Contains(collider.gameObject)) {
                     squad.enemies.Add(collider.gameObject);
                     if (collider.GetComponent<BasicBot>()) {
@@ -40,7 +40,8 @@ public class Flag : MonoBehaviour {
     private void OnTriggerExit2D(Collider2D collider) {
         squad.enemies.Remove(collider.gameObject);
         if (collider.CompareTag("Body")) {
-            if (collider.GetComponent<Body>().team == squad.team)
+            Body colliderBody = collider.GetComponent<Body>();
+            if (colliderBody.team == squad.team && colliderBody.untargetable == false)
                 if (collider.GetComponent<BasicBot>() != null) {
                     BasicBot bot = collider.GetComponent<BasicBot>();
                     squad.Command = delegate () { squad.TargetCommand(squad.flag.gameObject, bot); };

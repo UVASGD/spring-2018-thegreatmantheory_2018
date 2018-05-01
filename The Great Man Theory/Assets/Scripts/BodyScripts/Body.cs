@@ -55,6 +55,8 @@ public class Body : MonoBehaviour {
     bool paused = false;
     public bool cutsceneOverride = false;
 
+    public bool untargetable = false;
+
     void Start () {
         rb = GetComponent<Rigidbody2D>();
         health = maxHealth;
