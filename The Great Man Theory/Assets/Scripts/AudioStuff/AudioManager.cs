@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 public class AudioManager : MonoBehaviour {
 
@@ -51,9 +50,10 @@ public class AudioManager : MonoBehaviour {
             char charletter = (char)charint;
             string letter = charletter.ToString();
             string name = "English_" + letter;
-            string path = "Assets/Audio/LetterSounds/English_" + letter + ".mp3";
+            string path = "Audio/LetterSounds/English_" + letter; //+ ".mp3";
 
-            AudioClip clip = (AudioClip) AssetDatabase.LoadAssetAtPath(path, typeof(AudioClip));
+            AudioClip clip = (AudioClip)Resources.Load(path, typeof(AudioClip));
+            Debug.Log(clip);
             audioDict[name] = clip;
         }
 
