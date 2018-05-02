@@ -23,7 +23,7 @@ public class EventTrigger : MonoBehaviour {
         if (triggered && delayCounter < delay) {
             delayCounter += Time.deltaTime;
         }
-        else if (!done && triggered && delayCounter > delay && GameManager.state != GameState.SceneTransition) {
+        else if (!done && triggered && delayCounter >= delay && GameManager.state != GameState.SceneTransition) {
             strEvent.Invoke("");
             done = true;
         }

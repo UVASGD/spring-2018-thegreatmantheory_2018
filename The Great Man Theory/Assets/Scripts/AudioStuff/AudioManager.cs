@@ -53,7 +53,7 @@ public class AudioManager : MonoBehaviour {
             string path = "Audio/LetterSounds/English_" + letter; //+ ".mp3";
 
             AudioClip clip = (AudioClip)Resources.Load(path, typeof(AudioClip));
-            Debug.Log(clip);
+            // Debug.Log(clip);
             audioDict[name] = clip;
         }
 

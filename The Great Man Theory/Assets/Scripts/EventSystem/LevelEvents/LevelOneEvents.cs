@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class LevelOneEvents : EventManager {
 
+    public GameObject player;
+
     public Squad friendlyGuns;
     public Squad friendlyPike;
 
@@ -37,8 +39,13 @@ public class LevelOneEvents : EventManager {
     public Collider2D patrolArea;
     public SquadSpawner mainSpawner;
 
+    public SquadSpawner leftCavalry;
+    public SquadSpawner rightCavalry;
+    public SquadSpawner backCavalry;
+
     public GameObject door;
     public GameObject[] attackPoints = new GameObject[3];
+
 
     void Awake() {
         cam = Camera.main;
@@ -206,7 +213,7 @@ public class LevelOneEvents : EventManager {
             treesClearedDialogue.TriggerDialogue();
 
             donePatrol = true;
-            Debug.Log("END PATORL AGOPIAEHGIEOPAIHGEIOP");
+            // Debug.Log("END PATORL AGOPIAEHGIEOPAIHGEIOP");
             foreach (Squad squad in mainSpawner.ActiveSquads) {
                 squad.SetDefaultBehavior(SquadType.Advance);
                 squad.squadType = SquadType.Advance;
@@ -262,6 +269,28 @@ public class LevelOneEvents : EventManager {
 
     public IEnumerator DeadEnemy() {
         deadEnemies++;
+        yield return null;
+    }
+
+    public IEnumerator BackCavalryAttack() {
+        foreach (Squad squad in backCavalry.ActiveSquads) {
+            squad.Attack(player);
+        }
+        yield return null;
+    }
+
+    public IEnumerator LeftCavalryAttack() {
+        Debug.Log("Left horse should be fucking shit up");
+        foreach (Squad squad in leftCavalry.ActiveSquads) {
+            squad.Attack(player);
+        }
+        yield return null;
+    }
+
+    public IEnumerator RightCavalryAttack() {
+        foreach (Squad squad in rightCavalry.ActiveSquads) {
+            squad.Attack(player);
+        }
         yield return null;
     }
 
