@@ -3,7 +3,7 @@
 public class CameraFollow : MonoBehaviour {
 
     public Transform followPoint;
-    Vector3 offset = new Vector3(0, 0, -10);
+    public Vector3 offset = new Vector3(0, 0, -10);
     float smoothSpeed = 5f;
 
     public bool OnTarget { get { return onTarget; } }

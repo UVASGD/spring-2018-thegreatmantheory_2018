@@ -23,7 +23,7 @@ public class LevelThreeEvents : EventManager {
     }
 
     public IEnumerator PlayerDead() {
-        SceneManager.LoadSceneAsync("LevelThree");
+        //SceneManager.LoadScene("LevelThree");
         yield return null;
     }
 

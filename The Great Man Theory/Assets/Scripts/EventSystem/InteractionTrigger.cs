@@ -45,6 +45,7 @@ public class InteractionTrigger : EventTrigger {
         if (other.gameObject.CompareTag("Body") && objParent && objParent.gameObject.CompareTag("Player")) {
             Debug.Log("entered");
             entered = true;
+            sprite.color = new Color(1f, 0.92f, 0.016f, 0.5f);
             sprite.sprite = enteredSprite;
         }
     }
@@ -55,6 +56,7 @@ public class InteractionTrigger : EventTrigger {
         if (other.gameObject.CompareTag("Body") && objParent && objParent.gameObject.CompareTag("Player")) {
             Debug.Log("exited");
             entered = false;
+            sprite.color = Color.white;
             sprite.sprite = unenteredSprite;
         }
     }
