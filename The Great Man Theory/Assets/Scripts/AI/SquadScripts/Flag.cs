@@ -44,7 +44,8 @@ public class Flag : MonoBehaviour {
             if (colliderBody.team == squad.team && colliderBody.untargetable == false)
                 if (collider.GetComponent<BasicBot>() != null) {
                     BasicBot bot = collider.GetComponent<BasicBot>();
-                    squad.Command = delegate () { squad.TargetCommand(squad.flag.gameObject, bot); };
+                    if (squad.squadType != SquadType.TargetFollow)
+                        squad.Command = delegate () { squad.TargetCommand(squad.flag.gameObject, bot); };
                 }
         }
     }
