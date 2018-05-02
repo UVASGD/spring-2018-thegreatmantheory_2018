@@ -47,8 +47,8 @@ public class DialogueManager : MonoBehaviour {
 	}
 
     public void StartDialogue(Dialogue dialogue) {
-
-        animator.SetBool("IsOpen", true);
+        if (animator)
+            animator.SetBool("IsOpen", true);
 
         sentences.Clear();
 
