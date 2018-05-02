@@ -98,9 +98,9 @@ public class LevelThreeEvents : EventManager {
     }
 
     public IEnumerator FiringLine() {
-        Debug.Log("ASFGEAHGIEOSPHGOIPSEHEPSOHGIOEPSHGOIPEHOPI");
         firingLine.squadType = SquadType.FiringLine;
         firingLine.SetDefaultBehavior(SquadType.FiringLine);
+        firingLine.FiringLine();
         yield return null;
     }
 }

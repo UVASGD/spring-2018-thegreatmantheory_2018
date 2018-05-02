@@ -83,10 +83,12 @@ public class DialogueManager : MonoBehaviour {
         if (sentence.runOn) {
             if (continueDialogue)
                 continueDialogue.enabled = false;
-            skipDialogue.enabled = false;
+            if (skipDialogue)
+                skipDialogue.enabled = false;
         }
         else {
-            continueDialogue.enabled = true;
+            if (continueDialogue)
+                continueDialogue.enabled = true;
             skipDialogue.enabled = true;
         }
 

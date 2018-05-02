@@ -23,6 +23,7 @@ public class BombSpawn : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (GameManager.state != GameState.Gameplay) { return; }
         if (cooldown <= 0f) {
             float x = Random.Range(bounds.min.x, bounds.max.x);
             float y = Random.Range(bounds.min.y, bounds.max.y);

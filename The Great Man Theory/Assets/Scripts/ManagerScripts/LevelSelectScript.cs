@@ -24,6 +24,14 @@ public class LevelSelectScript : MonoBehaviour {
         StartCoroutine("LoadLevel", "WildAndFree");
     }
 
+    public void Restart() {
+        StartCoroutine("LoadLevel", SceneManager.GetActiveScene().name);
+    }
+
+    public void MainMenu() {
+        StartCoroutine("LoadLevel", "Main Menu");
+    }
+
     IEnumerator LoadLevel(string levelName) {
         i.enabled = true;
 
