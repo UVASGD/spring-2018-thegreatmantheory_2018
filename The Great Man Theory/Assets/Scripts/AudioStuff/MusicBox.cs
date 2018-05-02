@@ -23,6 +23,11 @@ public class MusicBox : EventManager {
         yield return null;
     }
 
+    public IEnumerator Triomphe() {
+        source.PlayOneShot(am.GetSong("Triomphe"));
+        yield return null;
+    }
+
     public IEnumerator Silence() {
         source.Stop();
         yield return null;
