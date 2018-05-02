@@ -28,6 +28,7 @@ public class Squad : MonoBehaviour {
 
     public Collider2D patrolArea;
     public GameObject target;
+    public float closeness = 20;
 
     void Start() {
         flag = GetComponentInChildren<Flag>();
@@ -121,13 +122,13 @@ public class Squad : MonoBehaviour {
             b.Command(new Command(
                 new Sequencer("Move", new List<Node>() {
                 new Gate(delegate () {
-                    if (Vector2.Distance(target, b.transform.position) > Mathf.Min(50, b.squad.SquadRadius))
+                    if (Vector2.Distance(target, b.transform.position) > Mathf.Min(closeness, b.squad.SquadRadius))
                         return NodeState.Success;
                     return NodeState.Failure;
                 }, "Move Gate"),
                 new MoveLeaf(b, target)
                     }),
-                interval),
+                timeLeft),
             priority);
         }
     }
@@ -141,13 +142,13 @@ public class Squad : MonoBehaviour {
             b.Command(new Command(
                 new Sequencer("MoveTarget", new List<Node>() {
                     new Gate(delegate () {
-                        return (target && Vector2.Distance(target.transform.position, b.transform.position) > Mathf.Min(50, b.squad.SquadRadius))
+                        return (target && Vector2.Distance(target.transform.position, b.transform.position) > Mathf.Min(closeness, b.squad.SquadRadius))
                          ?NodeState.Success
                          :NodeState.Failure;
                     }, "MoveTarget Gate"),
                     new MoveTargetLeaf(b, target)
                     }),
-                interval),
+                timeLeft),
             priority);
         }
     }
