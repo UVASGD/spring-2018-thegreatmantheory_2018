@@ -11,6 +11,7 @@ public class PauseManager : MonoBehaviour {
 
     public LevelSelectScript ls;
 
+
     // Update is called once per frame
     void Update () {
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P)) {
