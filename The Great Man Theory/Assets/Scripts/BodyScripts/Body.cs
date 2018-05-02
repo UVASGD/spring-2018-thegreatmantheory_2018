@@ -138,6 +138,7 @@ public class Body : MonoBehaviour {
     }
 
     public void Damage(float force) {
+        Debug.Log("Damaged by: " + force);
         health -= force;
         CheckHealth();
     }

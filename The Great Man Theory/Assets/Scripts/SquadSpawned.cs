@@ -12,6 +12,7 @@ public class SquadSpawned : MonoBehaviour {
     }
 
 	void OnDestroy() {
-        spawner.SquadDeath(squad);
+        if (spawner)
+            spawner.SquadDeath(squad);
     }
 }

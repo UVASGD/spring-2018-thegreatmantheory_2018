@@ -13,7 +13,7 @@ public class AreaTrigger : EventTrigger {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("Is Happening");
+        // Debug.Log("Is Happening");
 
         if (acceptAll && !(onceOnly && triggered)) {
             // strEvent.Invoke("");
