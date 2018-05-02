@@ -18,6 +18,8 @@ public class LevelThreeEvents : EventManager {
 
     public SpriteRenderer box;
 
+    public Squad firingLine;
+
     Camera cam;
 
     void Awake() {
@@ -93,5 +95,12 @@ public class LevelThreeEvents : EventManager {
         }
         SceneManager.LoadScene("WildAndFree");
         GameManager.state = GameState.Gameplay;
+    }
+
+    public IEnumerator FiringLine() {
+        Debug.Log("ASFGEAHGIEOSPHGOIPSEHEPSOHGIOEPSHGOIPEHOPI");
+        firingLine.squadType = SquadType.FiringLine;
+        firingLine.SetDefaultBehavior(SquadType.FiringLine);
+        yield return null;
     }
 }

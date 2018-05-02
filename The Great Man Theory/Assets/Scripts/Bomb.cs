@@ -37,12 +37,10 @@ public class Bomb : MonoBehaviour {
 	}
 
     void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("Boom");
 
         Body bod = other.gameObject.GetComponent<Body>();
 
         if (bod) {
-            Debug.Log("Boof");
             bod.Damage(damage);
         }
     }
