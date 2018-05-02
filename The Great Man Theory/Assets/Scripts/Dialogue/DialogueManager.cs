@@ -81,7 +81,8 @@ public class DialogueManager : MonoBehaviour {
             sentence.strEvent.Invoke("");
 
         if (sentence.runOn) {
-            continueDialogue.enabled = false;
+            if (continueDialogue)
+                continueDialogue.enabled = false;
             skipDialogue.enabled = false;
         }
         else {
