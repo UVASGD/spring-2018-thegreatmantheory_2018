@@ -8,6 +8,7 @@ public class Flag : MonoBehaviour {
     CircleCollider2D zone;
 
     public void Setup() {
+        squad = GetComponentInParent<Squad>();
         zone = GetComponent<CircleCollider2D>();
         zone.radius = squad.SquadRadius;
         zone.radius = Mathf.Clamp(zone.radius, 20, 100);

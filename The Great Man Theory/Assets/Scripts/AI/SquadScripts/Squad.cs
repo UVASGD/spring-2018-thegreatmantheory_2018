@@ -30,6 +30,8 @@ public class Squad : MonoBehaviour {
     public GameObject target;
 
     void Start() {
+        flag = GetComponentInChildren<Flag>();
+
         interval = 0.5f;
         time = interval;
 
