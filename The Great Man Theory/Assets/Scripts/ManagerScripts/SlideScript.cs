@@ -15,7 +15,7 @@ public class SlideScript : MonoBehaviour {
     public Text text;
     public Image image;
 
-    public void Go() {
+    public void Awake() {
         going = true;
         text = GetComponentInChildren<Text>();
         image = GetComponentInChildren<Image>();
@@ -25,8 +25,8 @@ public class SlideScript : MonoBehaviour {
 	void Update () {
         if (going) {
             if (!aud.isPlaying) {
+                going = false;
                 if (next) {
-                    going = false;
                     gameObject.SetActive(false);
                     next.gameObject.SetActive(true);
                 }
