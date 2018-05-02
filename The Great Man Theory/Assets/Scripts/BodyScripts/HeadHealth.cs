@@ -7,7 +7,7 @@ public class HeadHealth : MonoBehaviour {
     Body body;
     SpriteRenderer sp;
 
-    Color baseColor;
+    Color baseColor = new Color(0.3f, 0.3f, 0.3f);
 
     float lastHealth;
     float maxHealth;
@@ -21,7 +21,8 @@ public class HeadHealth : MonoBehaviour {
         body = GetComponentInParent<Body>();
         sp = GetComponent<SpriteRenderer>();
 
-        baseColor = sp.color;
+        // baseColor = sp.color;
+        sp.color = baseColor;
 
         lastHealth = body.Health;
         maxHealth = body.Health;
