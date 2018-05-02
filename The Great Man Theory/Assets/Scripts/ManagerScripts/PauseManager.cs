@@ -29,7 +29,7 @@ public class PauseManager : MonoBehaviour {
             pausePanel.SetActive(true);
             GameManager.state = GameState.Paused;
             IsPaused = true;
-            //APPLY LOW PASS FILTER
+            //AudioManager.Instance.
         }
     }
 
