@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour {
     public AudioClip Dvorak;
     public AudioClip TeDeum;
     public AudioClip Triomphe;
+    public AudioClip DiesIrae;
 
     public AudioClip roblox_oof;
     public AudioClip ded_egh;
@@ -61,6 +62,7 @@ public class AudioManager : MonoBehaviour {
             { "Dvorak", Dvorak },
             { "TeDeum", TeDeum },
             { "Triomphe", Triomphe },
+            { "DiesIrae", DiesIrae },
         };
     }
 	

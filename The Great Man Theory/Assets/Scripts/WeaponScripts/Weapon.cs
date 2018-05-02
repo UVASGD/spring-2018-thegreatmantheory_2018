@@ -56,7 +56,7 @@ public class Weapon : MonoBehaviour {
         if (collision.collider.CompareTag("Body") && collision.collider != thisBodyCollider) {
             //Check whether collided body is the same team
             Body hitBody = collision.collider.gameObject.GetComponent<Body>();
-            if (hitBody.team != thisBody.team) {
+            if (hitBody && hitBody.team != thisBody.team) {
                 if (targetColl && collision.collider != targetColl)
                     Physics2D.IgnoreCollision(targetColl, thisCollider, false);
                 targetColl = collision.collider;

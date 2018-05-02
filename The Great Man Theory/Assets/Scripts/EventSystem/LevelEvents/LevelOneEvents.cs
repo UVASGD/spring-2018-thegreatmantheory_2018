@@ -310,7 +310,8 @@ public class LevelOneEvents : EventManager {
 
     public IEnumerator WIN() {
         GameManager.state = GameState.SceneTransition;
-        SceneManager.LoadScene("WIN");
+        // SceneManager.LoadScene("WIN");
+        SceneManager.LoadScene("LevelTwo");
         yield return null;
     }
 
