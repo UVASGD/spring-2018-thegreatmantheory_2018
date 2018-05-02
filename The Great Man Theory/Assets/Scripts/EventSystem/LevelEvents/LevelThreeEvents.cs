@@ -23,13 +23,18 @@ public class LevelThreeEvents : EventManager {
     }
 
     public IEnumerator PlayerDead() {
-        SceneManager.LoadSceneAsync("LevelTwo");
+        SceneManager.LoadSceneAsync("LevelThree");
         yield return null;
     }
 
     public IEnumerator WIN() {
         GameManager.state = GameState.SceneTransition;
         SceneManager.LoadScene("WIN");
+        yield return null;
+    }
+
+    public IEnumerator Bomba() {
+        Instantiate(bomb);
         yield return null;
     }
 }

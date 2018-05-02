@@ -10,27 +10,28 @@ public class BombSpawn : MonoBehaviour {
 
     public GameObject bomb;
 
-    public float cooldown = 0f;
-    float counter;
+    public float spawnMin = 0f;
+    public float spawnMax = 3f;
+    float cooldown;
 
 	// Use this for initialization
 	void Start () {
         collide = GetComponent<Collider2D>();
         bounds = collide.bounds;
-        counter = cooldown;
+        cooldown = Random.Range(spawnMin, spawnMax);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (counter <= 0f) {
+        if (cooldown <= 0f) {
             float x = Random.Range(bounds.min.x, bounds.max.x);
             float y = Random.Range(bounds.min.y, bounds.max.y);
 
             Instantiate(bomb, new Vector3(x, y, transform.position.z), transform.rotation);
 
-            counter = cooldown;
+            cooldown = Random.Range(spawnMin, spawnMax);
         }
         else
-            counter -= Time.deltaTime;
+            cooldown -= Time.deltaTime;
     }
 }
