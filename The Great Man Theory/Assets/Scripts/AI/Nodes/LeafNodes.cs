@@ -318,7 +318,7 @@ public class MoveTargetLeaf : Leaf {
 
     public MoveTargetLeaf(BasicBot _bot, GameObject _target) : base() {
         bot = _bot;
-        target = (_target.transform == null) ? null : _target.transform;
+        target = (_target == null) ? null : _target.transform;
     }
 
     public override NodeState GetState() {

@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class DeathTrigger : EventTrigger {
 
+    public bool dewit = true;
+
 	void OnDestroy() {
-        if  (GameManager.state != GameState.SceneTransition)
-        strEvent.Invoke("");
+        if  (dewit && GameManager.state != GameState.SceneTransition)
+            strEvent.Invoke("");
     }
 }
