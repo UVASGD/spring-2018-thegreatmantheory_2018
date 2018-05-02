@@ -26,12 +26,15 @@ public class InteractionTrigger : EventTrigger {
 	protected override void Update () {
 		if (entered) {
             if (Input.GetKeyDown(key)) {
-                triggered = true;
+                if (onceOnly)
+                    triggered = true;
+                else
+                    strEvent.Invoke("");
             }
         }
 
         if (triggered && Input.GetKeyUp(key))
-            triggered = false;
+            // triggered = false;
 
         base.Update();
     }
