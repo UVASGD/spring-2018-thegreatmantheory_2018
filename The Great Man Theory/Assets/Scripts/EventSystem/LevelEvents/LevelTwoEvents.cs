@@ -43,7 +43,8 @@ public class LevelTwoEvents : EventManager {
 
     public IEnumerator WIN() {
         GameManager.state = GameState.SceneTransition;
-        SceneManager.LoadScene("WIN");
+        // SceneManager.LoadScene("WIN");
+        SceneManager.LoadScene("LevelThree");
         yield return null;
     }
 
