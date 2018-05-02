@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class PauseManager : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class PauseManager : MonoBehaviour {
 
     public LevelSelectScript ls;
 
+    public AudioMixer am;
 
     // Update is called once per frame
     void Update () {
@@ -30,7 +32,7 @@ public class PauseManager : MonoBehaviour {
             pausePanel.SetActive(true);
             GameManager.state = GameState.Paused;
             IsPaused = true;
-            //AudioManager.Instance.
+            am.SetFloat("lowpass", 1000f);
         }
     }
 
@@ -38,16 +40,18 @@ public class PauseManager : MonoBehaviour {
             pausePanel.SetActive(false);
             GameManager.state = GameState.Gameplay;
             IsPaused = false;
-            //UNDO LOW PASS FILTER
+            am.SetFloat("lowpass", 22000f);
     }
 
     public void Restart() {
         IsPaused = false;
+        am.SetFloat("lowpass", 22000f);
         ls.Restart();
     }
 
     public void LoadMenu() {
         IsPaused = false;
+        am.SetFloat("lowpass", 22000f);
         GameManager.state = GameState.Menu;
         ls.MainMenu();
     }
