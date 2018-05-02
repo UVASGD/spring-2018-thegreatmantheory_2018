@@ -28,9 +28,12 @@ public class HorseControl : MonoBehaviour {
         //body = GetComponent<Rigidbody2D>();
         bodyPointer = GetComponent<FollowPointer>();
         cam = Camera.main;
-        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), rider.GetComponent<Collider2D>());
+		if (rider) {
+			Physics2D.IgnoreCollision (GetComponent<Collider2D> (), rider.GetComponent<Collider2D> ());
+			Invoke("SetTeam", 0.2f);
+		}
 
-        Invoke("SetTeam", 0.2f);
+        
 	}
 
     void SetTeam() {
@@ -47,17 +50,17 @@ public class HorseControl : MonoBehaviour {
     }
 
     void GetInput() {
-        if (player) {
-            target = cam.ScreenToWorldPoint(Input.mousePosition);
-            if (Input.GetMouseButton(1)) {
-                mouseDown = true;
-            }
-            else
-                mouseDown = false;
-        }
-        else if (rider) {
-            target = rider.target;
-        }
+		if (player) {
+			target = cam.ScreenToWorldPoint (Input.mousePosition);
+			if (Input.GetMouseButton (1)) {
+				mouseDown = true;
+			} else
+				mouseDown = false;
+		} else if (rider) {
+			target = rider.target;
+		} else if(FreeHorseAI.ALLTARGET) {
+			target = FreeHorseAI.ALLTARGET.position;
+		}
     }
 
     void OldGetInput() {
