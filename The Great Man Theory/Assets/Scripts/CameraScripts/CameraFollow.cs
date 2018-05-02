@@ -3,15 +3,11 @@
 public class CameraFollow : MonoBehaviour {
 
     public Transform followPoint;
-    public Vector3 offset;
+    Vector3 offset = new Vector3(0, 0, -10);
     float smoothSpeed = 5f;
 
     public bool OnTarget { get { return onTarget; } }
     bool onTarget = false;
-
-    private void Start() {
-        offset = transform.position;
-    }
 
     // Update is called once per frame
     void LateUpdate () {
