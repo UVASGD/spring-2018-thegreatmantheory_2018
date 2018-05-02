@@ -403,11 +403,11 @@ public class CavalryRecenterLeaf : Leaf {
     float timerMax;
     float timer;
 
-    int recenterDist = 50; //TODO Determine whether this is good
+    int recenterDist = 40; //TODO Determine whether this is good
 
     public CavalryRecenterLeaf(BasicBot _bot) {
         bot = _bot;
-        timerMax = 3;
+        timerMax = 2;
         timer = timerMax;
     }
 

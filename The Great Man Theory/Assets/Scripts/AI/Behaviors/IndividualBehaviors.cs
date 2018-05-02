@@ -89,12 +89,12 @@ public class CavalryTree : DefaultTree {
 				//Wounded node here
 			}),
             new Selector("priority 2", new List<Node>() {
-			}),
-            new Selector("priority 3", new List<Node>() {
-                new Sequencer("Cavalry Charge", new List<Node>() {
-                    new CavalryChargeLeaf(bot)//,
-                    //new CavalryRecenterLeaf(bot)
+                    new Sequencer("Cavalry Charge", new List<Node>() {
+                    new CavalryChargeLeaf(bot),
+                    new CavalryRecenterLeaf(bot)
                 })
+            }),
+            new Selector("priority 3", new List<Node>() {
             }),
             new Selector("priority 4", new List<Node>() {
 				//Idle node here
