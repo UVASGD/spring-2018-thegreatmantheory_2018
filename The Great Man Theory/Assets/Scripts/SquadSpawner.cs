@@ -32,7 +32,7 @@ public class SquadSpawner : MonoBehaviour {
 	void Update () {
         if (activeSquads.Count < maxSquads && GameManager.state == GameState.Gameplay)
             waiting -= Time.deltaTime;
-        if (waiting <= 0f)
+        if (waiting < 0f)
             MakeSquad();
         if (newestSquad && wasNew) {
             newestSquad = null;
