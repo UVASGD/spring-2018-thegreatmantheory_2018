@@ -67,15 +67,12 @@ public class LevelTwoEvents : EventManager {
         friendlySquad.target = arqBod.gameObject;
         friendlySquad.TargetCommand(arqBod.gameObject);
 
-        DeathTrigger dt = player.GetComponentInChildren<DeathTrigger>();
-        dt.dewit = false;
-
-        Destroy(dt);
+        CameraFollow cf = cam.GetComponent<CameraFollow>();
+        cf.followPoint = arqBod.gameObject.transform;
 
         Destroy(player);
 
-        CameraFollow cf = cam.GetComponent<CameraFollow>();
-        cf.followPoint = arqBod.gameObject.transform;
+
 
         yield return null;
     }
