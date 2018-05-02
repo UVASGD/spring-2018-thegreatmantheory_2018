@@ -42,10 +42,13 @@ public class PauseManager : MonoBehaviour {
     }
 
     public void Restart() {
+        IsPaused = false;
         ls.Restart();
     }
 
     public void LoadMenu() {
+        IsPaused = false;
+        GameManager.state = GameState.Menu;
         ls.MainMenu();
     }
 }
