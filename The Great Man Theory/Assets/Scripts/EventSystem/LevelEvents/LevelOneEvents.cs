@@ -275,6 +275,9 @@ public class LevelOneEvents : EventManager {
     public IEnumerator BackCavalryAttack() {
         foreach (Squad squad in backCavalry.ActiveSquads) {
             squad.Attack(player);
+            // squad.target = player;
+            // squad.squadType = SquadType.TargetFollow;
+            // squad.SetDefaultBehavior(SquadType.TargetFollow);
         }
         yield return null;
     }
@@ -283,6 +286,9 @@ public class LevelOneEvents : EventManager {
         Debug.Log("Left horse should be fucking shit up");
         foreach (Squad squad in leftCavalry.ActiveSquads) {
             squad.Attack(player);
+            // squad.target = player;
+            // squad.squadType = SquadType.TargetFollow;
+            // squad.SetDefaultBehavior(SquadType.TargetFollow);
         }
         yield return null;
     }
@@ -290,6 +296,9 @@ public class LevelOneEvents : EventManager {
     public IEnumerator RightCavalryAttack() {
         foreach (Squad squad in rightCavalry.ActiveSquads) {
             squad.Attack(player);
+            // squad.target = player;
+            // squad.squadType = SquadType.TargetFollow;
+            // squad.SetDefaultBehavior(SquadType.TargetFollow);
         }
         yield return null;
     }

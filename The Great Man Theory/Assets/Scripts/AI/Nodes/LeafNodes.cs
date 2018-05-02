@@ -380,7 +380,8 @@ public class CavalryChargeLeaf : Leaf {
             return NodeState.Failure;
         if (!started) {
             target = bot.attackTarget.transform;
-            chargeTarget = (target.position - bot.transform.position).normalized * 50;
+            Vector2 worldTarget = (target.position - bot.transform.position).normalized * 50;
+            chargeTarget = bot.transform.TransformPoint(worldTarget);
             started = true;
         }
         timer -= Time.deltaTime;
