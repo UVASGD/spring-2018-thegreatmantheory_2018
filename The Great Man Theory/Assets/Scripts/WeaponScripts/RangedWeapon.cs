@@ -64,6 +64,10 @@ public class RangedWeapon : Weapon {
         RaycastHit2D[] hits = Physics2D.RaycastAll(barrelEnd, transform.up, maxrange);
 
         foreach (RaycastHit2D hit in hits) {
+            if (hit.collider.CompareTag("Wall")) {
+                ShowLine(hit.distance);
+                return;
+            }
             if (hit.rigidbody != null) {
                 Body target = hit.rigidbody.GetComponent<Body>();
                 if (target) {
