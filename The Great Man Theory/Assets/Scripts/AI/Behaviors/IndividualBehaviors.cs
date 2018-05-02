@@ -92,8 +92,8 @@ public class CavalryTree : DefaultTree {
 			}),
             new Selector("priority 3", new List<Node>() {
                 new Sequencer("Cavalry Charge", new List<Node>() {
-                    new CavalryChargeLeaf(bot),
-                    new CavalryRecenterLeaf(bot)
+                    new CavalryChargeLeaf(bot)//,
+                    //new CavalryRecenterLeaf(bot)
                 })
             }),
             new Selector("priority 4", new List<Node>() {
