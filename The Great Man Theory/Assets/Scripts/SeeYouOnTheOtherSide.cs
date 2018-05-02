@@ -13,7 +13,8 @@ public class SeeYouOnTheOtherSide : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (player && player.position.y < 150f)
+        // if (player && transform.position.y - player.position.y > 10)
+        if (player)
             transform.position = new Vector3(player.position.x, transform.position.y, transform.position.z);
 	}
 }

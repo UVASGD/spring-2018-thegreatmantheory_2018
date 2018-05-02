@@ -19,7 +19,7 @@ public class BombFall : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (GameManager.state != GameState.Gameplay) { return; }
+        if (PauseManager.IsPaused) { return; }
 		if (fallCount < fallTime) {
             fallCount += Time.deltaTime;
 
