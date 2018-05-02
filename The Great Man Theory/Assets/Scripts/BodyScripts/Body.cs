@@ -78,6 +78,27 @@ public class Body : MonoBehaviour {
         CheckHealth();
     }
 
+    public void Setup() {
+        rb = GetComponent<Rigidbody2D>();
+        health = maxHealth;
+
+        if (!weapon)
+            weapon = transform.parent.GetComponentInChildren<Weapon>();
+
+        if (!fx)
+            fx = effectGen.GetComponent<ParticleSystem>();
+        fxMain = fx.main;
+
+        if (!soundbox)
+            soundbox = GetComponentInChildren<BodySoundbox>();
+
+        if (!horse) {
+            SetColors();
+            ApplyColors();
+        }
+        CheckHealth();
+    }
+
     void Update() {
         if (!paused && GameManager.state != GameState.Gameplay && !cutsceneOverride) {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
