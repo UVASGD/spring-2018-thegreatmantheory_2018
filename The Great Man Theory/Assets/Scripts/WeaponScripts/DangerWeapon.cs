@@ -23,7 +23,7 @@ public class DangerWeapon : MonoBehaviour {
                 }
                 else if (collision.CompareTag("Weapon")) {
                     Weapon weapon = collision.GetComponent<Weapon>();
-                    if (weapon.ThisBody.team == thisBody.team) {
+                    if (weapon.ThisBody && weapon.ThisBody.team == thisBody.team) {
                         return;
                     }
                 }
