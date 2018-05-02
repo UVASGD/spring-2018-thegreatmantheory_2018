@@ -13,6 +13,6 @@ public class HealthRegen : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (body.Health < body.maxHealth) body.Damage(5 * Time.deltaTime);
+        if (body.Health < body.maxHealth) body.Damage(-5 * Time.deltaTime);
 	}
 }

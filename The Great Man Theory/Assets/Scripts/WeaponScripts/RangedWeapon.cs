@@ -71,7 +71,7 @@ public class RangedWeapon : Weapon {
             if (hit.rigidbody != null) {
                 Body target = hit.rigidbody.GetComponent<Body>();
                 if (target) {
-                    float dam = damage - hit.distance;
+                    float dam = (damage - hit.distance) * DAMAGE_MULTIPLIER;
                     target.Hit(dam / 2, hit.point);
                     ShowLine(hit.distance);
                     gotem = true;
