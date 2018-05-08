@@ -89,7 +89,8 @@ public class DialogueManager : MonoBehaviour {
         else {
             if (continueDialogue)
                 continueDialogue.enabled = true;
-            skipDialogue.enabled = true;
+            if (skipDialogue)
+                skipDialogue.enabled = true;
         }
 
         StopAllCoroutines();

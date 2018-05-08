@@ -27,24 +27,33 @@ public class SlideScript : MonoBehaviour {
             if (!aud.isPlaying) {
                 going = false;
                 if (next) {
-                    gameObject.SetActive(false);
-                    next.gameObject.SetActive(true);
+                    StartCoroutine("LoadNext");
                 }
 
                 else {
-                    StartCoroutine("LoadNext");
+                    StartCoroutine("LoadScene");
                 }
 
             }
         }
 	}
 
-    public IEnumerator LoadNext() {
+    public IEnumerator LoadScene() {
         while (image.color.a > 0.01) {
             image.color = Color.Lerp(image.color, Color.clear, 0.05f);
             text.color = Color.Lerp(text.color, Color.clear, 0.05f);
             yield return null;
         }
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("Main Menu");
+    }
+
+    public IEnumerator LoadNext() {
+        float time = 1;
+        while (time > 0) {
+            time -= Time.deltaTime;
+            yield return null;
+        }
+        gameObject.SetActive(false);
+        next.gameObject.SetActive(true);
     }
 }
